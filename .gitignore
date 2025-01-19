@@ -1,0 +1,17 @@
+# Composer
+backend/vendor/
+backend/.env.local
+
+# npm
+frontend/node_modules/
+frontend/.env.local
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# Build files
+frontend/dist/
+backend/vendor/
+
+.env
