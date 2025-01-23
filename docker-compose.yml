@@ -1,7 +1,6 @@
 services:
   db:
     image: postgres:17
-    container_name: db
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -21,59 +20,68 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    ports:
-      - "5050:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     depends_on:
       - db
     networks:
       - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.localhost`)"
+      - "traefik.http.routers.pgadmin.entrypoints=web"
+      - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
+      - "traefik.docker.network=app-network"
 
   backend:
     build:
       context: ./backend/docker
       dockerfile: Dockerfile
-    container_name: backend
     restart: unless-stopped
     environment:
       DATABASE_URL: "pgsql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}"
       APP_ENV: dev
       APP_DEBUG: '1'
-    ports:
-      - "8000:8000"
     depends_on:
       - db
     volumes:
       - ./backend/app:/var/www
     networks:
       - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.services.backend.loadbalancer.server.port=8000"
+      - "traefik.docker.network=app-network"
 
   frontend:
     build:
       context: ./frontend
       dockerfile: docker/Dockerfile
-    container_name: frontend
     restart: unless-stopped
     environment:
       VITE_API_URL: ${VITE_API_URL}
-    ports:
-      - "3000:3000"
     depends_on:
       - backend
     volumes:
       - ./frontend/app:/app
     networks:
       - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`front.localhost`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - "traefik.docker.network=app-network"
 
 networks:
   app-network:
-    driver: bridge
+    external: true
 
 volumes:
   db_data:
