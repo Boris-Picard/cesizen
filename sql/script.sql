@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS exercice CASCADE;
 
 CREATE TABLE IF NOT EXISTS exercice (
    ex_id SERIAL PRIMARY KEY,
-   ex_nom VARCHAR(200),
+   ex_nom VARCHAR(200) NOT NULL,
    ex_inspiration INT,
    ex_apnee INT,
    ex_expiration INT,
@@ -46,28 +46,28 @@ CREATE TABLE IF NOT EXISTS utilisateur (
    ut_prenom VARCHAR(200) NOT NULL,
    ut_mail VARCHAR(255) UNIQUE NOT NULL,
    ut_password VARCHAR(255) NOT NULL,
-   ut_active BOOLEAN DEFAULT FALSE,
+   ut_active BOOLEAN DEFAULT FALSE NOT NULL,
    role_id INT NOT NULL,
    FOREIGN KEY (role_id) REFERENCES role(role_id)
 );
 
 CREATE TABLE IF NOT EXISTS information (
    info_id SERIAL PRIMARY KEY,
-   info_titre VARCHAR(255),
-   info_description TEXT,
-   info_contenu TEXT,
-   info_active BOOLEAN DEFAULT FALSE,
+   info_titre VARCHAR(255) NOT NULL,
+   info_description TEXT NOT NULL,
+   info_contenu TEXT NOT NULL,
+   info_active BOOLEAN DEFAULT FALSE NOT NULL,
    type_info_id INT NOT NULL,
    FOREIGN KEY (type_info_id) REFERENCES type_information(type_info_id)
 );
 
 CREATE TABLE IF NOT EXISTS historique (
    histo_id SERIAL PRIMARY KEY,
-   histo_id_obj INT,
+   histo_id_obj INT NOT NULL,
    histo_nom_table VARCHAR(100),
-   histo_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-   histo_ancienne_valeur TEXT,
-   histo_nouvelle_valeur TEXT,
+   histo_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+   histo_ancienne_valeur TEXT NOT NULL,
+   histo_nouvelle_valeur TEXT NOT NULL ,
    type_histo_id INT NOT NULL,
    FOREIGN KEY (type_histo_id) REFERENCES type_historique(type_histo_id)
 );
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS validation (
    valid_id SERIAL PRIMARY KEY,
    validation_token VARCHAR(255) NOT NULL,
    date_expiration_token TIMESTAMP NOT NULL,
-   type_validation VARCHAR(100),
+   type_validation VARCHAR(100) NOT NULL,
    ut_id INT NOT NULL,
    FOREIGN KEY (ut_id) REFERENCES utilisateur(ut_id)
 );
