@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS exercice (
    ex_inspiration INT,
    ex_apnee INT,
    ex_expiration INT,
-   ex_active BOOLEAN DEFAULT FALSE
+   ex_active BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS role (
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS information (
 CREATE TABLE IF NOT EXISTS historique (
    histo_id SERIAL PRIMARY KEY,
    histo_id_obj INT NOT NULL,
-   histo_nom_table VARCHAR(100),
+   histo_nom_table VARCHAR(100) NOT NULL,
    histo_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
    histo_ancienne_valeur TEXT NOT NULL,
    histo_nouvelle_valeur TEXT NOT NULL ,

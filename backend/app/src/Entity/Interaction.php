@@ -17,25 +17,21 @@ class Interaction
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDeDebut = null;
+    private ?\DateTimeInterface $dateDebut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDeFin = null;
+    private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\ManyToOne(inversedBy: 'interactions')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Information $information = null;
 
     #[ORM\ManyToOne(inversedBy: 'interactions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?typeInteraction $type = null;
+    private ?TypeInteraction $typeInteraction = null;
 
     #[ORM\ManyToOne(inversedBy: 'interactions')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Exercice $exercice = null;
 
     #[ORM\ManyToOne(inversedBy: 'interactions')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
     public function getId(): ?int
@@ -43,26 +39,33 @@ class Interaction
         return $this->id;
     }
 
-    public function getDateDeDebut(): ?\DateTimeInterface
+    public function setId(int $id): static
     {
-        return $this->dateDeDebut;
-    }
-
-    public function setDateDeDebut(\DateTimeInterface $dateDeDebut): static
-    {
-        $this->dateDeDebut = $dateDeDebut;
+        $this->id = $id;
 
         return $this;
     }
 
-    public function getDateDeFin(): ?\DateTimeInterface
+    public function getDateDebut(): ?\DateTimeInterface
     {
-        return $this->dateDeFin;
+        return $this->dateDebut;
     }
 
-    public function setDateDeFin(\DateTimeInterface $dateDeFin): static
+    public function setDateDebut(\DateTimeInterface $dateDebut): static
     {
-        $this->dateDeFin = $dateDeFin;
+        $this->dateDebut = $dateDebut;
+
+        return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeInterface
+    {
+        return $this->dateFin;
+    }
+
+    public function setDateFin(\DateTimeInterface $dateFin): static
+    {
+        $this->dateFin = $dateFin;
 
         return $this;
     }
@@ -79,14 +82,14 @@ class Interaction
         return $this;
     }
 
-    public function getType(): ?typeInteraction
+    public function getTypeInteraction(): ?TypeInteraction
     {
-        return $this->type;
+        return $this->typeInteraction;
     }
 
-    public function setType(?typeInteraction $type): static
+    public function setTypeInteraction(?TypeInteraction $typeInteraction): static
     {
-        $this->type = $type;
+        $this->typeInteraction = $typeInteraction;
 
         return $this;
     }

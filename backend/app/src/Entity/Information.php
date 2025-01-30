@@ -30,31 +30,38 @@ class Information
     #[ORM\Column]
     private ?bool $active = null;
 
-    #[ORM\ManyToOne(inversedBy: 'information')]
+    #[ORM\ManyToOne(inversedBy: 'informations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?TypeInformation $type = null;
+    private ?TypeInformation $typeInformation = null;
 
     /**
      * @var Collection<int, Interaction>
      */
-    #[ORM\OneToMany(targetEntity: Interaction::class, mappedBy: 'information', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Interaction::class, mappedBy: 'information')]
     private Collection $interactions;
 
     /**
-     * @var Collection<int, Creer>
+     * @var Collection<int, Utilisateur>
      */
-    #[ORM\OneToMany(targetEntity: Creer::class, mappedBy: 'information')]
-    private Collection $creers;
+    #[ORM\ManyToMany(targetEntity: Utilisateur::class, mappedBy: 'informations')]
+    private Collection $utilisateurs;
 
     public function __construct()
     {
         $this->interactions = new ArrayCollection();
-        $this->creers = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getTitre(): ?string
@@ -105,14 +112,14 @@ class Information
         return $this;
     }
 
-    public function getType(): ?TypeInformation
+    public function getTypeInformation(): ?TypeInformation
     {
-        return $this->type;
+        return $this->typeInformation;
     }
 
-    public function setType(?TypeInformation $type): static
+    public function setTypeInformation(?TypeInformation $typeInformation): static
     {
-        $this->type = $type;
+        $this->typeInformation = $typeInformation;
 
         return $this;
     }
@@ -148,30 +155,27 @@ class Information
     }
 
     /**
-     * @return Collection<int, Creer>
+     * @return Collection<int, Utilisateur>
      */
-    public function getCreers(): Collection
+    public function getUtilisateurs(): Collection
     {
-        return $this->creers;
+        return $this->utilisateurs;
     }
 
-    public function addCreer(Creer $creer): static
+    public function addUtilisateur(Utilisateur $utilisateur): static
     {
-        if (!$this->creers->contains($creer)) {
-            $this->creers->add($creer);
-            $creer->setInformation($this);
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->add($utilisateur);
+            $utilisateur->addInformation($this);
         }
 
         return $this;
     }
 
-    public function removeCreer(Creer $creer): static
+    public function removeUtilisateur(Utilisateur $utilisateur): static
     {
-        if ($this->creers->removeElement($creer)) {
-            // set the owning side to null (unless already changed)
-            if ($creer->getInformation() === $this) {
-                $creer->setInformation(null);
-            }
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            $utilisateur->removeInformation($this);
         }
 
         return $this;

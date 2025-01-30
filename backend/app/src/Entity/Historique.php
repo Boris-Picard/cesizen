@@ -17,7 +17,7 @@ class Historique
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $idObj = null;
+    private ?int $idObject = null;
 
     #[ORM\Column(length: 100)]
     private ?string $nomTable = null;
@@ -33,21 +33,28 @@ class Historique
 
     #[ORM\ManyToOne(inversedBy: 'historiques')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?TypeHistorique $type = null;
+    private ?TypeHistorique $typeHistorique = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdObj(): ?int
+    public function setId(int $id): static
     {
-        return $this->idObj;
+        $this->id = $id;
+
+        return $this;
     }
 
-    public function setIdObj(int $idObj): static
+    public function getIdObject(): ?int
     {
-        $this->idObj = $idObj;
+        return $this->idObject;
+    }
+
+    public function setIdObject(int $idObject): static
+    {
+        $this->idObject = $idObject;
 
         return $this;
     }
@@ -100,14 +107,14 @@ class Historique
         return $this;
     }
 
-    public function getType(): ?TypeHistorique
+    public function getTypeHistorique(): ?TypeHistorique
     {
-        return $this->type;
+        return $this->typeHistorique;
     }
 
-    public function setType(?TypeHistorique $type): static
+    public function setTypeHistorique(?TypeHistorique $typeHistorique): static
     {
-        $this->type = $type;
+        $this->typeHistorique = $typeHistorique;
 
         return $this;
     }

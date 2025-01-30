@@ -39,20 +39,27 @@ class Exercice
     private Collection $interactions;
 
     /**
-     * @var Collection<int, Realiser>
+     * @var Collection<int, Utilisateur>
      */
-    #[ORM\OneToMany(targetEntity: Realiser::class, mappedBy: 'exercice')]
-    private Collection $realisers;
+    #[ORM\ManyToMany(targetEntity: Utilisateur::class, mappedBy: 'exercices')]
+    private Collection $utilisateurs;
 
     public function __construct()
     {
         $this->interactions = new ArrayCollection();
-        $this->realisers = new ArrayCollection();
+        $this->utilisateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getNom(): ?string
@@ -146,30 +153,27 @@ class Exercice
     }
 
     /**
-     * @return Collection<int, Realiser>
+     * @return Collection<int, Utilisateur>
      */
-    public function getRealisers(): Collection
+    public function getUtilisateurs(): Collection
     {
-        return $this->realisers;
+        return $this->utilisateurs;
     }
 
-    public function addRealiser(Realiser $realiser): static
+    public function addUtilisateur(Utilisateur $utilisateur): static
     {
-        if (!$this->realisers->contains($realiser)) {
-            $this->realisers->add($realiser);
-            $realiser->setExercice($this);
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->add($utilisateur);
+            $utilisateur->addExercice($this);
         }
 
         return $this;
     }
 
-    public function removeRealiser(Realiser $realiser): static
+    public function removeUtilisateur(Utilisateur $utilisateur): static
     {
-        if ($this->realisers->removeElement($realiser)) {
-            // set the owning side to null (unless already changed)
-            if ($realiser->getExercice() === $this) {
-                $realiser->setExercice(null);
-            }
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            $utilisateur->removeExercice($this);
         }
 
         return $this;

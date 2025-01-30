@@ -23,17 +23,24 @@ class TypeInformation
     /**
      * @var Collection<int, Information>
      */
-    #[ORM\OneToMany(targetEntity: Information::class, mappedBy: 'type')]
-    private Collection $information;
+    #[ORM\OneToMany(targetEntity: Information::class, mappedBy: 'typeInformation')]
+    private Collection $informations;
 
     public function __construct()
     {
-        $this->information = new ArrayCollection();
+        $this->informations = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getNom(): ?string
@@ -51,16 +58,16 @@ class TypeInformation
     /**
      * @return Collection<int, Information>
      */
-    public function getInformation(): Collection
+    public function getInformations(): Collection
     {
-        return $this->information;
+        return $this->informations;
     }
 
     public function addInformation(Information $information): static
     {
-        if (!$this->information->contains($information)) {
-            $this->information->add($information);
-            $information->setType($this);
+        if (!$this->informations->contains($information)) {
+            $this->informations->add($information);
+            $information->setTypeInformation($this);
         }
 
         return $this;
@@ -68,10 +75,10 @@ class TypeInformation
 
     public function removeInformation(Information $information): static
     {
-        if ($this->information->removeElement($information)) {
+        if ($this->informations->removeElement($information)) {
             // set the owning side to null (unless already changed)
-            if ($information->getType() === $this) {
-                $information->setType(null);
+            if ($information->getTypeInformation() === $this) {
+                $information->setTypeInformation(null);
             }
         }
 
