@@ -2,13 +2,11 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ValidationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ValidationRepository::class)]
-#[ApiResource]
 class Validation
 {
     #[ORM\Id]
@@ -20,10 +18,10 @@ class Validation
     private ?string $token = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateExpirationToken = null;
+    private ?\DateTimeInterface $dateExpiration = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $typeValidation = null;
+    private ?string $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'validations')]
     #[ORM\JoinColumn(nullable: false)]
@@ -32,6 +30,13 @@ class Validation
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getToken(): ?string
@@ -46,26 +51,26 @@ class Validation
         return $this;
     }
 
-    public function getDateExpirationToken(): ?\DateTimeInterface
+    public function getDateExpiration(): ?\DateTimeInterface
     {
-        return $this->dateExpirationToken;
+        return $this->dateExpiration;
     }
 
-    public function setDateExpirationToken(\DateTimeInterface $dateExpirationToken): static
+    public function setDateExpiration(\DateTimeInterface $dateExpiration): static
     {
-        $this->dateExpirationToken = $dateExpirationToken;
+        $this->dateExpiration = $dateExpiration;
 
         return $this;
     }
 
-    public function getTypeValidation(): ?string
+    public function getType(): ?string
     {
-        return $this->typeValidation;
+        return $this->type;
     }
 
-    public function setTypeValidation(string $typeValidation): static
+    public function setType(string $type): static
     {
-        $this->typeValidation = $typeValidation;
+        $this->type = $type;
 
         return $this;
     }

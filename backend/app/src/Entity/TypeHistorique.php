@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TypeHistoriqueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TypeHistoriqueRepository::class)]
-#[ApiResource]
 class TypeHistorique
 {
     #[ORM\Id]
@@ -23,7 +21,7 @@ class TypeHistorique
     /**
      * @var Collection<int, Historique>
      */
-    #[ORM\OneToMany(targetEntity: Historique::class, mappedBy: 'type')]
+    #[ORM\OneToMany(targetEntity: Historique::class, mappedBy: 'typeHistorique')]
     private Collection $historiques;
 
     public function __construct()
@@ -34,6 +32,13 @@ class TypeHistorique
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getLibelle(): ?string
@@ -60,7 +65,7 @@ class TypeHistorique
     {
         if (!$this->historiques->contains($historique)) {
             $this->historiques->add($historique);
-            $historique->setType($this);
+            $historique->setTypeHistorique($this);
         }
 
         return $this;
@@ -70,8 +75,8 @@ class TypeHistorique
     {
         if ($this->historiques->removeElement($historique)) {
             // set the owning side to null (unless already changed)
-            if ($historique->getType() === $this) {
-                $historique->setType(null);
+            if ($historique->getTypeHistorique() === $this) {
+                $historique->setTypeHistorique(null);
             }
         }
 

@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TypeInteractionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TypeInteractionRepository::class)]
-#[ApiResource]
 class TypeInteraction
 {
     #[ORM\Id]
@@ -23,7 +21,7 @@ class TypeInteraction
     /**
      * @var Collection<int, Interaction>
      */
-    #[ORM\OneToMany(targetEntity: Interaction::class, mappedBy: 'type')]
+    #[ORM\OneToMany(targetEntity: Interaction::class, mappedBy: 'typeInteraction')]
     private Collection $interactions;
 
     public function __construct()
@@ -34,6 +32,13 @@ class TypeInteraction
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getLibelle(): ?string
@@ -60,7 +65,7 @@ class TypeInteraction
     {
         if (!$this->interactions->contains($interaction)) {
             $this->interactions->add($interaction);
-            $interaction->setType($this);
+            $interaction->setTypeInteraction($this);
         }
 
         return $this;
@@ -70,8 +75,8 @@ class TypeInteraction
     {
         if ($this->interactions->removeElement($interaction)) {
             // set the owning side to null (unless already changed)
-            if ($interaction->getType() === $this) {
-                $interaction->setType(null);
+            if ($interaction->getTypeInteraction() === $this) {
+                $interaction->setTypeInteraction(null);
             }
         }
 

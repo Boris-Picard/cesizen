@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-#[ApiResource]
 class Utilisateur
 {
     #[ORM\Id]
@@ -24,7 +22,7 @@ class Utilisateur
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $mail = null;
+    private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -49,28 +47,41 @@ class Utilisateur
     private Collection $validations;
 
     /**
-     * @var Collection<int, Realiser>
+     * @var Collection<int, Exercice>
      */
-    #[ORM\OneToMany(targetEntity: Realiser::class, mappedBy: 'utilisateur')]
-    private Collection $realisers;
+    #[ORM\ManyToMany(targetEntity: Exercice::class, inversedBy: 'utilisateurs')]
+    #[ORM\JoinTable(name: 'realiser')]
+    #[ORM\JoinColumn(name: 'ut_id', referencedColumnName: 'ut_id')]
+    #[ORM\InverseJoinColumn(name: 'ex_id', referencedColumnName: 'ex_id')]
+    private Collection $exercices;
 
     /**
-     * @var Collection<int, Creer>
+     * @var Collection<int, Information>
      */
-    #[ORM\OneToMany(targetEntity: Creer::class, mappedBy: 'utilisateur')]
-    private Collection $creers;
+    #[ORM\ManyToMany(targetEntity: Information::class, inversedBy: 'utilisateurs')]
+    #[ORM\JoinTable(name: 'creer')]
+    #[ORM\JoinColumn(name: 'ut_id', referencedColumnName: 'ut_id')]
+    #[ORM\InverseJoinColumn(name: 'info_id', referencedColumnName: 'info_id')]
+    private Collection $informations;
 
     public function __construct()
     {
         $this->interactions = new ArrayCollection();
         $this->validations = new ArrayCollection();
-        $this->realisers = new ArrayCollection();
-        $this->creers = new ArrayCollection();
+        $this->exercices = new ArrayCollection();
+        $this->informations = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getNom(): ?string
@@ -97,14 +108,14 @@ class Utilisateur
         return $this;
     }
 
-    public function getMail(): ?string
+    public function getEmail(): ?string
     {
-        return $this->mail;
+        return $this->email;
     }
 
-    public function setMail(string $mail): static
+    public function setEmail(string $email): static
     {
-        $this->mail = $mail;
+        $this->email = $email;
 
         return $this;
     }
@@ -206,61 +217,49 @@ class Utilisateur
     }
 
     /**
-     * @return Collection<int, Realiser>
+     * @return Collection<int, Exercice>
      */
-    public function getRealisers(): Collection
+    public function getExercices(): Collection
     {
-        return $this->realisers;
+        return $this->exercices;
     }
 
-    public function addRealiser(Realiser $realiser): static
+    public function addExercice(Exercice $exercice): static
     {
-        if (!$this->realisers->contains($realiser)) {
-            $this->realisers->add($realiser);
-            $realiser->setUtilisateur($this);
+        if (!$this->exercices->contains($exercice)) {
+            $this->exercices->add($exercice);
         }
 
         return $this;
     }
 
-    public function removeRealiser(Realiser $realiser): static
+    public function removeExercice(Exercice $exercice): static
     {
-        if ($this->realisers->removeElement($realiser)) {
-            // set the owning side to null (unless already changed)
-            if ($realiser->getUtilisateur() === $this) {
-                $realiser->setUtilisateur(null);
-            }
-        }
+        $this->exercices->removeElement($exercice);
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Creer>
+     * @return Collection<int, Information>
      */
-    public function getCreers(): Collection
+    public function getInformations(): Collection
     {
-        return $this->creers;
+        return $this->informations;
     }
 
-    public function addCreer(Creer $creer): static
+    public function addInformation(Information $information): static
     {
-        if (!$this->creers->contains($creer)) {
-            $this->creers->add($creer);
-            $creer->setUtilisateur($this);
+        if (!$this->informations->contains($information)) {
+            $this->informations->add($information);
         }
 
         return $this;
     }
 
-    public function removeCreer(Creer $creer): static
+    public function removeInformation(Information $information): static
     {
-        if ($this->creers->removeElement($creer)) {
-            // set the owning side to null (unless already changed)
-            if ($creer->getUtilisateur() === $this) {
-                $creer->setUtilisateur(null);
-            }
-        }
+        $this->informations->removeElement($information);
 
         return $this;
     }
