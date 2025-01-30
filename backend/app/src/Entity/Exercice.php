@@ -14,7 +14,7 @@ class Exercice
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "ex_id", type: "integer")]
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]

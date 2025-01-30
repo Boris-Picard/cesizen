@@ -15,7 +15,7 @@ class Information
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "info_id", type: "integer")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

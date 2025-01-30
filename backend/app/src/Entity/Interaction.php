@@ -23,15 +23,18 @@ class Interaction
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\ManyToOne(inversedBy: 'interactions')]
+    #[ORM\JoinColumn(name: "info_id", referencedColumnName: "info_id", nullable: false)]
     private ?Information $information = null;
 
     #[ORM\ManyToOne(inversedBy: 'interactions')]
     private ?TypeInteraction $typeInteraction = null;
 
     #[ORM\ManyToOne(inversedBy: 'interactions')]
+    #[ORM\JoinColumn(name: "ex_id", referencedColumnName: "ex_id", nullable: false)]
     private ?Exercice $exercice = null;
 
     #[ORM\ManyToOne(inversedBy: 'interactions')]
+    #[ORM\JoinColumn(name: "ut_id", referencedColumnName: "ut_id", nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
     public function getId(): ?int
