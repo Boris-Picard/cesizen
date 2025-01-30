@@ -26,7 +26,7 @@ class Validation
     private ?string $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'validations')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "ut_id", referencedColumnName: "ut_id", nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
     public function getId(): ?int
