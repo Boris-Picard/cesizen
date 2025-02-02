@@ -7,15 +7,18 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['utilisateur:read']],
     denormalizationContext: ['groups' => ['utilisateur:write']]
 )]
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -24,31 +27,32 @@ class Utilisateur
     private ?int $id = null;
 
     #[Groups(['utilisateur:read', 'utilisateur:write'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "ut_nom", length: 255)]
     private ?string $ut_nom = null;
 
     #[Groups(['utilisateur:read', 'utilisateur:write'])]
-    #[ORM\Column(length: 200)]
+    #[ORM\Column(name: "ut_prenom", length: 200)]
     private ?string $ut_prenom = null;
 
     #[Groups(['utilisateur:read', 'utilisateur:write'])]
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "ut_mail", length: 255)]
     private ?string $ut_mail = null;
 
-    #[Groups(['utilisateur:read', 'utilisateur:write'])]
-    #[ORM\Column(length: 255)]
+    #[Groups(['utilisateur:write'])]
+    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide")]
+    #[ORM\Column(name: "ut_password", length: 255)]
     private ?string $ut_password = null;
 
     #[Groups(['utilisateur:read', 'utilisateur:write'])]
-    #[ORM\Column]
+    #[ORM\Column(name: "ut_active")]
     private ?bool $ut_active = null;
 
     /**
      * @var Role|null
      */
-    #[Groups(['utilisateur:read', 'utilisateur:write'])]
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: "utilisateurs")]
     #[ORM\JoinColumn(name: "role_id", referencedColumnName: "role_id", nullable: false)]
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
     private ?Role $role = null;
 
     /**
@@ -101,6 +105,8 @@ class Utilisateur
         $this->validations = new ArrayCollection();
     }
 
+    // --- Getters et Setters existants ---
+
     public function getId(): ?int
     {
         return $this->id;
@@ -114,7 +120,6 @@ class Utilisateur
     public function setUtNom(string $ut_nom): static
     {
         $this->ut_nom = $ut_nom;
-
         return $this;
     }
 
@@ -126,7 +131,6 @@ class Utilisateur
     public function setUtPrenom(string $ut_prenom): static
     {
         $this->ut_prenom = $ut_prenom;
-
         return $this;
     }
 
@@ -138,11 +142,10 @@ class Utilisateur
     public function setUtMail(string $ut_mail): static
     {
         $this->ut_mail = $ut_mail;
-
         return $this;
     }
 
-    public function getUtPassword(): ?string
+    public function getPassword(): ?string
     {
         return $this->ut_password;
     }
@@ -150,7 +153,6 @@ class Utilisateur
     public function setUtPassword(string $ut_password): static
     {
         $this->ut_password = $ut_password;
-
         return $this;
     }
 
@@ -162,7 +164,6 @@ class Utilisateur
     public function setUtActive(bool $ut_active): static
     {
         $this->ut_active = $ut_active;
-
         return $this;
     }
 
@@ -190,14 +191,12 @@ class Utilisateur
         if (!$this->exercices->contains($exercice)) {
             $this->exercices->add($exercice);
         }
-
         return $this;
     }
 
     public function removeExercice(Exercice $exercice): static
     {
         $this->exercices->removeElement($exercice);
-
         return $this;
     }
 
@@ -214,14 +213,12 @@ class Utilisateur
         if (!$this->informations->contains($information)) {
             $this->informations->add($information);
         }
-
         return $this;
     }
 
     public function removeInformation(Information $information): static
     {
         $this->informations->removeElement($information);
-
         return $this;
     }
 
@@ -239,19 +236,16 @@ class Utilisateur
             $this->interactions->add($interaction);
             $interaction->setUtilisateur($this);
         }
-
         return $this;
     }
 
     public function removeInteraction(Interaction $interaction): static
     {
         if ($this->interactions->removeElement($interaction)) {
-            // set the owning side to null (unless already changed)
             if ($interaction->getUtilisateur() === $this) {
                 $interaction->setUtilisateur(null);
             }
         }
-
         return $this;
     }
 
@@ -269,19 +263,73 @@ class Utilisateur
             $this->validations->add($validation);
             $validation->setUtilisateur($this);
         }
-
         return $this;
     }
 
     public function removeValidation(Validation $validation): static
     {
         if ($this->validations->removeElement($validation)) {
-            // set the owning side to null (unless already changed)
             if ($validation->getUtilisateur() === $this) {
                 $validation->setUtilisateur(null);
             }
         }
-
         return $this;
+    }
+
+    // --- Propriété non mappée pour le mot de passe en clair ---
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->ut_password;
+    }
+
+    public function setPlainPassword(?string $ut_password): self
+    {
+        $this->ut_password = $ut_password;
+        return $this;
+    }
+
+    // --- Méthodes de l'interface UserInterface / PasswordAuthenticatedUserInterface ---
+
+    /**
+     * On utilise l'email comme identifiant unique.
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->ut_mail;
+    }
+
+    /**
+     * Pour compatibilité avec l'ancienne méthode.
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->ut_mail;
+    }
+
+    /**
+     * Retourne le(s) rôle(s) de l'utilisateur.
+     * Vous pouvez personnaliser en fonction de la relation avec Role.
+     */
+    public function getRoles(): array
+    {
+        $roles = [];
+        if ($this->role !== null) {
+            $roles[] = $this->role->getRoleNom();
+        }
+
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+
+        return array_unique($roles);
+    }
+
+    /**
+     * Méthode permettant d'effacer les données sensibles.
+     */
+    public function eraseCredentials(): void
+    {
+        // $this->ut_password = null;
     }
 }
