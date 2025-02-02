@@ -7,18 +7,24 @@ use App\Repository\TypeInformationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['typeinformation:read']],
+    denormalizationContext: ['groups' => ['typeinformation:write']]
+)]
 #[ORM\Entity(repositoryClass: TypeInformationRepository::class)]
-#[ApiResource]
 class TypeInformation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "type_info_id", type: "integer")]
+    #[Groups(['typeinformation:read', 'information:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $nom = null;
+    #[Groups(['typeinformation:read', 'typeinformation:write', 'information:read'])]
+    private ?string $type_info_nom = null;
 
     /**
      * @var Collection<int, Information>
@@ -36,21 +42,14 @@ class TypeInformation
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getTypeInfoNom(): ?string
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->type_info_nom;
     }
 
-    public function getNom(): ?string
+    public function setTypeInfoNom(string $type_info_nom): static
     {
-        return $this->nom;
-    }
-
-    public function setNom(string $nom): static
-    {
-        $this->nom = $nom;
+        $this->type_info_nom = $type_info_nom;
 
         return $this;
     }
@@ -58,27 +57,27 @@ class TypeInformation
     /**
      * @return Collection<int, Information>
      */
-    public function getInformations(): Collection
+    public function getInformation(): Collection
     {
         return $this->informations;
     }
 
-    public function addInformation(Information $information): static
+    public function addInformation(Information $typeInformation): static
     {
-        if (!$this->informations->contains($information)) {
-            $this->informations->add($information);
-            $information->setTypeInformation($this);
+        if (!$this->informations->contains($typeInformation)) {
+            $this->informations->add($typeInformation);
+            $typeInformation->setTypeInformation($this);
         }
 
         return $this;
     }
 
-    public function removeInformation(Information $information): static
+    public function removeInformation(Information $typeInformation): static
     {
-        if ($this->informations->removeElement($information)) {
+        if ($this->informations->removeElement($typeInformation)) {
             // set the owning side to null (unless already changed)
-            if ($information->getTypeInformation() === $this) {
-                $information->setTypeInformation(null);
+            if ($typeInformation->getTypeInformation() === $this) {
+                $typeInformation->setTypeInformation(null);
             }
         }
 

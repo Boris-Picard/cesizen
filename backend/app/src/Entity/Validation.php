@@ -6,9 +6,13 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ValidationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['validation:read']],
+    denormalizationContext: ['groups' => ['validation:write']]
+)]
 #[ORM\Entity(repositoryClass: ValidationRepository::class)]
-#[ApiResource]
 class Validation
 {
     #[ORM\Id]
@@ -17,16 +21,20 @@ class Validation
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $token = null;
+    #[Groups(['validation:read', 'utilisateur:read'])]
+    private ?string $validation_token = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateExpiration = null;
+    #[Groups(['validation:read', 'validation:write'])]
+    private ?\DateTimeInterface $date_expiration_token = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $type = null;
+    #[Groups(['validation:read', 'validation:write'])]
+    private ?string $type_validation = null;
 
-    #[ORM\ManyToOne(inversedBy: 'validations')]
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class, inversedBy: "validations")]
     #[ORM\JoinColumn(name: "ut_id", referencedColumnName: "ut_id", nullable: false)]
+    #[Groups(['validation:read', 'validation:write'])]
     private ?Utilisateur $utilisateur = null;
 
     public function getId(): ?int
@@ -34,45 +42,38 @@ class Validation
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getValidationToken(): ?string
     {
-        $this->id = $id;
+        return $this->validation_token;
+    }
+
+    public function setValidationToken(string $validation_token): static
+    {
+        $this->validation_token = $validation_token;
 
         return $this;
     }
 
-    public function getToken(): ?string
+    public function getDateExpirationToken(): ?\DateTimeInterface
     {
-        return $this->token;
+        return $this->date_expiration_token;
     }
 
-    public function setToken(string $token): static
+    public function setDateExpirationToken(\DateTimeInterface $date_expiration_token): static
     {
-        $this->token = $token;
+        $this->date_expiration_token = $date_expiration_token;
 
         return $this;
     }
 
-    public function getDateExpiration(): ?\DateTimeInterface
+    public function getTypeValidation(): ?string
     {
-        return $this->dateExpiration;
+        return $this->type_validation;
     }
 
-    public function setDateExpiration(\DateTimeInterface $dateExpiration): static
+    public function setTypeValidation(string $type_validation): static
     {
-        $this->dateExpiration = $dateExpiration;
-
-        return $this;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
+        $this->type_validation = $type_validation;
 
         return $this;
     }

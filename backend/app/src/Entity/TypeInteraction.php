@@ -7,18 +7,24 @@ use App\Repository\TypeInteractionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['typeinteraction:read']],
+    denormalizationContext: ['groups' => ['typeinteraction:write']]
+)]
 #[ORM\Entity(repositoryClass: TypeInteractionRepository::class)]
-#[ApiResource]
 class TypeInteraction
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "type_inter_id", type: "integer")]
+    #[Groups(['typeinteraction:read', 'interaction:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $libelle = null;
+    #[Groups(['typeinteraction:read', 'typeinteraction:write', 'interaction:read'])]
+    private ?string $type_inter_libelle = null;
 
     /**
      * @var Collection<int, Interaction>
@@ -36,21 +42,14 @@ class TypeInteraction
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getTypeInterLibelle(): ?string
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->type_inter_libelle;
     }
 
-    public function getLibelle(): ?string
+    public function setTypeInterLibelle(string $type_inter_libelle): static
     {
-        return $this->libelle;
-    }
-
-    public function setLibelle(string $libelle): static
-    {
-        $this->libelle = $libelle;
+        $this->type_inter_libelle = $type_inter_libelle;
 
         return $this;
     }

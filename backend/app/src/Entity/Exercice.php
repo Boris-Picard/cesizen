@@ -7,47 +7,60 @@ use App\Repository\ExerciceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['exercice:read']],
+    denormalizationContext: ['groups' => ['exercice:write']]
+)]
 #[ORM\Entity(repositoryClass: ExerciceRepository::class)]
-#[ApiResource]
 class Exercice
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "ex_id", type: "integer")]
+    #[Groups(['exercice:read', 'utilisateur:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
-    private ?string $nom = null;
+    #[Groups(['exercice:read', 'exercice:write', 'utilisateur:read'])]
+    private ?string $ex_nom = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $inspiration = null;
+    #[Groups(['exercice:read', 'exercice:write'])]
+    private ?int $ex_inspiration = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $apnee = null;
+    #[Groups(['exercice:read', 'exercice:write'])]
+    private ?int $ex_apnee = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $expiration = null;
+    #[Groups(['exercice:read', 'exercice:write'])]
+    private ?int $ex_expiration = null;
 
     #[ORM\Column]
-    private ?bool $active = null;
-
-    /**
-     * @var Collection<int, Interaction>
-     */
-    #[ORM\OneToMany(targetEntity: Interaction::class, mappedBy: 'exercice')]
-    private Collection $interactions;
+    #[Groups(['exercice:read', 'exercice:write'])]
+    private ?bool $ex_active = null;
 
     /**
      * @var Collection<int, Utilisateur>
      */
     #[ORM\ManyToMany(targetEntity: Utilisateur::class, mappedBy: 'exercices')]
+    #[Groups(['exercice:read'])]
+    #[MaxDepth(1)]
     private Collection $utilisateurs;
+
+    /**
+     * @var Collection<int, Interaction>    
+     */
+    #[ORM\OneToMany(targetEntity: Interaction::class, mappedBy: 'exercice')]
+    private Collection $interactions;
 
     public function __construct()
     {
-        $this->interactions = new ArrayCollection();
         $this->utilisateurs = new ArrayCollection();
+        $this->interactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,69 +68,89 @@ class Exercice
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getExNom(): ?string
     {
-        $this->id = $id;
+        return $this->ex_nom;
+    }
+
+    public function setExNom(string $ex_nom): static
+    {
+        $this->ex_nom = $ex_nom;
 
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getExInspiration(): ?int
     {
-        return $this->nom;
+        return $this->ex_inspiration;
     }
 
-    public function setNom(string $nom): static
+    public function setExInspiration(?int $ex_inspiration): static
     {
-        $this->nom = $nom;
+        $this->ex_inspiration = $ex_inspiration;
 
         return $this;
     }
 
-    public function getInspiration(): ?int
+    public function getExApnee(): ?int
     {
-        return $this->inspiration;
+        return $this->ex_apnee;
     }
 
-    public function setInspiration(?int $inspiration): static
+    public function setExApnee(?int $ex_apnee): static
     {
-        $this->inspiration = $inspiration;
+        $this->ex_apnee = $ex_apnee;
 
         return $this;
     }
 
-    public function getApnee(): ?int
+    public function getExExpiration(): ?int
     {
-        return $this->apnee;
+        return $this->ex_expiration;
     }
 
-    public function setApnee(?int $apnee): static
+    public function setExExpiration(?int $ex_expiration): static
     {
-        $this->apnee = $apnee;
+        $this->ex_expiration = $ex_expiration;
 
         return $this;
     }
 
-    public function getExpiration(): ?int
+    public function isExActive(): ?bool
     {
-        return $this->expiration;
+        return $this->ex_active;
     }
 
-    public function setExpiration(?int $expiration): static
+    public function setExActive(bool $ex_active): static
     {
-        $this->expiration = $expiration;
+        $this->ex_active = $ex_active;
 
         return $this;
     }
 
-    public function isActive(): ?bool
+    /**
+     * @return Collection<int, Utilisateur>
+     */
+    public function getUtilisateurs(): Collection
     {
-        return $this->active;
+        return $this->utilisateurs;
     }
 
-    public function setActive(bool $active): static
+    public function addUtilisateur(Utilisateur $utilisateur): static
     {
-        $this->active = $active;
+        if (!$this->utilisateurs->contains($utilisateur)) {
+            $this->utilisateurs->add($utilisateur);
+            $utilisateur->addExercice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUtilisateur(Utilisateur $utilisateur): static
+    {
+        if ($this->utilisateurs->removeElement($utilisateur)) {
+            $utilisateur->removeExercice($this);
+        }
 
         return $this;
     }
@@ -147,33 +180,6 @@ class Exercice
             if ($interaction->getExercice() === $this) {
                 $interaction->setExercice(null);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Utilisateur>
-     */
-    public function getUtilisateurs(): Collection
-    {
-        return $this->utilisateurs;
-    }
-
-    public function addUtilisateur(Utilisateur $utilisateur): static
-    {
-        if (!$this->utilisateurs->contains($utilisateur)) {
-            $this->utilisateurs->add($utilisateur);
-            $utilisateur->addExercice($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUtilisateur(Utilisateur $utilisateur): static
-    {
-        if ($this->utilisateurs->removeElement($utilisateur)) {
-            $utilisateur->removeExercice($this);
         }
 
         return $this;

@@ -7,71 +7,98 @@ use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['utilisateur:read']],
+    denormalizationContext: ['groups' => ['utilisateur:write']]
+)]
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-#[ApiResource]
 class Utilisateur
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "ut_id", type: "integer")]
+    #[Groups(['utilisateur:read'])]
     private ?int $id = null;
 
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
     #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    private ?string $ut_nom = null;
 
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
     #[ORM\Column(length: 200)]
-    private ?string $prenom = null;
+    private ?string $ut_prenom = null;
 
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
     #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    private ?string $ut_mail = null;
 
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
     #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    private ?string $ut_password = null;
 
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
     #[ORM\Column]
-    private ?bool $active = null;
+    private ?bool $ut_active = null;
 
-    #[ORM\ManyToOne(inversedBy: 'utilisateurs')]
-    #[ORM\JoinColumn(nullable: false)]
+    /**
+     * @var Role|null
+     */
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
+    #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: "utilisateurs")]
+    #[ORM\JoinColumn(name: "role_id", referencedColumnName: "role_id", nullable: false)]
     private ?Role $role = null;
+
+    /**
+     * @var Collection<int, Exercice>
+     */
+    #[ORM\ManyToMany(targetEntity: Exercice::class, inversedBy: "utilisateurs")]
+    #[ORM\JoinTable(
+        name: "realiser",
+        joinColumns: [new ORM\JoinColumn(name: "ut_id", referencedColumnName: "ut_id")],
+        inverseJoinColumns: [new ORM\JoinColumn(name: "ex_id", referencedColumnName: "ex_id")]
+    )]
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
+    #[MaxDepth(1)]
+    private Collection $exercices;
+
+    /**
+     * @var Collection<int, Information>
+     */
+    #[ORM\ManyToMany(targetEntity: Information::class, inversedBy: "utilisateurs")]
+    #[ORM\JoinTable(
+        name: "creer",
+        joinColumns: [new ORM\JoinColumn(name: "ut_id", referencedColumnName: "ut_id")],
+        inverseJoinColumns: [new ORM\JoinColumn(name: "info_id", referencedColumnName: "info_id")]
+    )]
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
+    #[MaxDepth(1)]
+    private Collection $informations;
 
     /**
      * @var Collection<int, Interaction>
      */
     #[ORM\OneToMany(targetEntity: Interaction::class, mappedBy: 'utilisateur')]
+    #[Groups(['utilisateur:read'])]
+    #[MaxDepth(1)]
     private Collection $interactions;
 
     /**
      * @var Collection<int, Validation>
      */
     #[ORM\OneToMany(targetEntity: Validation::class, mappedBy: 'utilisateur')]
+    #[Groups(['utilisateur:read'])]
+    #[MaxDepth(1)]
     private Collection $validations;
-
-    /**
-     * @var Collection<int, Exercice>
-     */
-    #[ORM\ManyToMany(targetEntity: Exercice::class, inversedBy: 'utilisateurs')]
-    #[ORM\JoinTable(name: 'realiser')]
-    #[ORM\JoinColumn(name: 'ut_id', referencedColumnName: 'ut_id')]
-    #[ORM\InverseJoinColumn(name: 'ex_id', referencedColumnName: 'ex_id')]
-    private Collection $exercices;
-
-    /**
-     * @var Collection<int, Information>
-     */
-    #[ORM\ManyToMany(targetEntity: Information::class, inversedBy: 'utilisateurs')]
-    #[ORM\JoinTable(name: 'creer')]
-    #[ORM\JoinColumn(name: 'ut_id', referencedColumnName: 'ut_id')]
-    #[ORM\InverseJoinColumn(name: 'info_id', referencedColumnName: 'info_id')]
-    private Collection $informations;
 
     public function __construct()
     {
-        $this->interactions = new ArrayCollection();
-        $this->validations = new ArrayCollection();
         $this->exercices = new ArrayCollection();
         $this->informations = new ArrayCollection();
+        $this->interactions = new ArrayCollection();
+        $this->validations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -79,69 +106,62 @@ class Utilisateur
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getUtNom(): ?string
     {
-        $this->id = $id;
+        return $this->ut_nom;
+    }
+
+    public function setUtNom(string $ut_nom): static
+    {
+        $this->ut_nom = $ut_nom;
 
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getUtPrenom(): ?string
     {
-        return $this->nom;
+        return $this->ut_prenom;
     }
 
-    public function setNom(string $nom): static
+    public function setUtPrenom(string $ut_prenom): static
     {
-        $this->nom = $nom;
+        $this->ut_prenom = $ut_prenom;
 
         return $this;
     }
 
-    public function getPrenom(): ?string
+    public function getUtMail(): ?string
     {
-        return $this->prenom;
+        return $this->ut_mail;
     }
 
-    public function setPrenom(string $prenom): static
+    public function setUtMail(string $ut_mail): static
     {
-        $this->prenom = $prenom;
+        $this->ut_mail = $ut_mail;
 
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getUtPassword(): ?string
     {
-        return $this->email;
+        return $this->ut_password;
     }
 
-    public function setEmail(string $email): static
+    public function setUtPassword(string $ut_password): static
     {
-        $this->email = $email;
+        $this->ut_password = $ut_password;
 
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function isUtActive(): ?bool
     {
-        return $this->password;
+        return $this->ut_active;
     }
 
-    public function setPassword(string $password): static
+    public function setUtActive(bool $ut_active): static
     {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function isActive(): ?bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): static
-    {
-        $this->active = $active;
+        $this->ut_active = $ut_active;
 
         return $this;
     }
@@ -151,9 +171,56 @@ class Utilisateur
         return $this->role;
     }
 
-    public function setRole(?Role $role): static
+    public function setRole(?Role $role): self
     {
         $this->role = $role;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exercice>
+     */
+    public function getExercices(): Collection
+    {
+        return $this->exercices;
+    }
+
+    public function addExercice(Exercice $exercice): static
+    {
+        if (!$this->exercices->contains($exercice)) {
+            $this->exercices->add($exercice);
+        }
+
+        return $this;
+    }
+
+    public function removeExercice(Exercice $exercice): static
+    {
+        $this->exercices->removeElement($exercice);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Information>
+     */
+    public function getInformations(): Collection
+    {
+        return $this->informations;
+    }
+
+    public function addInformation(Information $information): static
+    {
+        if (!$this->informations->contains($information)) {
+            $this->informations->add($information);
+        }
+
+        return $this;
+    }
+
+    public function removeInformation(Information $information): static
+    {
+        $this->informations->removeElement($information);
 
         return $this;
     }
@@ -214,54 +281,6 @@ class Utilisateur
                 $validation->setUtilisateur(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Exercice>
-     */
-    public function getExercices(): Collection
-    {
-        return $this->exercices;
-    }
-
-    public function addExercice(Exercice $exercice): static
-    {
-        if (!$this->exercices->contains($exercice)) {
-            $this->exercices->add($exercice);
-        }
-
-        return $this;
-    }
-
-    public function removeExercice(Exercice $exercice): static
-    {
-        $this->exercices->removeElement($exercice);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Information>
-     */
-    public function getInformations(): Collection
-    {
-        return $this->informations;
-    }
-
-    public function addInformation(Information $information): static
-    {
-        if (!$this->informations->contains($information)) {
-            $this->informations->add($information);
-        }
-
-        return $this;
-    }
-
-    public function removeInformation(Information $information): static
-    {
-        $this->informations->removeElement($information);
 
         return $this;
     }
