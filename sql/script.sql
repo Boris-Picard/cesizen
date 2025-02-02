@@ -14,9 +14,9 @@ DROP TABLE IF EXISTS exercice CASCADE;
 CREATE TABLE IF NOT EXISTS exercice (
    ex_id SERIAL PRIMARY KEY,
    ex_nom VARCHAR(200) NOT NULL,
-   ex_inspiration INT,
-   ex_apnee INT,
-   ex_expiration INT,
+   ex_inspiration INT CHECK (ex_inspiration > 0),
+   ex_apnee INT CHECK (ex_apnee > 0),
+   ex_expiration INT CHECK (ex_expiration > 0),
    ex_active BOOLEAN DEFAULT FALSE NOT NULL
 );
 
