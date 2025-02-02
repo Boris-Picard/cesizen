@@ -7,6 +7,7 @@ use App\Repository\ValidationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['validation:read']],
@@ -17,11 +18,12 @@ class Validation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "valid_id")]
+    #[Groups(['validation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['validation:read', 'utilisateur:read'])]
+    #[Groups(['validation:read', 'validation:write'])]
     private ?string $validation_token = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -35,6 +37,7 @@ class Validation
     #[ORM\ManyToOne(targetEntity: Utilisateur::class, inversedBy: "validations")]
     #[ORM\JoinColumn(name: "ut_id", referencedColumnName: "ut_id", nullable: false)]
     #[Groups(['validation:read', 'validation:write'])]
+    #[MaxDepth(1)]
     private ?Utilisateur $utilisateur = null;
 
     public function getId(): ?int
