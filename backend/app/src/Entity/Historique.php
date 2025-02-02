@@ -6,33 +6,44 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\HistoriqueRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['historique:read']],
+    denormalizationContext: ['groups' => ['historique:write']]
+)]
 #[ORM\Entity(repositoryClass: HistoriqueRepository::class)]
-#[ApiResource]
 class Historique
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "histo_id", type: "integer")]
+    #[Groups(['historique:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $idObject = null;
+    #[Groups(['historique:read', 'historique:write'])]
+    private ?int $histo_id_obj = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $nomTable = null;
+    #[Groups(['historique:read', 'historique:write'])]
+    private ?string $histo_nom_table = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
+    #[Groups(['historique:read', 'historique:write'])]
+    private ?\DateTimeInterface $histo_date = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $ancienneValeur = null;
+    #[Groups(['historique:read', 'historique:write'])]
+    private ?string $histo_ancienne_valeur = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $nouvelleValeur = null;
+    #[Groups(['historique:read', 'historique:write'])]
+    private ?string $histo_nouvelle_valeur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'historiques')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: TypeHistorique::class, inversedBy: "historiques")]
+    #[ORM\JoinColumn(name: "type_histo_id", referencedColumnName: "type_histo_id", nullable: false)]
+    #[Groups(['historique:read', 'historique:write'])]
     private ?TypeHistorique $typeHistorique = null;
 
     public function getId(): ?int
@@ -40,69 +51,62 @@ class Historique
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getHistoIdObj(): ?int
     {
-        $this->id = $id;
+        return $this->histo_id_obj;
+    }
+
+    public function setHistoIdObj(int $histo_id_obj): static
+    {
+        $this->histo_id_obj = $histo_id_obj;
 
         return $this;
     }
 
-    public function getIdObject(): ?int
+    public function getHistoNomTable(): ?string
     {
-        return $this->idObject;
+        return $this->histo_nom_table;
     }
 
-    public function setIdObject(int $idObject): static
+    public function setHistoNomTable(string $histo_nom_table): static
     {
-        $this->idObject = $idObject;
+        $this->histo_nom_table = $histo_nom_table;
 
         return $this;
     }
 
-    public function getNomTable(): ?string
+    public function getHistoDate(): ?\DateTimeInterface
     {
-        return $this->nomTable;
+        return $this->histo_date;
     }
 
-    public function setNomTable(string $nomTable): static
+    public function setHistoDate(\DateTimeInterface $histo_date): static
     {
-        $this->nomTable = $nomTable;
+        $this->histo_date = $histo_date;
 
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getHistoAncienneValeur(): ?string
     {
-        return $this->date;
+        return $this->histo_ancienne_valeur;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setHistoAncienneValeur(string $histo_ancienne_valeur): static
     {
-        $this->date = $date;
+        $this->histo_ancienne_valeur = $histo_ancienne_valeur;
 
         return $this;
     }
 
-    public function getAncienneValeur(): ?string
+    public function getHistoNouvelleValeur(): ?string
     {
-        return $this->ancienneValeur;
+        return $this->histo_nouvelle_valeur;
     }
 
-    public function setAncienneValeur(string $ancienneValeur): static
+    public function setHistoNouvelleValeur(string $histo_nouvelle_valeur): static
     {
-        $this->ancienneValeur = $ancienneValeur;
-
-        return $this;
-    }
-
-    public function getNouvelleValeur(): ?string
-    {
-        return $this->nouvelleValeur;
-    }
-
-    public function setNouvelleValeur(string $nouvelleValeur): static
-    {
-        $this->nouvelleValeur = $nouvelleValeur;
+        $this->histo_nouvelle_valeur = $histo_nouvelle_valeur;
 
         return $this;
     }

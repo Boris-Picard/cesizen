@@ -6,69 +6,79 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\InteractionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['interaction:read']],
+    denormalizationContext: ['groups' => ['interaction:write']]
+)]
 #[ORM\Entity(repositoryClass: InteractionRepository::class)]
-#[ApiResource]
 class Interaction
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "inter_id", type: "integer")]
+    #[Groups(['interaction:read', 'utilisateur:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateDebut = null;
+    #[Groups(['interaction:read', 'interaction:write'])]
+    private ?\DateTimeInterface $inter_date_de_debut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateFin = null;
+    #[Groups(['interaction:read', 'interaction:write'])]
+    private ?\DateTimeInterface $inter_date_de_fin = null;
 
-    #[ORM\ManyToOne(inversedBy: 'interactions')]
+    #[ORM\ManyToOne(targetEntity: Information::class, inversedBy: "interactions")]
     #[ORM\JoinColumn(name: "info_id", referencedColumnName: "info_id", nullable: false)]
+    #[Groups(['interaction:read', 'interaction:write'])]
+    #[MaxDepth(1)]
     private ?Information $information = null;
 
-    #[ORM\ManyToOne(inversedBy: 'interactions')]
-    private ?TypeInteraction $typeInteraction = null;
-
-    #[ORM\ManyToOne(inversedBy: 'interactions')]
+    #[ORM\ManyToOne(targetEntity: Exercice::class, inversedBy: "interactions")]
     #[ORM\JoinColumn(name: "ex_id", referencedColumnName: "ex_id", nullable: false)]
+    #[Groups(['interaction:read', 'interaction:write'])]
+    #[MaxDepth(1)]
     private ?Exercice $exercice = null;
 
-    #[ORM\ManyToOne(inversedBy: 'interactions')]
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class, inversedBy: "interactions")]
     #[ORM\JoinColumn(name: "ut_id", referencedColumnName: "ut_id", nullable: false)]
+    #[Groups(['interaction:read', 'interaction:write'])]
+    #[MaxDepth(1)]
     private ?Utilisateur $utilisateur = null;
+
+    #[ORM\ManyToOne(targetEntity: TypeInteraction::class, inversedBy: "interactions")]
+    #[ORM\JoinColumn(name: "type_inter_id", referencedColumnName: "type_inter_id", nullable: false)]
+    #[Groups(['interaction:read', 'interaction:write'])]
+    #[MaxDepth(1)]
+    private ?TypeInteraction $typeInteraction = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getInterDateDeDebut(): ?\DateTimeInterface
     {
-        $this->id = $id;
+        return $this->inter_date_de_debut;
+    }
+
+    public function setInterDateDeDebut(\DateTimeInterface $inter_date_de_debut): static
+    {
+        $this->inter_date_de_debut = $inter_date_de_debut;
 
         return $this;
     }
 
-    public function getDateDebut(): ?\DateTimeInterface
+    public function getInterDateDeFin(): ?\DateTimeInterface
     {
-        return $this->dateDebut;
+        return $this->inter_date_de_fin;
     }
 
-    public function setDateDebut(\DateTimeInterface $dateDebut): static
+    public function setInterDateDeFin(\DateTimeInterface $inter_date_de_fin): static
     {
-        $this->dateDebut = $dateDebut;
-
-        return $this;
-    }
-
-    public function getDateFin(): ?\DateTimeInterface
-    {
-        return $this->dateFin;
-    }
-
-    public function setDateFin(\DateTimeInterface $dateFin): static
-    {
-        $this->dateFin = $dateFin;
+        $this->inter_date_de_fin = $inter_date_de_fin;
 
         return $this;
     }

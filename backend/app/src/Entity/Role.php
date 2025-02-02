@@ -7,23 +7,29 @@ use App\Repository\RoleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['role:read']],
+    denormalizationContext: ['groups' => ['role:write']]
+)]
 #[ORM\Entity(repositoryClass: RoleRepository::class)]
-#[ApiResource]
 class Role
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "role_id", type: "integer")]
+    #[Groups(['role:read', 'utilisateur:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $nom = null;
+    #[Groups(['role:read', 'role:write', 'utilisateur:read'])]
+    private ?string $role_nom = null;
 
-    /**
-     * @var Collection<int, Utilisateur>
-     */
-    #[ORM\OneToMany(targetEntity: Utilisateur::class, mappedBy: 'role')]
+    #[ORM\OneToMany(mappedBy: "role", targetEntity: Utilisateur::class)]
+    #[Groups(['role:read'])]
+    #[MaxDepth(1)]
     private Collection $utilisateurs;
 
     public function __construct()
@@ -36,52 +42,51 @@ class Role
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getRoleNom(): ?string
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->role_nom;
     }
 
-    public function getNom(): ?string
+    public function setRoleNom(string $role_nom): self
     {
-        return $this->nom;
-    }
-
-    public function setNom(string $nom): static
-    {
-        $this->nom = $nom;
-
+        $this->role_nom = $role_nom;
         return $this;
     }
 
     /**
-     * @return Collection<int, Utilisateur>
+     * Retourne la collection des utilisateurs liés à ce rôle.
      */
     public function getUtilisateurs(): Collection
     {
         return $this->utilisateurs;
     }
 
-    public function addUtilisateur(Utilisateur $utilisateur): static
+    /**
+     * Définit la collection complète des utilisateurs (optionnel, à utiliser avec précaution).
+     */
+    public function setUtilisateurs(Collection $utilisateurs): self
+    {
+        $this->utilisateurs = $utilisateurs;
+        return $this;
+    }
+
+    public function addUtilisateur(Utilisateur $utilisateur): self
     {
         if (!$this->utilisateurs->contains($utilisateur)) {
             $this->utilisateurs->add($utilisateur);
             $utilisateur->setRole($this);
         }
-
         return $this;
     }
 
-    public function removeUtilisateur(Utilisateur $utilisateur): static
+    public function removeUtilisateur(Utilisateur $utilisateur): self
     {
         if ($this->utilisateurs->removeElement($utilisateur)) {
-            // set the owning side to null (unless already changed)
+            // Si le rôle de l'utilisateur est ce rôle, on le remet à null
             if ($utilisateur->getRole() === $this) {
                 $utilisateur->setRole(null);
             }
         }
-
         return $this;
     }
 }

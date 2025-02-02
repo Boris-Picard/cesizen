@@ -7,23 +7,29 @@ use App\Repository\TypeHistoriqueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['typehistorique:read']],
+    denormalizationContext: ['groups' => ['typehistorique:write']]
+)]
 #[ORM\Entity(repositoryClass: TypeHistoriqueRepository::class)]
-#[ApiResource]
 class TypeHistorique
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "type_histo_id", type: "integer")]
+    #[Groups(['typehistorique:read', 'historique:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    private ?string $libelle = null;
+    #[Groups(['typehistorique:read', 'typehistorique:write', 'historique:read'])]
+    private ?string $type_histo_libelle = null;
 
     /**
      * @var Collection<int, Historique>
      */
-    #[ORM\OneToMany(targetEntity: Historique::class, mappedBy: 'typeHistorique')]
+    #[ORM\OneToMany(mappedBy: "typeHistorique", targetEntity: Historique::class)]
     private Collection $historiques;
 
     public function __construct()
@@ -36,21 +42,14 @@ class TypeHistorique
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function getTypeHistoLibelle(): ?string
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->type_histo_libelle;
     }
 
-    public function getLibelle(): ?string
+    public function setTypeHistoLibelle(string $type_histo_libelle): static
     {
-        return $this->libelle;
-    }
-
-    public function setLibelle(string $libelle): static
-    {
-        $this->libelle = $libelle;
+        $this->type_histo_libelle = $type_histo_libelle;
 
         return $this;
     }
