@@ -27,15 +27,21 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[Groups(['utilisateur:read', 'utilisateur:write'])]
+    #[Assert\NotBlank(message: "Le nom ne peut pas être vide", groups: ['registration'])]
     #[ORM\Column(name: "ut_nom", length: 255)]
     private ?string $ut_nom = null;
 
     #[Groups(['utilisateur:read', 'utilisateur:write'])]
+    #[Assert\NotBlank(message: "Le prénom ne peut pas être vide", groups: ['registration'])]
     #[ORM\Column(name: "ut_prenom", length: 200)]
     private ?string $ut_prenom = null;
 
     #[Groups(['utilisateur:read', 'utilisateur:write'])]
     #[ORM\Column(name: "ut_mail", length: 255)]
+    #[Assert\NotBlank(message: "L'addresse mail ne peut pas être vide", groups: ['registration'])]
+    #[Assert\Email(
+        message: "L'adresse mail {{ value }} n'est pas une adresse valide.",
+    )]
     private ?string $ut_mail = null;
 
     #[Groups(['utilisateur:write'])]

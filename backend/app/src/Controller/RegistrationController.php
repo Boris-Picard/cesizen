@@ -26,7 +26,6 @@ class RegistrationController
         $data = json_decode($request->getContent(), true);
 
         $utilisateur = new Utilisateur();
-        // Remappez les clés si besoin (votre front envoie "firstName", etc.)
         $utilisateur->setUtNom($data['ut_nom'] ?? '');
         $utilisateur->setUtPrenom($data['ut_prenom'] ?? '');
         $utilisateur->setUtMail($data['ut_mail'] ?? '');
@@ -39,13 +38,11 @@ class RegistrationController
         }
         $utilisateur->setRole($defaultRole);
 
-        // Validation
-        $errors = $this->validator->validate($utilisateur, null, ['registration']);
+        $errors = $this->validator->validate($utilisateur, null, ['utilisateur']);
         if (count($errors) > 0) {
             return new JsonResponse(['error' => (string) $errors], 400);
         }
 
-        // Hashage du mot de passe
         $hashedPassword = $this->passwordHasher->hashPassword($utilisateur, $utilisateur->getPlainPassword());
         $utilisateur->setUtPassword($hashedPassword);
         $utilisateur->setPlainPassword(null);
