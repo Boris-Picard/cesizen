@@ -1,5 +1,3 @@
-"use client"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -8,16 +6,25 @@ import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import axios from "axios"
 
-// Définition du schéma de validation pour l'inscription.
 const registerSchema = z
   .object({
+    firstName: z
+      .string().min(2, { message: "Le prénom est requis." })
+      .regex(/^(?!.*\d)[\p{L}\s]+$/u, { message: "Le prénom ne doit pas contenir de chiffres ou de caractères spéciaux." }),
+    lastName: z
+      .string().min(2, { message: "Le nom est requis." })
+      .regex(/^(?!.*\d)[\p{L}\s]+$/u, { message: "Le prénom ne doit pas contenir de chiffres ou de caractères spéciaux." }),
     email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
     password: z
       .string()
       .min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." })
       .max(100, { message: "Le mot de passe doit comporter moins de 100 caractères." }),
-    confirmPassword: z.string().min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." })
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." })
+      .max(100, { message: "Le mot de passe doit comporter moins de 100 caractères." }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Les mots de passe ne correspondent pas.",
@@ -28,6 +35,8 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -35,7 +44,18 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
   })
 
   function onSubmit(values: z.infer<typeof registerSchema>) {
-    console.log("Valeurs du formulaire :", values)
+    const validData = registerSchema.parse(values);
+    const getUser = async () => {
+      const data = axios.post('http://cesizen-api.localhost/register', {
+        ut_prenom: validData.firstName,
+        ut_nom: validData.lastName,
+        ut_mail: validData.email,
+        plainPassword: validData.password,
+      })
+      const sendUserData = await data;
+      console.log(sendUserData);
+    }
+    getUser();
   }
 
   return (
@@ -52,12 +72,45 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                 </p>
               </div>
 
+              {/* Champ Prénom */}
+              <div className="grid gap-2">
+                <Label htmlFor="firstName">Prénom</Label>
+                <Input
+                  id="firstName"
+                  type="text"
+                  placeholder="Votre prénom"
+                  {...form.register("firstName")}
+                />
+                {form.formState.errors.firstName && (
+                  <p className="text-sm text-red-600">
+                    {form.formState.errors.firstName.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Champ Nom */}
+              <div className="grid gap-2">
+                <Label htmlFor="lastName">Nom</Label>
+                <Input
+                  id="lastName"
+                  type="text"
+                  placeholder="Votre nom"
+                  {...form.register("lastName")}
+                />
+                {form.formState.errors.lastName && (
+                  <p className="text-sm text-red-600">
+                    {form.formState.errors.lastName.message}
+                  </p>
+                )}
+              </div>
+
               {/* Champ adresse e-mail */}
               <div className="grid gap-2">
                 <Label htmlFor="email">Adresse e-mail</Label>
                 <Input
                   id="email"
                   type="email"
+                  autoComplete="email"
                   placeholder="exemple@domaine.com"
                   {...form.register("email")}
                 />
@@ -75,6 +128,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                   id="password"
                   type="password"
                   placeholder="Votre mot de passe"
+                  autoComplete="new-password"
                   {...form.register("password")}
                 />
                 {form.formState.errors.password && (
@@ -91,6 +145,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                   id="confirmPassword"
                   type="password"
                   placeholder="Confirmez votre mot de passe"
+                  autoComplete="new-password"
                   {...form.register("confirmPassword")}
                 />
                 {form.formState.errors.confirmPassword && (

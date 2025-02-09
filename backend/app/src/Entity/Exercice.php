@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['exercice:read']],
-    denormalizationContext: ['groups' => ['exercice:write']]
+    denormalizationContext: ['groups' => ['exercice:write']],
 )]
 #[ORM\Entity(repositoryClass: ExerciceRepository::class)]
 class Exercice
