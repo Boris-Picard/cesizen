@@ -51,6 +51,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                   id="email"
                   type="email"
                   placeholder="exemple@domaine.com"
+                  autoComplete="email"
                   {...form.register("email")}
                 />
                 {form.formState.errors.email && (
@@ -74,6 +75,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                 <Input
                   id="password"
                   type="password"
+                  autoComplete="new-password"
                   {...form.register("password")}
                 />
                 {form.formState.errors.password && (

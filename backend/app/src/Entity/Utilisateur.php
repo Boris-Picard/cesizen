@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['utilisateur:read']],
-    denormalizationContext: ['groups' => ['utilisateur:write']]
+    denormalizationContext: ['groups' => ['utilisateur:write']],
 )]
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
@@ -39,9 +39,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $ut_mail = null;
 
     #[Groups(['utilisateur:write'])]
-    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide")]
     #[ORM\Column(name: "ut_password", length: 255)]
     private ?string $ut_password = null;
+
+    #[Groups(['utilisateur:write'])]
+    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide", groups: ['registration'])]
+    private ?string $plainPassword = null;
 
     #[Groups(['utilisateur:read', 'utilisateur:write'])]
     #[ORM\Column(name: "ut_active")]
@@ -280,12 +283,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPlainPassword(): ?string
     {
-        return $this->ut_password;
+        return $this->plainPassword;
     }
 
-    public function setPlainPassword(?string $ut_password): self
+    public function setPlainPassword(?string $plainPassword): self
     {
-        $this->ut_password = $ut_password;
+        $this->plainPassword = $plainPassword;
         return $this;
     }
 
