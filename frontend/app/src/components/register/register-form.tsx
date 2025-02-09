@@ -62,7 +62,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
       if (data.status === 201) {
         toast({
           variant: "success",
-          title: "Connexion réussie, vous allez être redirigé."
+          title: "Inscription réussie, vous allez être redirigé."
         })
       }
     } catch (error) {
