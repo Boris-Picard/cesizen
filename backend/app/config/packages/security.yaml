@@ -12,27 +12,26 @@ security:
       entity:
         class: App\Entity\Utilisateur
         property: ut_mail
+        
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
-    main:
-      lazy: true
-      provider: users_in_memory
-    api_login:
-      pattern: ^/api/login
+    login:
+      pattern: ^/login
       stateless: true
       provider: app_user_provider
       json_login:
-        check_path: /api/login
+        check_path: /login
         username_path: ut_mail
         password_path: ut_password
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
     api:
-      pattern: ^/api
-      provider: app_user_provider
+      pattern: ^/api  # Tout ce qui commence par /api, sauf /api/login
       stateless: true
+      provider: app_user_provider
       jwt: ~
 
       # activate different ways to authenticate
@@ -44,6 +43,7 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
+    - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
     # - { path: ^/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
 

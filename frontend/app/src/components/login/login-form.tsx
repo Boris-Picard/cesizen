@@ -1,5 +1,3 @@
-"use client"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -8,6 +6,10 @@ import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import axios from "axios"
+import { useToast } from "@/hooks/use-toast"
+import Spinner from "@/components/spinner/spinner"
+import { useIsLoading } from "@/hooks/use-loading"
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
@@ -18,6 +20,9 @@ const loginSchema = z.object({
 })
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+  const { toast } = useToast()
+  const { isLoading, loading } = useIsLoading()
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -26,8 +31,39 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
     }
   })
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log("Valeurs du formulaire :", values)
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    const validData = loginSchema.parse(values);
+    try {
+      loading(true)
+      const data = await axios.post('http://cesizen-api.localhost/login', {
+        ut_mail: validData.email,
+        ut_password: validData.password,
+      })
+      if (data.status === 200) {
+        toast({
+          variant: "success",
+          title: "Connexion réussie, vous allez être redirigé."
+        })
+      }
+
+    } catch (error) {
+      if (error instanceof Error) {
+        if (axios.isAxiosError(error)) {
+          toast({
+            variant: "destructive",
+            title: error.response?.data?.title ?? "Something went wrong",
+            description: error.response?.data?.message,
+          })
+        }
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+        })
+      }
+    } finally {
+      loading(false)
+    }
   }
 
   return (
@@ -86,8 +122,17 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               </div>
 
               {/* Bouton de connexion */}
-              <Button type="submit" className="w-full">
-                Connexion
+              <Button className="w-full" disabled={isLoading}>
+                {isLoading ?
+                  <>
+                    <Spinner />
+                    Chargement...
+                  </>
+                  :
+                  <>
+                    Inscription
+                  </>
+                }
               </Button>
 
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
