@@ -7,6 +7,9 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import axios from "axios"
+import { useToast } from "@/hooks/use-toast"
+import Spinner from "@/components/spinner/spinner"
+import { useIsLoading } from "@/hooks/use-loading"
 
 const registerSchema = z
   .object({
@@ -32,6 +35,9 @@ const registerSchema = z
   })
 
 export function RegisterForm({ className, ...props }: React.ComponentProps<"div">) {
+  const { toast } = useToast()
+  const { isLoading, loading } = useIsLoading()
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -43,19 +49,40 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
     },
   })
 
-  function onSubmit(values: z.infer<typeof registerSchema>) {
+  async function onSubmit(values: z.infer<typeof registerSchema>) {
     const validData = registerSchema.parse(values);
-    const getUser = async () => {
-      const data = axios.post('http://cesizen-api.localhost/register', {
+    loading(true)
+    try {
+      const data = await axios.post('http://cesizen-api.localhost/register', {
         ut_prenom: validData.firstName,
         ut_nom: validData.lastName,
         ut_mail: validData.email,
         plainPassword: validData.password,
       })
-      const sendUserData = await data;
-      console.log(sendUserData);
+      if (data.status === 201) {
+        toast({
+          variant: "success",
+          title: "Connexion réussie, vous allez être redirigé."
+        })
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        if (axios.isAxiosError(error)) {
+          toast({
+            variant: "destructive",
+            title: error.response?.data?.title ?? "Something went wrong",
+            description: error.response?.data?.message,
+          })
+        }
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+        })
+      }
+    } finally {
+      loading(false)
     }
-    getUser();
   }
 
   return (
@@ -156,9 +183,19 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
               </div>
 
               {/* Bouton d'inscription */}
-              <Button type="submit" className="w-full">
-                Inscription
+              <Button className="w-full" disabled={isLoading}>
+                {isLoading ?
+                  <>
+                    <Spinner />
+                    Chargement...
+                  </>
+                  :
+                  <>
+                    Inscription
+                  </>
+                }
               </Button>
+
 
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">
