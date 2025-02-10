@@ -45,10 +45,10 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
           title: "Connexion réussie, vous allez être redirigé."
         })
       }
-console.log(data);
-
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
+        
         if (axios.isAxiosError(error)) {
           toast({
             variant: "destructive",
@@ -131,7 +131,7 @@ console.log(data);
                   </>
                   :
                   <>
-                    Inscription
+                    Connexion
                   </>
                 }
               </Button>
