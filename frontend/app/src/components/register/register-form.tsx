@@ -60,18 +60,22 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
         plainPassword: validData.password,
       })
       if (data.status === 201) {
+        console.log(data);
+
         toast({
           variant: "success",
-          title: "Inscription réussie, vous allez être redirigé."
+          title: data.data.status
         })
       }
     } catch (error) {
       if (error instanceof Error) {
+        console.log(error);
+
         if (axios.isAxiosError(error)) {
           toast({
             variant: "destructive",
             title: error.response?.data?.title ?? "Something went wrong",
-            description: error.response?.data?.message,
+            description: error.response?.data?.error || error.message,
           })
         }
       } else {
