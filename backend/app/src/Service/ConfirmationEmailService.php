@@ -37,7 +37,6 @@ class ConfirmationEmailService
             $this->entityManager->flush();
         }
 
-        // Générer le token via JWT avec une expiration de 24 heures
         $payload = [
             'ut_mail' => $user->getUtMail(),
             'exp'      => time() + 86400, // expiration dans 24 heures
@@ -45,7 +44,6 @@ class ConfirmationEmailService
         ];
         $token = $this->jwtEncoder->encode($payload);
 
-        // Créer une nouvelle instance de Validation et la remplir
         $validation = new Validation();
         $validation->setValidationToken($token);
         $validation->setTypeValidation('account_confirmation');
@@ -61,7 +59,6 @@ class ConfirmationEmailService
         );
         $confirmationUrl = rtrim($this->frontUrl, '/') . $relativeUrl;
 
-        // Construction et envoi de l'email
         $email = (new Email())
             ->from($this->senderEmail)
             ->to($user->getUtMail())
@@ -99,7 +96,6 @@ class ConfirmationEmailService
                     return $user;
                 }
             } catch (\Exception $e) {
-                // Le token est invalide, on passe à l'exception ci-dessous.
             }
             throw new \Exception('Token invalide ou inexistant.');
         }
