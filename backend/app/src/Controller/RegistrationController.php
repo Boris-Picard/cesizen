@@ -68,10 +68,9 @@ class RegistrationController
             $this->entityManager->commit();
         } catch (\Exception $error) {
             $this->entityManager->rollback();
-
             return new JsonResponse(['error' => $error->getMessage()], 500);
         }
 
-        return new JsonResponse(['status' => "Un mail de confirmation viens d'être envoyé"], 201);
+        return new JsonResponse(['status' => "Un mail de confirmation vient d'être envoyé"], 201);
     }
 }
