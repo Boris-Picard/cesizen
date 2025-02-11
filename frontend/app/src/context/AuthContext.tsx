@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<UserPayload | null>(null);
 
-    // Au montage, on charge le token du localStorage
     useEffect(() => {
         const savedToken = localStorage.getItem("jwt");
         if (savedToken) {
