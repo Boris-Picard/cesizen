@@ -12,7 +12,7 @@ class AccountConfirmationController extends AbstractController
 
     public function __construct(protected ConfirmationEmailService $confirmationEmailService) {}
 
-    #[Route(path: "/account_confirmation/{token}", name: "account_confirmation")]
+    #[Route(path: "/account-confirmation/{token}", name: "account_confirmation")]
     public function confirm(string $token): JsonResponse
     {
         try {
@@ -23,7 +23,7 @@ class AccountConfirmationController extends AbstractController
                 'user' => [
                     'id'       => $user->getId(),
                     'username' => $user->getUtPrenom(),
-                    'mail' => $user->getUtMail(),
+                    'mail'     => $user->getUtMail(),
                 ]
             ]);
         } catch (\Exception $error) {

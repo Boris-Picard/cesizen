@@ -7,9 +7,10 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import axios from "axios"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/useToast"
 import Spinner from "@/components/spinner/spinner"
-import { useIsLoading } from "@/hooks/use-loading"
+import { useIsLoading } from "@/hooks/useLoading"
+import { useAuth } from "@/context/AuthContext"
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
@@ -22,6 +23,7 @@ const loginSchema = z.object({
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const { toast } = useToast()
   const { isLoading, loading } = useIsLoading()
+  const { isAuthenticated, login } = useAuth();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -35,31 +37,24 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
     const validData = loginSchema.parse(values);
     try {
       loading(true)
-      const data = await axios.post('http://cesizen-api.localhost/login', {
-        ut_mail: validData.email,
-        ut_password: validData.password,
-      })
-      if (data.status === 200) {
-        toast({
-          variant: "success",
-          title: "Connexion réussie, vous allez être redirigé."
-        })
-      }
+      await login(validData.email, validData.password);
+      toast({
+        variant: "success",
+        title: "Connexion réussie, vous allez être redirigé."
+      });
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error);
-        
         if (axios.isAxiosError(error)) {
           toast({
             variant: "destructive",
-            title: error.response?.data?.title ?? "Something went wrong",
+            title: error.response?.data?.title ?? "Une erreur est survenue",
             description: error.response?.data?.message,
           })
         }
       } else {
         toast({
           variant: "destructive",
-          title: "Something went wrong",
+          title: "Une erreur est survenue",
         })
       }
     } finally {
@@ -103,7 +98,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                 <div className="flex items-center">
                   <Label htmlFor="password">Mot de passe</Label>
                   <a
-                    href="#"
+                    href="/reset-password"
                     className="ml-auto text-sm underline-offset-2 hover:underline"
                   >
                     Mot de passe oublié ?
@@ -123,7 +118,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               </div>
 
               {/* Bouton de connexion */}
-              <Button className="w-full" disabled={isLoading}>
+              <Button className="w-full" disabled={isLoading || isAuthenticated}>
                 {isLoading ?
                   <>
                     <Spinner />

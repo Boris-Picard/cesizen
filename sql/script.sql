@@ -88,10 +88,10 @@ CREATE TABLE IF NOT EXISTS interaction (
 
 CREATE TABLE IF NOT EXISTS validation (
    valid_id SERIAL PRIMARY KEY,
-   validation_token VARCHAR(255) NOT NULL,
+   validation_token TEXT UNIQUE NOT NULL,
    date_expiration_token TIMESTAMP NOT NULL,
    type_validation VARCHAR(100) NOT NULL,
-   ut_id INT NOT NULL,
+   ut_id INT UNIQUE NOT NULL,
    FOREIGN KEY (ut_id) REFERENCES utilisateur(ut_id)
 );
 

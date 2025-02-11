@@ -7,9 +7,9 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import axios from "axios"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/useToast"
 import Spinner from "@/components/spinner/spinner"
-import { useIsLoading } from "@/hooks/use-loading"
+import { useIsLoading } from "@/hooks/useLoading"
 
 const registerSchema = z
   .object({
@@ -74,14 +74,14 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
         if (axios.isAxiosError(error)) {
           toast({
             variant: "destructive",
-            title: error.response?.data?.title ?? "Something went wrong",
+            title: error.response?.data?.title ?? "Une erreur est survenue",
             description: error.response?.data?.error || error.message,
           })
         }
       } else {
         toast({
           variant: "destructive",
-          title: "Something went wrong",
+          title: "Une erreur est survenue",
         })
       }
     } finally {
