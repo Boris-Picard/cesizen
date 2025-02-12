@@ -40,7 +40,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
       await login(validData.email, validData.password);
       toast({
         variant: "success",
-        title: "Connexion réussie, vous allez être redirigé."
+        title: "Connexion réussie."
       });
     } catch (error) {
       if (error instanceof Error) {
