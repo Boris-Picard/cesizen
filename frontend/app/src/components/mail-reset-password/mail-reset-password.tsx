@@ -6,18 +6,15 @@ import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import axios from "axios";
-import { useToast } from "@/hooks/useToast";
 import Spinner from "@/components/spinner/spinner";
-import { useIsLoading } from "@/hooks/useLoading";
+import useMailResetPassword from "@/hooks/useMailResetPassword";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
 });
 
 export function MailResetPassword({ className, ...props }: React.ComponentProps<"div">) {
-  const { toast } = useToast();
-  const { isLoading, loading } = useIsLoading();
+  const { mailResetPassword, loading } = useMailResetPassword()
 
   const form = useForm<z.infer<typeof forgotPasswordSchema>>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -28,37 +25,7 @@ export function MailResetPassword({ className, ...props }: React.ComponentProps<
 
   async function onSubmit(values: z.infer<typeof forgotPasswordSchema>) {
     const validData = forgotPasswordSchema.parse(values);
-    try {
-      loading(true);
-      const response = await axios.post('http://cesizen-api.localhost/reset-password/forgot-password', {
-        ut_mail: validData.email,
-      });
-      if (response.status === 200) {
-        toast({
-          variant: "success",
-          title: "Un email de réinitialisation a été envoyé (si l'adresse existe).",
-        });
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error);
-        
-        if (axios.isAxiosError(error)) {
-          toast({
-            variant: "destructive",
-            title: error.response?.data?.title ?? error.message,
-            description: error.response?.data?.message ? error.response?.data?.detail : error.response?.data?.error,
-          });
-        }
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Une erreur est survenue",
-        });
-      }
-    } finally {
-      loading(false);
-    }
+    await mailResetPassword({ ut_mail: validData.email })
   }
 
   return (
@@ -101,8 +68,8 @@ export function MailResetPassword({ className, ...props }: React.ComponentProps<
               </div>
 
               {/* Bouton de validation */}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
                   <>
                     <Spinner />
                     Chargement...

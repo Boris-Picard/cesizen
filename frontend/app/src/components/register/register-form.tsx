@@ -1,42 +1,57 @@
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import axios from "axios"
-import { useToast } from "@/hooks/useToast"
-import Spinner from "@/components/spinner/spinner"
-import { useIsLoading } from "@/hooks/useLoading"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox"; // Import de la Checkbox (shadcn)
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import Spinner from "@/components/spinner/spinner";
+import { useRegisterUser } from "@/hooks/useRegisterUser";
 
 const registerSchema = z
   .object({
     firstName: z
-      .string().min(2, { message: "Le prénom est requis." })
-      .regex(/^(?!.*\d)[\p{L}\s]+$/u, { message: "Le prénom ne doit pas contenir de chiffres ou de caractères spéciaux." }),
+      .string()
+      .min(2, { message: "Le prénom est requis." })
+      .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
+        message: "Le prénom ne doit pas contenir de chiffres ou de caractères spéciaux.",
+      }),
     lastName: z
-      .string().min(2, { message: "Le nom est requis." })
-      .regex(/^(?!.*\d)[\p{L}\s]+$/u, { message: "Le prénom ne doit pas contenir de chiffres ou de caractères spéciaux." }),
-    email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
+      .string()
+      .min(2, { message: "Le nom est requis." })
+      .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
+        message: "Le nom ne doit pas contenir de chiffres ou de caractères spéciaux.",
+      }),
+    email: z.string().email({
+      message: "Veuillez entrer une adresse e-mail valide.",
+    }),
     password: z
       .string()
       .min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." })
-      .max(100, { message: "Le mot de passe doit comporter moins de 100 caractères." }),
+      .max(100, {
+        message: "Le mot de passe doit comporter moins de 100 caractères.",
+      }),
     confirmPassword: z
       .string()
       .min(8, { message: "Le mot de passe doit comporter au moins 8 caractères." })
-      .max(100, { message: "Le mot de passe doit comporter moins de 100 caractères." }),
+      .max(100, {
+        message: "Le mot de passe doit comporter moins de 100 caractères.",
+      }),
+    rgpd: z.boolean().refine((val) => val === true, {
+      message:
+        "Vous devez accepter la politique de confidentialité et les conditions d'utilisation",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Les mots de passe ne correspondent pas.",
     path: ["confirmPassword"],
-  })
+  });
+
 
 export function RegisterForm({ className, ...props }: React.ComponentProps<"div">) {
-  const { toast } = useToast()
-  const { isLoading, loading } = useIsLoading()
+  const { registerUser, loading } = useRegisterUser();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -46,54 +61,24 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
       email: "",
       password: "",
       confirmPassword: "",
+      rgpd: false
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     const validData = registerSchema.parse(values);
-    loading(true)
-    try {
-      const data = await axios.post('http://cesizen-api.localhost/register', {
-        ut_prenom: validData.firstName,
-        ut_nom: validData.lastName,
-        ut_mail: validData.email,
-        plainPassword: validData.password,
-      })
-      if (data.status === 201) {
-        console.log(data);
-
-        toast({
-          variant: "success",
-          title: data.data.status
-        })
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.log(error);
-
-        if (axios.isAxiosError(error)) {
-          toast({
-            variant: "destructive",
-            title: error.response?.data?.title ?? "Une erreur est survenue",
-            description: error.response?.data?.error || error.message,
-          })
-        }
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Une erreur est survenue",
-        })
-      }
-    } finally {
-      loading(false)
-    }
+    await registerUser({
+      firstName: validData.firstName,
+      lastName: validData.lastName,
+      email: validData.email,
+      password: validData.password,
+    });
   }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
-
           <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
@@ -102,39 +87,22 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                   Créez votre compte Cesizen
                 </p>
               </div>
-
               {/* Champ Prénom */}
               <div className="grid gap-2">
                 <Label htmlFor="firstName">Prénom</Label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  placeholder="Votre prénom"
-                  {...form.register("firstName")}
-                />
+                <Input id="firstName" type="text" placeholder="Votre prénom" {...form.register("firstName")} />
                 {form.formState.errors.firstName && (
-                  <p className="text-sm text-red-600">
-                    {form.formState.errors.firstName.message}
-                  </p>
+                  <p className="text-sm text-red-600">{form.formState.errors.firstName.message}</p>
                 )}
               </div>
-
               {/* Champ Nom */}
               <div className="grid gap-2">
                 <Label htmlFor="lastName">Nom</Label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  placeholder="Votre nom"
-                  {...form.register("lastName")}
-                />
+                <Input id="lastName" type="text" placeholder="Votre nom" {...form.register("lastName")} />
                 {form.formState.errors.lastName && (
-                  <p className="text-sm text-red-600">
-                    {form.formState.errors.lastName.message}
-                  </p>
+                  <p className="text-sm text-red-600">{form.formState.errors.lastName.message}</p>
                 )}
               </div>
-
               {/* Champ adresse e-mail */}
               <div className="grid gap-2">
                 <Label htmlFor="email">Adresse e-mail</Label>
@@ -146,12 +114,9 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                   {...form.register("email")}
                 />
                 {form.formState.errors.email && (
-                  <p className="text-sm text-red-600">
-                    {form.formState.errors.email.message}
-                  </p>
+                  <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>
                 )}
               </div>
-
               {/* Champ mot de passe */}
               <div className="grid gap-2">
                 <Label htmlFor="password">Mot de passe</Label>
@@ -163,12 +128,9 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                   {...form.register("password")}
                 />
                 {form.formState.errors.password && (
-                  <p className="text-sm text-red-600">
-                    {form.formState.errors.password.message}
-                  </p>
+                  <p className="text-sm text-red-600">{form.formState.errors.password.message}</p>
                 )}
               </div>
-
               {/* Champ de confirmation du mot de passe */}
               <div className="grid gap-2">
                 <Label htmlFor="confirmPassword">Confirmez le mot de passe</Label>
@@ -180,33 +142,53 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                   {...form.register("confirmPassword")}
                 />
                 {form.formState.errors.confirmPassword && (
-                  <p className="text-sm text-red-600">
-                    {form.formState.errors.confirmPassword.message}
-                  </p>
+                  <p className="text-sm text-red-600">{form.formState.errors.confirmPassword.message}</p>
                 )}
               </div>
+              {/* Case à cocher RGPD */}
+              <Controller
+                name="rgpd"
+                control={form.control}
+                render={({ field }) => (
+                  <div className="flex items-center">
+                    <Checkbox
+                      id="rgpd"
+                      checked={field.value}
+                      onCheckedChange={(checked) => field.onChange(checked)}
+                    />
+                    <Label htmlFor="rgpd" className="ml-2">
+                      J'accepte les{" "}
+                      <a href="/conditions" className="underline">
+                        Conditions d'utilisation
+                      </a>{" "}
+                      et la{" "}
+                      <a href="/privacy" className="underline">
+                        Politique de confidentialité
+                      </a>
+                    </Label>
+                  </div>
+                )}
+              />
+              {form.formState.errors.rgpd && (
+                <p className="text-sm text-red-600">{form.formState.errors.rgpd.message}</p>
+              )}
 
               {/* Bouton d'inscription */}
-              <Button className="w-full" disabled={isLoading}>
-                {isLoading ?
+              <Button className="w-full" disabled={loading}>
+                {loading ? (
                   <>
                     <Spinner />
                     Chargement...
                   </>
-                  :
-                  <>
-                    Inscription
-                  </>
-                }
+                ) : (
+                  "Inscription"
+                )}
               </Button>
-
-
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">
                   Ou continuer avec
                 </span>
               </div>
-
               {/* Boutons pour inscription via des fournisseurs tiers */}
               <div className="grid grid-cols-3 gap-4">
                 <Button variant="outline" className="w-full">
@@ -240,7 +222,6 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                   <span className="sr-only">S'inscrire avec Meta</span>
                 </Button>
               </div>
-
               <div className="text-center text-sm">
                 Vous avez déjà un compte ?{" "}
                 <a href="/login" className="underline underline-offset-4">
@@ -249,8 +230,6 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
               </div>
             </div>
           </form>
-
-          {/* Illustration (affichée en md et plus) */}
           <div className="relative hidden bg-muted md:block">
             <img
               src="/placeholder.svg"
@@ -260,12 +239,6 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
           </div>
         </CardContent>
       </Card>
-
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-        En cliquant sur Continuer, vous acceptez nos{" "}
-        <a href="#">Conditions d'utilisation</a> et{" "}
-        <a href="#">Politique de confidentialité</a>.
-      </div>
     </div>
-  )
+  );
 }
