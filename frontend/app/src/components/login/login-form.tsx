@@ -6,11 +6,9 @@ import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import axios from "axios"
-import { useToast } from "@/hooks/useToast"
 import Spinner from "@/components/spinner/spinner"
-import { useIsLoading } from "@/hooks/useLoading"
 import { useAuth } from "@/context/AuthContext"
+import useLoginUser from "@/hooks/useLoginUser"
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
@@ -21,9 +19,8 @@ const loginSchema = z.object({
 })
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
-  const { toast } = useToast()
-  const { isLoading, loading } = useIsLoading()
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated } = useAuth();
+  const { loginUser, loading } = useLoginUser()
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -35,31 +32,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     const validData = loginSchema.parse(values);
-    try {
-      loading(true)
-      await login(validData.email, validData.password);
-      toast({
-        variant: "success",
-        title: "Connexion réussie."
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        if (axios.isAxiosError(error)) {
-          toast({
-            variant: "destructive",
-            title: error.response?.data?.title ?? "Une erreur est survenue",
-            description: error.response?.data?.message,
-          })
-        }
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Une erreur est survenue",
-        })
-      }
-    } finally {
-      loading(false)
-    }
+    await loginUser({ email: validData.email, password: validData.password })
   }
 
   return (
@@ -118,8 +91,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               </div>
 
               {/* Bouton de connexion */}
-              <Button className="w-full" disabled={isLoading || isAuthenticated}>
-                {isLoading ?
+              <Button className="w-full" disabled={loading || isAuthenticated}>
+                {loading ?
                   <>
                     <Spinner />
                     Chargement...

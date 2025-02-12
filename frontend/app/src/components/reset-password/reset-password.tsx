@@ -6,11 +6,9 @@ import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import axios from "axios";
-import { useToast } from "@/hooks/useToast";
 import Spinner from "@/components/spinner/spinner";
-import { useIsLoading } from "@/hooks/useLoading";
 import { useParams } from "react-router-dom";
+import useResetPasswordUser from "@/hooks/useResetPasswordUser";
 
 const resetPasswordSchema = z
     .object({
@@ -24,8 +22,7 @@ const resetPasswordSchema = z
 
 export function ResetPassword({ className, ...props }: React.ComponentProps<"div">) {
     const { token } = useParams<{ token: string }>();
-    const { toast } = useToast();
-    const { isLoading, loading } = useIsLoading();
+    const { resetPasswordUser, loading } = useResetPasswordUser(token)
 
     const form = useForm<z.infer<typeof resetPasswordSchema>>({
         resolver: zodResolver(resetPasswordSchema),
@@ -37,43 +34,7 @@ export function ResetPassword({ className, ...props }: React.ComponentProps<"div
 
     async function onSubmit(values: z.infer<typeof resetPasswordSchema>) {
         const validData = resetPasswordSchema.parse(values)
-        try {
-            loading(true);
-            const response = await axios.post(
-                `http://cesizen-api.localhost/reset-password/reset/${token}`,
-                {
-                    plainPassword: validData.plainPassword,
-                }
-            );
-            if (response.status === 200) {
-                toast({
-                    variant: "success",
-                    title: "Mot de passe réinitialisé avec succès.",
-                });
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log(error);
-                
-                if (axios.isAxiosError(error)) {
-                    toast({
-                        variant: "destructive",
-                        title: error.response?.data?.title ?? error.message,
-                        description:
-                            error.response?.data?.message ||
-                            error.response?.data?.detail ||
-                            error.response?.data?.error,
-                    });
-                }
-            } else {
-                toast({
-                    variant: "destructive",
-                    title: "Une erreur est survenue",
-                });
-            }
-        } finally {
-            loading(false);
-        }
+        await resetPasswordUser({ plainPassword: validData.plainPassword })
     }
 
     if (!token) {
@@ -150,8 +111,8 @@ export function ResetPassword({ className, ...props }: React.ComponentProps<"div
                             </div>
 
                             {/* Bouton de validation */}
-                            <Button type="submit" className="w-full" disabled={isLoading}>
-                                {isLoading ? (
+                            <Button type="submit" className="w-full" disabled={loading}>
+                                {loading ? (
                                     <>
                                         <Spinner />
                                         Chargement...
