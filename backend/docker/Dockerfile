@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:8.2-fpm
 
 # Installer dépendances système
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -28,7 +28,7 @@ RUN curl -sS https://get.symfony.com/cli/installer | bash \
 WORKDIR /var/www
 
 # Copier l'entrypoint dans l'image
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Donner les permissions (optionnel)
@@ -40,4 +40,4 @@ EXPOSE 8000
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Commande finale : lancer "symfony serve" sur 0.0.0.0:8000, sans TLS
-CMD ["symfony", "serve", "--no-tls", "--allow-http", "--port=8000", "--allow-all-ip"]
+CMD ["php-fpm"]
