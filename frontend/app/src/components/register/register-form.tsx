@@ -9,6 +9,7 @@ import { z } from "zod";
 import Spinner from "@/components/spinner/spinner";
 import { useRegisterUser } from "@/hooks/useRegisterUser";
 import { Switch } from "@/components/ui/switch";
+import authImg from "@/assets/auth-img.jpeg"
 
 const registerSchema = z
   .object({
@@ -233,7 +234,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
           </form>
           <div className="relative hidden bg-muted md:block">
             <img
-              src="/placeholder.svg"
+              src={authImg}
               alt="Illustration"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />

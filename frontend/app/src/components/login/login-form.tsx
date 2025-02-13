@@ -9,6 +9,7 @@ import { z } from "zod"
 import Spinner from "@/components/spinner/spinner"
 import { useAuth } from "@/context/AuthContext"
 import useLoginUser from "@/hooks/useLoginUser"
+import authImg from "@/assets/auth-img.jpeg"
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
@@ -32,7 +33,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     const validData = loginSchema.parse(values);
-    await loginUser({ email: validData.email, password: validData.password })
+    await loginUser({ username: validData.email, password: validData.password })
   }
 
   return (
@@ -153,19 +154,13 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
           {/* Illustration (affichée en md et plus) */}
           <div className="relative hidden bg-muted md:block">
             <img
-              src="/placeholder.svg"
+              src={authImg}
               alt="Illustration"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>
         </CardContent>
       </Card>
-
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-        En cliquant sur Continuer, vous acceptez nos{" "}
-        <a href="#">Conditions d'utilisation</a> et{" "}
-        <a href="#">Politique de confidentialité</a>.
-      </div>
     </div>
   )
 }
