@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox"; // Import de la Checkbox (shadcn)
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Spinner from "@/components/spinner/spinner";
 import { useRegisterUser } from "@/hooks/useRegisterUser";
+import { Switch } from "@/components/ui/switch";
 
 const registerSchema = z
   .object({
@@ -145,13 +145,13 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                   <p className="text-sm text-red-600">{form.formState.errors.confirmPassword.message}</p>
                 )}
               </div>
-              {/* Case à cocher RGPD */}
+              {/* Utilisation du switch RGPD */}
               <Controller
                 name="rgpd"
                 control={form.control}
                 render={({ field }) => (
                   <div className="flex items-center">
-                    <Checkbox
+                    <Switch
                       id="rgpd"
                       checked={field.value}
                       onCheckedChange={(checked) => field.onChange(checked)}
@@ -172,6 +172,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
               {form.formState.errors.rgpd && (
                 <p className="text-sm text-red-600">{form.formState.errors.rgpd.message}</p>
               )}
+
 
               {/* Bouton d'inscription */}
               <Button className="w-full" disabled={loading}>
