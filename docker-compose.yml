@@ -41,24 +41,36 @@ services:
 
   backend:
     build:
-      context: ./backend/docker
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: docker/Dockerfile
     restart: unless-stopped
-    environment:
-      - DATABASE_URL=pgsql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB} 
-      - APP_ENV=dev
-      - APP_DEBUG='1'
-    depends_on:
-      - db
+    working_dir: /var/www
     volumes:
       - ./backend/app:/var/www
+    environment:
+      - APP_ENV=dev
+      - APP_DEBUG=1
+    command: bash -c "chown -R www-data:www-data /var/www/var && php-fpm"
+    networks:
+      - app-network
+
+  backend-nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend/app:/var/www
+      - ./backend/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - app-network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`${PROJECT_NAME}-api.localhost`)"
       - "traefik.http.routers.backend.entrypoints=web"
-      - "traefik.http.services.backend.loadbalancer.server.port=8000"
+      - "traefik.http.services.backend.loadbalancer.server.port=80"
       - "traefik.docker.network=app-network"
 
   frontend:
