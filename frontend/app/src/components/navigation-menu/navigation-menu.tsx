@@ -102,7 +102,7 @@ export const Navbar = () => {
   return (
     <header className="bg-white shadow-sm border-b border-green-100 py-4">
       <div className="max-w-6xl mx-auto px-4 md:px-8 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-green-600">CESIZen</h1>
+        <Link to="/"><h1 className="text-2xl font-bold text-green-600">CESIZen</h1></Link>
         {/* Menu complet sur desktop */}
         <NavigationMenu className="hidden md:flex">
           <NavigationMenuList>
