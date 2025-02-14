@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo, FC } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { DndProvider, useDrag, useDrop, XYCoord } from "react-dnd";
+import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Switch } from "@/components/ui/switch";
 
@@ -73,6 +74,9 @@ const PhaseItem: FC<PhaseItemProps> = ({
 
     drag(drop(ref));
 
+    const capitalizeFirst = (str: string) =>
+        str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
     return (
         <div
             ref={ref}
@@ -81,8 +85,9 @@ const PhaseItem: FC<PhaseItemProps> = ({
             data-handler-id={handlerId}
         >
             <div className="flex items-center justify-between">
-                <div {...(drag as any).dragHandleProps} className="cursor-move font-semibold">
-                    {phase.type.toUpperCase()}
+                <div {...(drag as any).dragHandleProps} className="cursor-move font-semibold text-lg"
+                >
+                    {capitalizeFirst(phase.type)}
                 </div>
                 <div className="flex items-center space-x-2">
                     <Switch
@@ -111,12 +116,14 @@ const PhaseItem: FC<PhaseItemProps> = ({
 
 export default function ExerciceLibre() {
     const [phases, setPhases] = useState<Phase[]>([
-        { id: "1", type: "Inspirez", duration: 4, active: true },
-        { id: "2", type: "Retenez", duration: 4, active: true },
-        { id: "3", type: "Expirez", duration: 4, active: true },
+        { id: "1", type: "Inspirez", duration: 10, active: true },
+        { id: "2", type: "Retenez", duration: 10, active: true },
+        { id: "3", type: "Expirez", duration: 10, active: true },
     ]);
 
     const [isActive, setIsActive] = useState(false);
+    const [finished, setFinished] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
     const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
     const [progress, setProgress] = useState(0);
     const timerRef = useRef<number>();
@@ -128,14 +135,27 @@ export default function ExerciceLibre() {
     const remainingTime = Math.ceil(currentPhase.duration * (100 - progress) / 100);
     const getIntervalTime = () => (currentPhase.duration * 1000) / 100;
 
+    const handlePauseToggle = () => {
+        if (!isPaused && timerRef.current) {
+            clearTimeout(timerRef.current);
+        }
+        setIsPaused((prev) => !prev);
+    };
+
     useEffect(() => {
-        if (!isActive || activePhases.length === 0) return;
+        if (!isActive || isPaused || activePhases.length === 0) return;
 
         const tick = () => {
             setProgress((prev) => {
                 if (prev >= 100) {
-                    setCurrentPhaseIndex((prevIndex) => (prevIndex + 1) % activePhases.length);
-                    return 0;
+                    if (currentPhaseIndex === activePhases.length - 1) {
+                        setIsActive(false);
+                        setFinished(true);
+                        return 100;
+                    } else {
+                        setCurrentPhaseIndex(currentPhaseIndex + 1);
+                        return 0;
+                    }
                 }
                 return prev + 1;
             });
@@ -147,12 +167,14 @@ export default function ExerciceLibre() {
         return () => {
             if (timerRef.current) clearTimeout(timerRef.current);
         };
-    }, [isActive, currentPhaseIndex, currentPhase.duration, activePhases]);
+    }, [isActive, isPaused, currentPhaseIndex, currentPhase.duration, activePhases]);
 
     const toggleExercise = () => {
         if (!isActive) {
             setCurrentPhaseIndex(0);
             setProgress(0);
+            setFinished(false);
+            setIsPaused(false);
         } else {
             if (timerRef.current) clearTimeout(timerRef.current);
         }
@@ -164,6 +186,7 @@ export default function ExerciceLibre() {
         setIsActive(false);
         setCurrentPhaseIndex(0);
         setProgress(0);
+        setFinished(false);
     };
 
     const updatePhaseDuration = (id: string, newDuration: number) => {
@@ -185,8 +208,32 @@ export default function ExerciceLibre() {
         setPhases(newPhases);
     };
 
+    const isTouchDevice = () => {
+        return (
+            "ontouchstart" in window ||
+            navigator.maxTouchPoints > 0 ||
+            (navigator as any).msMaxTouchPoints > 0
+        );
+    };
+
+    const getStrokeColor = () => {
+        switch (currentPhase.type) {
+            case "Inspirez":
+                return "#4ade80";
+            case "Retenez":
+                return "#facc15";
+            case "Expirez":
+                return "#60a5fa";
+            default:
+                return "#4ade80";
+        }
+    };
+
     return (
-        <DndProvider backend={HTML5Backend}>
+        <DndProvider
+            backend={isTouchDevice() ? TouchBackend : HTML5Backend}
+            options={isTouchDevice() ? { enableMouseEvents: true } : {}}
+        >
             <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 p-4">
                 <h1 className="text-3xl font-bold text-green-800 mb-8">
                     Exercice de Respiration Libre
@@ -198,28 +245,38 @@ export default function ExerciceLibre() {
                             cy="50"
                             r="45"
                             fill="none"
-                            stroke="#4ade80"
+                            stroke={getStrokeColor()}
                             strokeWidth="10"
                             strokeDasharray="282.7"
                             strokeDashoffset={282.7 - (progress / 100) * 282.7}
                             transform="rotate(-90 50 50)"
                         />
-                        <text
-                            x="50"
-                            y="45"
-                            textAnchor="middle"
-                            className="text-2xl font-bold fill-green-800"
-                        >
-                            {currentPhase.type === "Inspirez"
-                                ? "Inspirez"
-                                : currentPhase.type === "Retenez"
-                                    ? "Retenez"
-                                    : currentPhase.type === "Expirez"
-                                        ? "Expirez"
-                                        : "Aucun"}
-                            <tspan x="50" dy="1.2em" className="text-xl">
-                                {remainingTime} s
-                            </tspan>
+                        <text x="50" y="50" textAnchor="middle">
+                            {!isActive && finished ? (
+                                <>
+                                    <tspan x="50" dy="-0.3em" className="text-xs font-bold fill-green-800">
+                                        Bravo,
+                                    </tspan>
+                                    <tspan x="50" dy="0.9em" className="text-xs font-bold fill-green-800">
+                                        exercice terminé !
+                                    </tspan>
+                                </>
+                            ) : (
+                                <>
+                                    <tspan x="50" dy="-0.3em" className="text-2xl font-bold fill-green-800">
+                                        {currentPhase.type === "Inspirez"
+                                            ? "Inspirez"
+                                            : currentPhase.type === "Retenez"
+                                                ? "Retenez"
+                                                : currentPhase.type === "Expirez"
+                                                    ? "Expirez"
+                                                    : "Aucun"}
+                                    </tspan>
+                                    <tspan x="50" dy="1.5em" className="text-xl fill-green-800">
+                                        {remainingTime} s
+                                    </tspan>
+                                </>
+                            )}
                         </text>
                     </svg>
                 </div>
@@ -246,6 +303,14 @@ export default function ExerciceLibre() {
                     >
                         {isActive ? "Arrêter" : "Commencer"}
                     </Button>
+                    {isActive && (
+                        <Button
+                            onClick={handlePauseToggle}
+                            className="bg-blue-500 hover:bg-blue-600 text-white"
+                        >
+                            {isPaused ? "Reprendre" : "Pause"}
+                        </Button>
+                    )}
                     <Button onClick={resetExercise} className="bg-red-500 hover:bg-red-700 text-white">
                         Reset
                     </Button>
