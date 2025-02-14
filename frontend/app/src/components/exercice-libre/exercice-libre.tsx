@@ -116,8 +116,8 @@ const PhaseItem: FC<PhaseItemProps> = ({
 
 export default function ExerciceLibre() {
     const [phases, setPhases] = useState<Phase[]>([
-        { id: "1", type: "Inspirez", duration: 10, active: true },
-        { id: "2", type: "Retenez", duration: 10, active: true },
+        { id: "1", type: "Inspirez", duration: 5, active: true },
+        { id: "2", type: "Retenez", duration: 15, active: true },
         { id: "3", type: "Expirez", duration: 10, active: true },
     ]);
 
@@ -234,7 +234,7 @@ export default function ExerciceLibre() {
             backend={isTouchDevice() ? TouchBackend : HTML5Backend}
             options={isTouchDevice() ? { enableMouseEvents: true } : {}}
         >
-            <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 p-4">
+            <div className="flex flex-col items-center p-8">
                 <h1 className="text-3xl font-bold text-green-800 mb-8">
                     Exercice de Respiration Libre
                 </h1>

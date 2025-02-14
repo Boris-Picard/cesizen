@@ -39,7 +39,7 @@ export function ResetPassword({ className, ...props }: React.ComponentProps<"div
 
     if (!token) {
         return (
-            <div className={cn("flex flex-col gap-6 items-center justify-center min-h-screen p-4", className)} {...props}>
+            <div className={cn("flex flex-col gap-6 items-center", className)} {...props}>
                 <Card className="overflow-hidden w-full max-w-2xl">
                     <CardContent className="p-6 md:p-8">
                         <div className="mb-4">
@@ -58,7 +58,7 @@ export function ResetPassword({ className, ...props }: React.ComponentProps<"div
 
     return (
         <div
-            className={cn("flex flex-col gap-6 items-center justify-center min-h-screen p-4", className)}
+            className={cn("flex flex-col gap-6 items-center", className)}
             {...props}
         >
             <Card className="overflow-hidden w-full max-w-2xl">

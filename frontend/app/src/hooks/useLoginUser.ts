@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 
 interface submitDataInterface {
-    email: string
+    username: string
     password: string
 }
 
@@ -16,7 +16,7 @@ export default function useLoginUser() {
     const loginUser = async (submitData: submitDataInterface) => {
         setLoading(true)
         try {
-            await login(submitData.email, submitData.password);
+            await login(submitData.username, submitData.password);
             toast({
                 variant: "success",
                 title: "Connexion réussie."

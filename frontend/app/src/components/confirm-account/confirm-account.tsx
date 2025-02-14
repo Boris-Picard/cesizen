@@ -37,7 +37,7 @@ export function ConfirmAccount({ className, ...props }: React.ComponentProps<"di
     }, [token]);
 
     return (
-        <div className={cn("flex flex-col items-center justify-center min-h-screen p-4", className)} {...props}>
+        <div className={cn("flex flex-col items-center", className)} {...props}>
             <Card className="overflow-hidden w-full max-w-2xl">
                 <CardContent className="p-6 md:p-8">
                     {isLoading && (
