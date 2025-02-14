@@ -1,12 +1,10 @@
-"use client";
-
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { BarChart, Calendar, Heart, type LucideIcon, Smile, Timer } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { BarChart, Calendar, Heart, type LucideIcon, Smile, Timer } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 const UserDashboard = () => {
   const [selectedEmotion, setSelectedEmotion] = useState("");
@@ -29,7 +27,7 @@ const UserDashboard = () => {
 
   return (
     <div className="py-8 px-4 md:px-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div className="max-w-6xl px-4 md:px-8 mx-auto space-y-8">
         {/* En-tête avec Avatar et informations utilisateur */}
         <div className="flex flex-col md:flex-row items-center justify-between bg-white p-6 rounded-lg shadow-sm">
           <div className="flex items-center space-x-4">
