@@ -1,11 +1,12 @@
-import ExerciceLibre from "@/components/exercice-libre/exercice-libre";
 import { Navbar } from "@/components/navigation-menu/navigation-menu";
+import EditProfileComponent from "@/components/profile/edit-profile/edit-profile";
 
-export default function ExerciceLibrePage() {
+export default function EditProfilePage() {
     return (
         <div className="min-h-screen bg-green-50">
             <Navbar />
-            <ExerciceLibre />
+            <EditProfileComponent />
         </div>
+
     )
 }
