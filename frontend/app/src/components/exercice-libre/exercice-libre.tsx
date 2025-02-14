@@ -1,10 +1,24 @@
-import { useState, useEffect, useRef, useMemo, FC } from "react";
+"use client";
+import {
+    useState,
+    useEffect,
+    useRef,
+    useMemo,
+    FC,
+} from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { DndProvider, useDrag, useDrop, XYCoord } from "react-dnd";
+import {
+    DndProvider,
+    useDrag,
+    useDrop,
+    XYCoord,
+} from "react-dnd";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Switch } from "@/components/ui/switch";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 interface Phase {
     id: string;
@@ -16,7 +30,6 @@ interface Phase {
 interface DragItem {
     index: number;
     id: string;
-    type: string;
 }
 
 interface PhaseItemProps {
@@ -46,14 +59,13 @@ const PhaseItem: FC<PhaseItemProps> = ({
             };
         },
         hover(item: DragItem, monitor) {
-            if (!ref.current) {
-                return;
-            }
+            if (!ref.current) return;
             const dragIndex = item.index;
             const hoverIndex = index;
             if (dragIndex === hoverIndex) return;
             const hoverBoundingRect = ref.current.getBoundingClientRect();
-            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+            const hoverMiddleY =
+                (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
             const clientOffset = monitor.getClientOffset();
             if (!clientOffset) return;
             const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
@@ -85,11 +97,13 @@ const PhaseItem: FC<PhaseItemProps> = ({
             data-handler-id={handlerId}
         >
             <div className="flex items-center justify-between">
-                <div {...(drag as any).dragHandleProps} className="cursor-move font-semibold text-lg"
+                <div
+                    {...(drag as any).dragHandleProps}
+                    className="cursor-move font-semibold text-lg"
                 >
                     {capitalizeFirst(phase.type)}
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center">
                     <Switch
                         checked={phase.active}
                         onCheckedChange={() => togglePhaseActive(phase.id)}
@@ -103,7 +117,9 @@ const PhaseItem: FC<PhaseItemProps> = ({
                 </label>
                 <Slider
                     value={[phase.duration]}
-                    onValueChange={(value) => updatePhaseDuration(phase.id, value[0])}
+                    onValueChange={(value) =>
+                        updatePhaseDuration(phase.id, value[0])
+                    }
                     min={1}
                     max={30}
                     step={1}
@@ -115,12 +131,8 @@ const PhaseItem: FC<PhaseItemProps> = ({
 };
 
 export default function ExerciceLibre() {
-    const [phases, setPhases] = useState<Phase[]>([
-        { id: "1", type: "Inspirez", duration: 5, active: true },
-        { id: "2", type: "Retenez", duration: 15, active: true },
-        { id: "3", type: "Expirez", duration: 10, active: true },
-    ]);
-
+    const navigate = useNavigate();
+    const [phases, setPhases] = useState<Phase[]>([]);
     const [isActive, setIsActive] = useState(false);
     const [finished, setFinished] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -128,11 +140,26 @@ export default function ExerciceLibre() {
     const [progress, setProgress] = useState(0);
     const timerRef = useRef<number>();
 
-    const activePhases = useMemo(() => phases.filter((phase) => phase.active), [phases]);
+    useEffect(() => {
+        setTimeout(() => {
+            setPhases([
+                { id: "1", type: "inspirez", duration: 5, active: true },
+                { id: "2", type: "retenez", duration: 15, active: true },
+                { id: "3", type: "expirez", duration: 10, active: true },
+            ]);
+        }, 500);
+    }, []);
+
+    const activePhases = useMemo(
+        () => phases.filter((phase) => phase.active),
+        [phases]
+    );
     const currentPhase =
         activePhases[currentPhaseIndex] || { type: "", duration: 0, active: false, id: "0" };
 
-    const remainingTime = Math.ceil(currentPhase.duration * (100 - progress) / 100);
+    const remainingTime = Math.ceil(
+        currentPhase.duration * (100 - progress) / 100
+    );
     const getIntervalTime = () => (currentPhase.duration * 1000) / 100;
 
     const handlePauseToggle = () => {
@@ -218,11 +245,11 @@ export default function ExerciceLibre() {
 
     const getStrokeColor = () => {
         switch (currentPhase.type) {
-            case "Inspirez":
+            case "inspirez":
                 return "#4ade80";
-            case "Retenez":
+            case "retenez":
                 return "#facc15";
-            case "Expirez":
+            case "expirez":
                 return "#60a5fa";
             default:
                 return "#4ade80";
@@ -234,86 +261,108 @@ export default function ExerciceLibre() {
             backend={isTouchDevice() ? TouchBackend : HTML5Backend}
             options={isTouchDevice() ? { enableMouseEvents: true } : {}}
         >
-            <div className="flex flex-col items-center p-8">
-                <h1 className="text-3xl font-bold text-green-800 mb-8">
-                    Exercice de Respiration Libre
-                </h1>
-                <div className="relative w-64 h-64 mb-8">
-                    <svg className="w-full h-full" viewBox="0 0 100 100">
-                        <circle
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            fill="none"
-                            stroke={getStrokeColor()}
-                            strokeWidth="10"
-                            strokeDasharray="282.7"
-                            strokeDashoffset={282.7 - (progress / 100) * 282.7}
-                            transform="rotate(-90 50 50)"
-                        />
-                        <text x="50" y="50" textAnchor="middle">
-                            {!isActive && finished ? (
-                                <>
-                                    <tspan x="50" dy="-0.3em" className="text-xs font-bold fill-green-800">
-                                        Bravo,
-                                    </tspan>
-                                    <tspan x="50" dy="0.9em" className="text-xs font-bold fill-green-800">
-                                        exercice terminé !
-                                    </tspan>
-                                </>
-                            ) : (
-                                <>
-                                    <tspan x="50" dy="-0.3em" className="text-2xl font-bold fill-green-800">
-                                        {currentPhase.type === "Inspirez"
-                                            ? "Inspirez"
-                                            : currentPhase.type === "Retenez"
-                                                ? "Retenez"
-                                                : currentPhase.type === "Expirez"
-                                                    ? "Expirez"
-                                                    : "Aucun"}
-                                    </tspan>
-                                    <tspan x="50" dy="1.5em" className="text-xl fill-green-800">
-                                        {remainingTime} s
-                                    </tspan>
-                                </>
-                            )}
-                        </text>
-                    </svg>
-                </div>
-                <div className="w-full max-w-md mb-8">
-                    <h2 className="text-xl font-bold mb-4">Configurer les phases</h2>
-                    <div className="flex flex-col gap-3">
-                        {phases.map((phase, index) => (
-                            <PhaseItem
-                                key={phase.id}
-                                phase={phase}
-                                index={index}
-                                movePhase={movePhase}
-                                updatePhaseDuration={updatePhaseDuration}
-                                togglePhaseActive={togglePhaseActive}
-                                isExerciseActive={isActive}
-                            />
-                        ))}
-                    </div>
-                </div>
-                <div className="flex gap-3">
-                    <Button
-                        onClick={toggleExercise}
-                        className="bg-primary hover:bg-green-700 text-white"
-                    >
-                        {isActive ? "Arrêter" : "Commencer"}
-                    </Button>
-                    {isActive && (
+            <div>
+                {/* Header moderne */}
+                <header className="py-8 bg-white shadow-sm">
+                    <div className="max-w-6xl mx-auto px-4 md:px-8 flex items-center">
                         <Button
-                            onClick={handlePauseToggle}
-                            className="bg-blue-500 hover:bg-blue-600 text-white"
+                            variant="ghost"
+                            className="flex items-center text-gray-600 hover:text-gray-800"
+                            onClick={() => navigate(-1)}
                         >
-                            {isPaused ? "Reprendre" : "Pause"}
+                            <ArrowLeft className="mr-2 h-5 w-5" /> Retour
                         </Button>
-                    )}
-                    <Button onClick={resetExercise} className="bg-red-500 hover:bg-red-700 text-white">
-                        Reset
-                    </Button>
+                        <h1 className="flex-1 text-center text-4xl font-bold text-green-800">
+                            Exercice de Respiration Libre
+                        </h1>
+                    </div>
+                </header>
+
+                <div className="max-w-6xl mx-auto px-4 md:px-8 py-8 space-y-12">
+                    {/* Visualisation de l'exercice */}
+                    <div className="flex flex-col items-center">
+                        <div className="relative w-64 h-64 mb-8">
+                            <svg className="w-full h-full" viewBox="0 0 100 100">
+                                <circle
+                                    cx="50"
+                                    cy="50"
+                                    r="45"
+                                    fill="none"
+                                    stroke={getStrokeColor()}
+                                    strokeWidth="10"
+                                    strokeDasharray="282.7"
+                                    strokeDashoffset={
+                                        282.7 - (progress / 100) * 282.7
+                                    }
+                                    transform="rotate(-90 50 50)"
+                                />
+                                <text x="50" y="50" textAnchor="middle">
+                                    {!isActive && finished ? (
+                                        <>
+                                            <tspan x="50" dy="-0.3em" className="text-xs font-bold fill-green-800">
+                                                Bravo,
+                                            </tspan>
+                                            <tspan x="50" dy="0.9em" className="text-xs font-bold fill-green-800">
+                                                exercice terminé !
+                                            </tspan>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <tspan x="50" dy="-0.3em" className="text-2xl font-bold fill-green-800">
+                                                {currentPhase.type === "inspirez"
+                                                    ? "Inspirez"
+                                                    : currentPhase.type === "retenez"
+                                                        ? "Retenez"
+                                                        : currentPhase.type === "expirez"
+                                                            ? "Expirez"
+                                                            : "Aucun"}
+                                            </tspan>
+                                            <tspan x="50" dy="1.5em" className="text-xl fill-green-800">
+                                                {remainingTime} s
+                                            </tspan>
+                                        </>
+                                    )}
+                                </text>
+                            </svg>
+                        </div>
+                        <div className="flex gap-3">
+                            <Button
+                                onClick={toggleExercise}
+                                className="bg-primary hover:bg-green-700 text-white"
+                            >
+                                {isActive ? "Arrêter" : "Commencer"}
+                            </Button>
+                            {isActive && (
+                                <Button
+                                    onClick={handlePauseToggle}
+                                    className="bg-blue-500 hover:bg-blue-600 text-white"
+                                >
+                                    {isPaused ? "Reprendre" : "Pause"}
+                                </Button>
+                            )}
+                            <Button onClick={resetExercise} className="bg-red-500 hover:bg-red-700 text-white">
+                                Reset
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Configuration des phases */}
+                    <div className="w-full max-w-md mx-auto">
+                        <h2 className="text-2xl font-bold mb-4 text-center">Configurer les phases</h2>
+                        <div className="flex flex-col gap-3">
+                            {phases.map((phase, index) => (
+                                <PhaseItem
+                                    key={phase.id}
+                                    phase={phase}
+                                    index={index}
+                                    movePhase={movePhase}
+                                    updatePhaseDuration={updatePhaseDuration}
+                                    togglePhaseActive={togglePhaseActive}
+                                    isExerciseActive={isActive}
+                                />
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </DndProvider>

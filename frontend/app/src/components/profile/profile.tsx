@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -24,28 +22,29 @@ const UserDashboard = () => {
         </Card>
     )
 
-    return (
-        <div className="p-8">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex flex-col md:flex-row items-center justify-between mb-8">
-                    <div className="flex items-center space-x-4 mb-4 md:mb-0">
-                        <Avatar className="w-16 h-16">
-                            <AvatarImage src="/placeholder-avatar.jpg" alt="Avatar de l'utilisateur" />
-                            <AvatarFallback>JD</AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <h1 className="text-2xl font-bold text-green-800">Bonjour, Jean Dupont</h1>
-                            <p className="text-green-600">jean.dupont@example.com</p>
-                        </div>
-                    </div>
-                    <Button
-                        variant="outline"
-                        onClick={() => navigate("/profile/edit")}
-                        className="w-full md:w-auto bg-white text-green-600 border-green-300 hover:bg-green-100"
-                    >
-                        Modifier le profil
-                    </Button>
-                </div>
+  return (
+    <div className="py-8 px-4 md:px-8">
+      <div className="max-w-6xl px-4 md:px-8 mx-auto space-y-8">
+        {/* En-tête avec Avatar et informations utilisateur */}
+        <div className="flex flex-col md:flex-row items-center justify-between bg-white p-6 rounded-lg shadow-sm">
+          <div className="flex items-center space-x-4">
+            <Avatar className="w-16 h-16">
+              <AvatarImage src="/placeholder-avatar.jpg" alt="Avatar de l'utilisateur" />
+              <AvatarFallback>JD</AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-2xl font-bold text-green-800">Bonjour, Jean Dupont</h1>
+              <p className="text-green-600">jean.dupont@example.com</p>
+            </div>
+          </div>
+          <Button
+            variant="outline"
+            onClick={() => navigate("/profile/edit")}
+            className="mt-4 md:mt-0 bg-white text-green-600 border-green-300 hover:bg-green-100"
+          >
+            Modifier le profil
+          </Button>
+        </div>
 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">

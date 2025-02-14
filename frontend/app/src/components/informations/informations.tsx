@@ -1,5 +1,11 @@
+"use client";
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -59,29 +65,34 @@ const InformationsComponents = () => {
       : articles.filter((article) => article.type === filter);
 
   return (
-    <div className="py-8 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto">
-        <Button
-          variant="ghost"
-          className="mb-6 flex items-center text-gray-600 hover:text-gray-800"
-          onClick={() => navigate(-1)}
-        >
-          <ArrowLeft className="mr-2 h-5 w-5" /> Retour
-        </Button>
+    <div>
+      {/* Header léger et moderne */}
+      <header className="py-8 bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 flex items-center">
+          <Button
+            variant="ghost"
+            className="flex items-center text-gray-600 hover:text-gray-800"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft className="mr-2 h-5 w-5" /> Retour
+          </Button>
+          <h1 className="flex-1 text-center text-4xl font-bold text-green-800">
+            Santé Mentale & Bien-être
+          </h1>
+        </div>
+      </header>
 
-        <h1 className="text-4xl font-bold text-green-800 text-center mb-10">
-          Santé Mentale et Bien-être
-        </h1>
-
-        {/* Boutons de filtrage centrés en mode "chips" */}
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-8 space-y-12">
+        {/* Filtres en "chips" centrés */}
         <div className="flex justify-center mb-10">
           <div className="flex space-x-4 overflow-x-auto pb-2 no-scrollbar">
             {categories.map((cat) => (
               <Button
                 key={cat.value}
                 variant={filter === cat.value ? "default" : "outline"}
-                className={`whitespace-nowrap px-4 py-2 transition-colors duration-300 ease-out ${filter !== cat.value ? "hover:bg-green-50" : ""
-                  }`}
+                className={`whitespace-nowrap px-4 py-2 transition-colors duration-300 ease-out ${
+                  filter !== cat.value ? "hover:bg-green-50" : ""
+                }`}
                 onClick={() => setFilter(cat.value)}
               >
                 {cat.label}
@@ -90,7 +101,7 @@ const InformationsComponents = () => {
           </div>
         </div>
 
-        {/* Grille de type "Bento Grid" inspirée d'Airbnb */}
+        {/* Grille de cartes inspirée d'Airbnb */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredArticles.map((article) => (
             <Card
@@ -132,7 +143,7 @@ const InformationsComponents = () => {
 
         <div className="mt-12 text-center">
           <p className="text-green-700 mb-4">
-            N&apos;oubliez pas, prendre soin de votre santé mentale est un voyage continu.
+            N'oubliez pas, prendre soin de votre santé mentale est un voyage continu.
           </p>
           <Button
             className="bg-green-600 hover:bg-green-700 text-white py-3 px-6 transition-colors duration-300 ease-out"
