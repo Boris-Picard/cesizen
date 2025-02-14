@@ -27,7 +27,7 @@ const UserDashboard = () => {
 
   return (
     <div className="py-8 px-4 md:px-8">
-      <div className="max-w-6xl px-4 md:px-8 mx-auto space-y-8">
+      <div className="max-w-6xl px-4 md:px-8 mx-auto space-y-6">
         {/* En-tête avec Avatar et informations utilisateur */}
         <div className="flex flex-col md:flex-row items-center justify-between bg-white p-6 rounded-lg shadow-sm">
           <div className="flex items-center space-x-4">
