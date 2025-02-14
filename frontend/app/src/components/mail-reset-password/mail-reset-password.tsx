@@ -30,7 +30,7 @@ export function MailResetPassword({ className, ...props }: React.ComponentProps<
 
   return (
     <div
-      className={cn("flex flex-col gap-6 items-center justify-center min-h-screen p-4", className)}
+      className={cn("flex flex-col gap-6 items-center", className)}
       {...props}
     >
       <Card className="overflow-hidden w-full max-w-2xl">

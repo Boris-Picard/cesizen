@@ -1,11 +1,11 @@
-import ExerciceLibre from "@/components/exercice-libre/exercice-libre";
 import { Navbar } from "@/components/navigation-menu/navigation-menu";
+import UserDashboard from "@/components/profile/profile";
 
-export default function ExerciceLibrePage() {
+export default function ProfilePage() {
     return (
         <div className="min-h-screen bg-green-50">
             <Navbar />
-            <ExerciceLibre />
+            <UserDashboard />
         </div>
     )
 }
