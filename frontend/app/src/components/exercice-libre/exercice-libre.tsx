@@ -1,0 +1,256 @@
+import { useState, useEffect, useRef, useMemo, FC } from "react";
+import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
+import { DndProvider, useDrag, useDrop, XYCoord } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { Switch } from "@/components/ui/switch";
+
+interface Phase {
+    id: string;
+    type: string;
+    duration: number;
+    active: boolean;
+}
+
+interface DragItem {
+    index: number;
+    id: string;
+    type: string;
+}
+
+interface PhaseItemProps {
+    phase: Phase;
+    index: number;
+    movePhase: (dragIndex: number, hoverIndex: number) => void;
+    updatePhaseDuration: (id: string, newDuration: number) => void;
+    togglePhaseActive: (id: string) => void;
+    isExerciseActive: boolean;
+}
+
+const PhaseItem: FC<PhaseItemProps> = ({
+    phase,
+    index,
+    movePhase,
+    updatePhaseDuration,
+    togglePhaseActive,
+    isExerciseActive,
+}) => {
+    const ref = useRef<HTMLDivElement>(null);
+
+    const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: any }>({
+        accept: "phase",
+        collect(monitor) {
+            return {
+                handlerId: monitor.getHandlerId(),
+            };
+        },
+        hover(item: DragItem, monitor) {
+            if (!ref.current) {
+                return;
+            }
+            const dragIndex = item.index;
+            const hoverIndex = index;
+            if (dragIndex === hoverIndex) return;
+            const hoverBoundingRect = ref.current.getBoundingClientRect();
+            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+            const clientOffset = monitor.getClientOffset();
+            if (!clientOffset) return;
+            const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
+            movePhase(dragIndex, hoverIndex);
+            item.index = hoverIndex;
+        },
+    });
+
+    const [{ isDragging }, drag] = useDrag({
+        type: "phase",
+        item: () => ({ id: phase.id, index }),
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    });
+
+    drag(drop(ref));
+
+    return (
+        <div
+            ref={ref}
+            className="p-6 border rounded-xl bg-green-50 shadow-md cursor-move hover:bg-green-100 transition-colors duration-200"
+            style={{ opacity: isDragging ? 0.5 : 1 }}
+            data-handler-id={handlerId}
+        >
+            <div className="flex items-center justify-between">
+                <div {...(drag as any).dragHandleProps} className="cursor-move font-semibold">
+                    {phase.type.toUpperCase()}
+                </div>
+                <div className="flex items-center space-x-2">
+                    <Switch
+                        checked={phase.active}
+                        onCheckedChange={() => togglePhaseActive(phase.id)}
+                        disabled={isExerciseActive}
+                    />
+                </div>
+            </div>
+            <div className="mt-2">
+                <label className="block text-sm font-medium text-green-700">
+                    Durée : {phase.duration} s
+                </label>
+                <Slider
+                    value={[phase.duration]}
+                    onValueChange={(value) => updatePhaseDuration(phase.id, value[0])}
+                    min={1}
+                    max={30}
+                    step={1}
+                    disabled={isExerciseActive}
+                />
+            </div>
+        </div>
+    );
+};
+
+export default function ExerciceLibre() {
+    const [phases, setPhases] = useState<Phase[]>([
+        { id: "1", type: "Inspirez", duration: 4, active: true },
+        { id: "2", type: "Retenez", duration: 4, active: true },
+        { id: "3", type: "Expirez", duration: 4, active: true },
+    ]);
+
+    const [isActive, setIsActive] = useState(false);
+    const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
+    const [progress, setProgress] = useState(0);
+    const timerRef = useRef<number>();
+
+    const activePhases = useMemo(() => phases.filter((phase) => phase.active), [phases]);
+    const currentPhase =
+        activePhases[currentPhaseIndex] || { type: "", duration: 0, active: false, id: "0" };
+
+    const remainingTime = Math.ceil(currentPhase.duration * (100 - progress) / 100);
+    const getIntervalTime = () => (currentPhase.duration * 1000) / 100;
+
+    useEffect(() => {
+        if (!isActive || activePhases.length === 0) return;
+
+        const tick = () => {
+            setProgress((prev) => {
+                if (prev >= 100) {
+                    setCurrentPhaseIndex((prevIndex) => (prevIndex + 1) % activePhases.length);
+                    return 0;
+                }
+                return prev + 1;
+            });
+            timerRef.current = window.setTimeout(tick, getIntervalTime());
+        };
+
+        tick();
+
+        return () => {
+            if (timerRef.current) clearTimeout(timerRef.current);
+        };
+    }, [isActive, currentPhaseIndex, currentPhase.duration, activePhases]);
+
+    const toggleExercise = () => {
+        if (!isActive) {
+            setCurrentPhaseIndex(0);
+            setProgress(0);
+        } else {
+            if (timerRef.current) clearTimeout(timerRef.current);
+        }
+        setIsActive((prev) => !prev);
+    };
+
+    const resetExercise = () => {
+        if (timerRef.current) clearTimeout(timerRef.current);
+        setIsActive(false);
+        setCurrentPhaseIndex(0);
+        setProgress(0);
+    };
+
+    const updatePhaseDuration = (id: string, newDuration: number) => {
+        setPhases((prev) =>
+            prev.map((phase) => (phase.id === id ? { ...phase, duration: newDuration } : phase))
+        );
+    };
+
+    const togglePhaseActive = (id: string) => {
+        setPhases((prev) =>
+            prev.map((phase) => (phase.id === id ? { ...phase, active: !phase.active } : phase))
+        );
+    };
+
+    const movePhase = (dragIndex: number, hoverIndex: number) => {
+        const newPhases = Array.from(phases);
+        const [removed] = newPhases.splice(dragIndex, 1);
+        newPhases.splice(hoverIndex, 0, removed);
+        setPhases(newPhases);
+    };
+
+    return (
+        <DndProvider backend={HTML5Backend}>
+            <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 p-4">
+                <h1 className="text-3xl font-bold text-green-800 mb-8">
+                    Exercice de Respiration Libre
+                </h1>
+                <div className="relative w-64 h-64 mb-8">
+                    <svg className="w-full h-full" viewBox="0 0 100 100">
+                        <circle
+                            cx="50"
+                            cy="50"
+                            r="45"
+                            fill="none"
+                            stroke="#4ade80"
+                            strokeWidth="10"
+                            strokeDasharray="282.7"
+                            strokeDashoffset={282.7 - (progress / 100) * 282.7}
+                            transform="rotate(-90 50 50)"
+                        />
+                        <text
+                            x="50"
+                            y="45"
+                            textAnchor="middle"
+                            className="text-2xl font-bold fill-green-800"
+                        >
+                            {currentPhase.type === "Inspirez"
+                                ? "Inspirez"
+                                : currentPhase.type === "Retenez"
+                                    ? "Retenez"
+                                    : currentPhase.type === "Expirez"
+                                        ? "Expirez"
+                                        : "Aucun"}
+                            <tspan x="50" dy="1.2em" className="text-xl">
+                                {remainingTime} s
+                            </tspan>
+                        </text>
+                    </svg>
+                </div>
+                <div className="w-full max-w-md mb-8">
+                    <h2 className="text-xl font-bold mb-4">Configurer les phases</h2>
+                    <div className="flex flex-col gap-3">
+                        {phases.map((phase, index) => (
+                            <PhaseItem
+                                key={phase.id}
+                                phase={phase}
+                                index={index}
+                                movePhase={movePhase}
+                                updatePhaseDuration={updatePhaseDuration}
+                                togglePhaseActive={togglePhaseActive}
+                                isExerciseActive={isActive}
+                            />
+                        ))}
+                    </div>
+                </div>
+                <div className="flex gap-3">
+                    <Button
+                        onClick={toggleExercise}
+                        className="bg-primary hover:bg-green-700 text-white"
+                    >
+                        {isActive ? "Arrêter" : "Commencer"}
+                    </Button>
+                    <Button onClick={resetExercise} className="bg-red-500 hover:bg-red-700 text-white">
+                        Reset
+                    </Button>
+                </div>
+            </div>
+        </DndProvider>
+    );
+}

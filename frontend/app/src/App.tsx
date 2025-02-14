@@ -9,13 +9,21 @@ import { PublicRoute } from '@/components/routes/PublicRoute';
 import { RequireAuth } from '@/components/routes/RequireAuth';
 import HomePage from '@/app/homepage/page';
 import { Toaster } from '@/components/ui/toaster';
-import { HydraAdmin } from '@api-platform/admin';
+import { OpenApiAdmin } from "@api-platform/admin";
+import ExerciceLibrePage from './app/exercice-libre/pages';
 
 function App() {
   return (
     <AuthProvider>
       <Toaster />
       <Routes>
+        <Route>
+          {/* <Route element={<AdminRoute />}> */}
+          <Route path="/*" element={
+            <OpenApiAdmin docEntrypoint='http://cesizen-api.localhost/api/docs' entrypoint='http://cesizen-api.localhost/api' />
+          } />
+          {/* </Route> */}
+        </Route>
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -26,16 +34,11 @@ function App() {
         <Route path="/account-confirmation/:token" element={<ConfirmAccount />} />
 
         <Route element={<RequireAuth />}>
+          <Route path='/exercice-libre' element={<ExerciceLibrePage />} />
           <Route path="/" element={<HomePage />} />
         </Route>
-        <Route
-          path="/admin/*"
-          element={
-            <HydraAdmin entrypoint="http://cesizen-api.localhost/api" basename='/admin' />
-          }
-        />
       </Routes>
-    </AuthProvider>
+    </AuthProvider >
   );
 }
 
