@@ -26,17 +26,17 @@ class AccountEnabledUserChecker implements UserCheckerInterface
 
     public function checkPostAuth(UserInterface $user): void
     {
-        // if (!$user instanceof AppUser) {
-        //     return;
-        // }
+        if (!$user instanceof AppUser) {
+            return;
+        }
 
-        // // user account is expired, the user may be notified
+        // user account is expired, the user may be notified
         // if ($user->isExpired()) {
         //     throw new AccountExpiredException('...');
         // }
 
-        // if (!\in_array('foo', $token->getRoleNames())) {
-        //     throw new AccessDeniedException('...');
+        // if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+        //     throw new AccessDeniedException('Vous devez avoir le rôle ADMIN pour accéder à cette section.');
         // }
     }
 }

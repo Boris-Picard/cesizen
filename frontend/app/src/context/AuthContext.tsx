@@ -1,4 +1,3 @@
-// src/context/AuthContext.tsx
 import {
     createContext,
     useState,
@@ -6,6 +5,7 @@ import {
     useContext,
     ReactNode,
     useCallback,
+    useRef,
 } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -32,7 +32,7 @@ interface AuthProviderProps {
 }
 
 /**
- * Fonction utilitaire pour vérifier si un token est expiré.
+ * Vérifie si un token est expiré.
  */
 const isTokenExpired = (token: string): boolean => {
     try {
@@ -45,6 +45,9 @@ const isTokenExpired = (token: string): boolean => {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+    // Référence pour stocker l'ID du timeout de rafraîchissement
+    const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
     const getInitialToken = () => {
         const savedToken = localStorage.getItem("jwt");
         if (savedToken && !isTokenExpired(savedToken)) {
@@ -59,8 +62,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     );
 
     /**
-     * Met à jour automatiquement l'en-tête Authorization d'axios
-     * lorsque le token change.
+     * Mise à jour de l'en-tête Authorization d'axios
      */
     useEffect(() => {
         if (token) {
@@ -71,30 +73,93 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }, [token]);
 
     /**
-     * Fonction de déconnexion qui réinitialise le contexte et nettoie le localStorage.
+     * Déconnexion : réinitialise le contexte, le localStorage et annule le timeout.
      */
     const logout = useCallback(() => {
         setToken(null);
         setUser(null);
         localStorage.removeItem("jwt");
         delete axios.defaults.headers.common["Authorization"];
+        if (refreshTimeoutRef.current) {
+            clearTimeout(refreshTimeoutRef.current);
+        }
     }, []);
 
     /**
-     * Vérification périodique (toutes les 30 minutes) pour détecter l'expiration du token.
+     * Fonction qui rafraîchit le token avant son expiration.
+     * On suppose ici que le backend expose un endpoint `/api/token/refresh`
+     * qui renvoie un nouveau token.
      */
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (token && isTokenExpired(token)) {
-                logout();
+    const refreshToken = useCallback(async () => {
+        if (!token) return;
+        try {
+            const response = await axios.post(
+                "http://cesizen-api.localhost/api/token/refresh",
+                { token }
+            );
+            if (response.status === 200 && response.data.token) {
+                const newToken = response.data.token;
+                if (isTokenExpired(newToken)) {
+                    logout();
+                    return;
+                }
+                setToken(newToken);
+                localStorage.setItem("jwt", newToken);
+                const decoded: UserPayload = jwtDecode(newToken);
+                setUser(decoded);
+                // Planifie le prochain rafraîchissement avec le nouveau token
+                scheduleRefresh(newToken);
             }
-        }, 1800000); // 1800000 ms = 30 minutes
-
-        return () => clearInterval(interval);
+        } catch (error) {
+            console.error("Erreur lors du rafraîchissement du token :", error);
+            logout();
+        }
     }, [token, logout]);
 
     /**
-     * Méthode de login asynchrone.
+     * Planifie un rafraîchissement du token en fonction du temps restant avant expiration.
+     * On démarre le rafraîchissement 1 minute avant l'expiration effective.
+     */
+    const scheduleRefresh = useCallback(
+        (currentToken: string) => {
+            if (refreshTimeoutRef.current) {
+                clearTimeout(refreshTimeoutRef.current);
+            }
+            try {
+                const decoded: UserPayload = jwtDecode(currentToken);
+                const expTime = decoded.exp * 1000;
+                const now = Date.now();
+                const margin = 60000; // 1 minute de marge
+                const delay = expTime - now - margin;
+                if (delay <= 0) {
+                    // Si le délai est négatif, rafraîchir immédiatement
+                    refreshToken();
+                } else {
+                    refreshTimeoutRef.current = setTimeout(() => {
+                        refreshToken();
+                    }, delay);
+                }
+            } catch (error) {
+                console.error(
+                    "Erreur lors du scheduling du rafraîchissement du token",
+                    error
+                );
+            }
+        },
+        [refreshToken]
+    );
+
+    /**
+     * Lorsqu'un token est défini, on planifie son rafraîchissement.
+     */
+    useEffect(() => {
+        if (token) {
+            scheduleRefresh(token);
+        }
+    }, [token, scheduleRefresh]);
+
+    /**
+     * Fonction de login asynchrone.
      */
     const login = async (email: string, password: string): Promise<void> => {
         try {
@@ -115,6 +180,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 localStorage.setItem("jwt", jwtToken);
                 const decoded: UserPayload = jwtDecode(jwtToken);
                 setUser(decoded);
+                // Planifie le rafraîchissement du token
+                scheduleRefresh(jwtToken);
             }
         } catch (error) {
             console.error("Erreur lors de la connexion :", error);
@@ -143,9 +210,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const isAuthenticated = Boolean(token);
 
     return (
-        <AuthContext.Provider
-            value={{ token, user, login, logout, isAuthenticated }}
-        >
+        <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated }}>
             {children}
         </AuthContext.Provider>
     );
