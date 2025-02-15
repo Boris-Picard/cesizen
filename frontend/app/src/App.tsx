@@ -6,7 +6,6 @@ import { PublicRoute } from '@/components/routes/PublicRoute';
 import { RequireAuth } from '@/components/routes/RequireAuth';
 import HomePage from '@/app/homepage/page';
 import { Toaster } from '@/components/ui/toaster';
-// import { OpenApiAdmin } from "@api-platform/admin";
 import ExerciceLibrePage from '@/app/exercice-libre/pages';
 import ProfilePage from '@/app/profile/page';
 import EditProfilePage from '@/app/profile/edit-profile/page';
