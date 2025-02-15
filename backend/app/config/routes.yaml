@@ -4,9 +4,8 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-login:
-  path: /login
-  methods: ['POST']
+api_login_check:
+    path: /api/login_check
 
 app_reset_password:
     path: /reset-password/reset/{token}
