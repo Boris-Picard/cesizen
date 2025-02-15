@@ -6,15 +6,19 @@ import { PublicRoute } from '@/components/routes/PublicRoute';
 import { RequireAuth } from '@/components/routes/RequireAuth';
 import HomePage from '@/app/homepage/page';
 import { Toaster } from '@/components/ui/toaster';
-import { OpenApiAdmin } from "@api-platform/admin";
+// import { OpenApiAdmin } from "@api-platform/admin";
 import ExerciceLibrePage from '@/app/exercice-libre/pages';
 import ProfilePage from '@/app/profile/page';
 import EditProfilePage from '@/app/profile/edit-profile/page';
 import ForgotPasswordPage from '@/app/mail-reset-password/page';
 import ResetPasswordPage from '@/app/reset-password/page';
 import ConfirmAccountPage from '@/app/confirm-account/page';
-import ExercicesFrontPage from './app/exercices-frontpage/page';
-import InformationsPage from './app/informations/page';
+import ExercicesFrontPage from '@/app/exercices-frontpage/page';
+import InformationsPage from '@/app/informations/page';
+import AdminPage from '@/app/admin-dashboard/page';
+import { AdminRoute } from '@/components/routes/AdminRoute';
+import UsersPage from '@/app/admin-dashboard/users/page';
+import ArticlesPage from '@/app/admin-dashboard/articles/page';
 
 function App() {
   return (
@@ -22,11 +26,11 @@ function App() {
       <Toaster />
       <Routes>
         <Route>
-          {/* <Route element={<AdminRoute />}> */}
-          <Route path="/*" element={
-            <OpenApiAdmin docEntrypoint='http://cesizen-api.localhost/api/docs' entrypoint='http://cesizen-api.localhost/api' />
-          } />
-          {/* </Route> */}
+          <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/articles" element={<ArticlesPage />} />
+            <Route path="/admin/users" element={<UsersPage />} />
+          </Route>
         </Route>
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />
@@ -36,7 +40,6 @@ function App() {
         <Route path="/reset-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password/reset/:token" element={<ResetPasswordPage />} />
         <Route path="/account-confirmation/:token" element={<ConfirmAccountPage />} />
-
         <Route element={<RequireAuth />}>
           <Route path='/exercice-libre' element={<ExerciceLibrePage />} />
           <Route path="/exercices" element={<ExercicesFrontPage />} />

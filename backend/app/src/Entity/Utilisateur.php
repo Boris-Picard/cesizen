@@ -46,11 +46,11 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $ut_mail = null;
 
-    #[Groups(['utilisateur:write'])]
+    #[Groups(['utilisateur:read'])]
     #[ORM\Column(name: "ut_password", length: 255)]
     private ?string $ut_password = null;
 
-    #[Groups(['utilisateur:write'])]
+    #[Groups(['utilisateur:read'])]
     #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide", groups: ['registration'])]
     private ?string $plainPassword = null;
 
@@ -63,7 +63,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: "utilisateurs")]
     #[ORM\JoinColumn(name: "role_id", referencedColumnName: "role_id", nullable: false)]
-    #[Groups(['utilisateur:read', 'utilisateur:write'])]
+    #[Groups(['utilisateur:write', 'utilisateur:read'])]
     private ?Role $role = null;
 
     /**
@@ -320,7 +320,6 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Retourne le(s) rôle(s) de l'utilisateur.
-     * Vous pouvez personnaliser en fonction de la relation avec Role.
      */
     public function getRoles(): array
     {
