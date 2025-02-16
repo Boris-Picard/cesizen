@@ -19,6 +19,7 @@ export interface UserPayload {
 
 interface AuthContextType {
     token: string | null;
+    isAdmin: boolean | null;
     user: UserPayload | null;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
@@ -60,6 +61,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<UserPayload | null>(
         token ? jwtDecode(token) : null
     );
+
+    const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
+
+    useEffect(() => {
+        if (user?.roles.includes("ROLE_ADMIN")) {
+            setIsAdmin(true)
+        } else {
+            setIsAdmin(false)
+        }
+    }, [user])
 
     /**
      * Mise à jour de l'en-tête Authorization d'axios
@@ -210,7 +221,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const isAuthenticated = Boolean(token);
 
     return (
-        <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated }}>
+        <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated, isAdmin }}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,12 +1,10 @@
-"use client"
-
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-siderbar/app-sidebar"
 import AdminHeader from "@/components/admin-dashboard/header/header"
 import { DataTable } from "@/components/ui/data-table"
 import { columns, User } from "./columns"
+import AddUserModal from "./add-user-modal"
 
 export default function UsersComponents() {
     const [searchTerm, setSearchTerm] = useState("")
@@ -55,9 +53,7 @@ export default function UsersComponents() {
                     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                         <div className="mb-8 flex justify-between items-center">
                             <h2 className="text-2xl font-semibold text-green-800">Liste des Utilisateurs</h2>
-                            <Button className="bg-green-600 hover:bg-green-700 text-white">
-                                Ajouter un Utilisateur
-                            </Button>
+                            <AddUserModal />
                         </div>
                         {loading ? (
                             <p>Chargement...</p>

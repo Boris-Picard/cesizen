@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import {
   useReactTable,
@@ -40,16 +38,25 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  MoreHorizontal,
 } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog"
 
-export interface DataTableProps<TData, TValue> {
+export interface DataTableProps<TData extends { id: string | number }, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  // Ajout d'une colonne de sélection
+export function DataTable<TData extends { id: string | number }, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+  // Colonne de sélection
   const selectionColumn: ColumnDef<TData, unknown> = {
     id: "select",
     header: ({ table }) => (
@@ -97,12 +104,25 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    onPaginationChange: setPagination, // Mise à jour automatique de la pagination
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   })
+
+  // Actions groupées
+  const handleDeleteSelected = () => {
+    const selectedIds = table.getFilteredSelectedRowModel().rows.map(row => row.original.id)
+    // Ici vous pouvez ajouter l'appel API pour supprimer
+    alert("Supprimer les lignes avec ID : " + selectedIds.join(", "))
+  }
+
+  const handleExportSelected = () => {
+    const selectedData = table.getFilteredSelectedRowModel().rows.map(row => row.original)
+    // Ici vous pouvez ajouter l'appel API pour exporter
+    alert("Exporter les données : " + JSON.stringify(selectedData, null, 2))
+  }
 
   return (
     <div className="space-y-4">
@@ -185,11 +205,67 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
       {/* Contrôles en bas */}
       <div className="flex items-center justify-between py-4">
-        {/* Ligne de sélection à gauche */}
-        <div className="text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} sur {table.getFilteredRowModel().rows.length} ligne(s) sélectionnée(s).
+        {/* Gauche : résumé et actions groupées */}
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} sur {table.getFilteredRowModel().rows.length} ligne(s) sélectionnée(s)
+          </span>
+          {table.getFilteredSelectedRowModel().rows.length > 0 && (
+            <>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="destructive" size="sm">
+                    Supprimer
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Confirmer la suppression</DialogTitle>
+                    <DialogDescription>
+                      Voulez-vous vraiment supprimer ces lignes sélectionnées ?
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline" size="sm">
+                        Annuler
+                      </Button>
+                    </DialogClose>
+                    <Button variant="destructive" size="sm" onClick={handleDeleteSelected}>
+                      Confirmer
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    Exporter
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Confirmer l'export</DialogTitle>
+                    <DialogDescription>
+                      Voulez-vous exporter les données des lignes sélectionnées ?
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline" size="sm">
+                        Annuler
+                      </Button>
+                    </DialogClose>
+                    <Button variant="outline" size="sm" onClick={handleExportSelected}>
+                      Confirmer
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
         </div>
-        {/* Pagination et sélection du nombre de lignes à droite */}
+        {/* Droite : pagination et sélection du nombre de lignes */}
         <div className="flex items-center space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
