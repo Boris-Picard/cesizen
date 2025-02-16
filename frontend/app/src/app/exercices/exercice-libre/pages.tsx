@@ -1,4 +1,4 @@
-import ExerciceLibre from "@/components/exercice-libre/exercice-libre";
+import ExerciceLibre from "@/components/exercices/exercice-libre/exercice-libre";
 import { Navbar } from "@/components/navigation-menu/navigation-menu";
 
 export default function ExerciceLibrePage() {

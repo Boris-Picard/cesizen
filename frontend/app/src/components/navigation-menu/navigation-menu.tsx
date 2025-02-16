@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -15,15 +16,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useAuth } from "@/context/AuthContext";
-import { Home, User, Settings, Menu, LogOut, Activity, Info } from "lucide-react";
+import { Home, User, Menu, LogOut, Activity, Info, UserCog } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import logo from "@/assets/logo.webp"
 
-const NavigationItems = () => {
+// Boutons de navigation à gauche (sans déconnexion)
+const LeftDesktopNavigationItems = () => {
   const location = useLocation();
-  const { logout } = useAuth();
 
   const baseClasses =
-    "group inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors";
+    "group inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors";
   const activeClasses = "bg-green-50 text-green-600";
   const inactiveClasses = "text-gray-600 hover:bg-green-50 hover:text-green-600";
 
@@ -32,22 +34,11 @@ const NavigationItems = () => {
       <NavigationMenuItem>
         <NavigationMenuLink asChild>
           <Link
-            to="/"
-            className={`${baseClasses} ${location.pathname === "/" ? activeClasses : inactiveClasses}`}
-          >
-            <Home className="mr-2 h-4 w-4" /> Accueil
-          </Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild>
-          <Link
             to="/informations"
-            className={`${baseClasses} ${
-              location.pathname === "/informations" ? activeClasses : inactiveClasses
-            }`}
+            className={`${baseClasses} ${location.pathname === "/informations" ? activeClasses : inactiveClasses
+              }`}
           >
-            <Info className="mr-2 h-4 w-4" /> Informations
+            <Info className="h-4 w-4" /> Informations
           </Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
@@ -55,75 +46,171 @@ const NavigationItems = () => {
         <NavigationMenuLink asChild>
           <Link
             to="/exercices"
-            className={`${baseClasses} ${
-              location.pathname === "/exercices" ? activeClasses : inactiveClasses
-            }`}
+            className={`${baseClasses} ${location.pathname === "/exercices" ? activeClasses : inactiveClasses
+              }`}
           >
-            <Activity className="mr-2 h-4 w-4" /> Exercices
+            <Activity className="h-4 w-4" /> Exercices
           </Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild>
-          <Link
-            to="/profile"
-            className={`${baseClasses} ${
-              location.pathname === "/profile" ? activeClasses : inactiveClasses
-            }`}
-          >
-            <User className="mr-2 h-4 w-4" /> Profil
-          </Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild>
-          <Link
-            to="/profile/edit"
-            className={`${baseClasses} ${
-              location.pathname === "/profile/edit" ? activeClasses : inactiveClasses
-            }`}
-          >
-            <Settings className="mr-2 h-4 w-4" /> Paramètres
-          </Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild>
-          <Button variant="destructive" onClick={logout} className="px-4 py-2">
-            <LogOut className="mr-2 h-4 w-4" /> Déconnexion
-          </Button>
         </NavigationMenuLink>
       </NavigationMenuItem>
     </>
   );
 };
 
-export const Navbar = () => {
+// Menu mobile (incluant tous les boutons)
+const MobileNavigationItems = () => {
+  const location = useLocation();
+  const { logout, isAdmin, isAuthenticated } = useAuth();
+
+  const baseClasses =
+    "flex items-center gap-2 rounded-md px-4 py-4 text-sm font-medium text-left w-full transition-colors";
+  const activeClasses = "bg-green-50 text-green-600";
+  const inactiveClasses = "text-gray-600 hover:bg-green-50 hover:text-green-600";
+
   return (
-    <header className="bg-white shadow-sm border-b border-green-100 py-4">
-      <div className="max-w-6xl mx-auto px-4 md:px-8 flex justify-between items-center">
-        <Link to="/"><h1 className="text-2xl font-bold text-green-600">CESIZen</h1></Link>
-        {/* Menu complet sur desktop */}
-        <NavigationMenu className="hidden md:flex">
-          <NavigationMenuList>
-            <NavigationItems />
-          </NavigationMenuList>
-        </NavigationMenu>
-        {/* Menu mobile avec Sheet */}
+    <nav className="flex flex-col space-y-2">
+      <Link
+        to="/"
+        className={`${baseClasses} ${location.pathname === "/" ? activeClasses : inactiveClasses
+          }`}
+      >
+        <Home className="h-4 w-4" /> Accueil
+      </Link>
+      <Link
+        to="/informations"
+        className={`${baseClasses} ${location.pathname === "/informations" ? activeClasses : inactiveClasses
+          }`}
+      >
+        <Info className="h-4 w-4" /> Informations
+      </Link>
+      <Link
+        to="/exercices"
+        className={`${baseClasses} ${location.pathname === "/exercices" ? activeClasses : inactiveClasses
+          }`}
+      >
+        <Activity className="h-4 w-4" /> Exercices
+      </Link>
+      {
+        isAdmin ?
+          <>
+            <Link
+              to="/admin"
+              className={`${baseClasses} ${location.pathname === "/admin" ? activeClasses : inactiveClasses
+                }`}
+            >
+              <UserCog className="h-4 w-4" /> Admin
+            </Link>
+            <Link
+              to="/profile"
+              className={`${baseClasses} ${location.pathname === "/profile" ? activeClasses : inactiveClasses
+                }`}
+            >
+              <User className="h-4 w-4" /> Profil
+            </Link>
+          </>
+          :
+          isAuthenticated
+            ?
+            <Link
+              to="/profile"
+              className={`${baseClasses} ${location.pathname === "/profile" ? activeClasses : inactiveClasses
+                }`}
+            >
+              <User className="h-4 w-4" /> Profil
+            </Link>
+            :
+            ""
+      }
+      <div className="border-t pt-4">
+        <Button variant="destructive" onClick={logout} className={`${baseClasses} justify-start`}>
+          <LogOut className="h-4 w-4" /> Déconnexion
+        </Button>
+      </div>
+    </nav>
+  );
+};
+
+export const Navbar = () => {
+  const { logout, isAdmin, isAuthenticated } = useAuth();
+
+  const baseClasses =
+    "group inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors";
+  const activeClasses = "bg-green-50 text-green-600";
+  const inactiveClasses = "text-gray-600 hover:bg-green-50 hover:text-green-600";
+
+  return (
+    <header className="bg-white shadow-sm border-green-100 py-4 min-w-full sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 flex items-center justify-between">
+        {/* Partie gauche : Logo + navigation */}
+        <div className="flex items-center gap-4">
+          <Link to="/">
+            {/* <h1 className="text-2xl font-bold text-green-600">CESIZen</h1> */}
+            <img src={logo} alt="logo cesizen" className="h-10 w-10" />
+          </Link>
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList className="flex gap-2">
+              <LeftDesktopNavigationItems />
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+
+        {/* Bouton de déconnexion à droite (affiché uniquement en desktop) */}
+        <div className="hidden md:block">
+          <div className="flex flex-wrap gap-2">
+            {
+              isAdmin ?
+                <div>
+                  <Link
+                    to="/admin"
+                    className={`${baseClasses} ${location.pathname === "/admin" ? activeClasses : inactiveClasses
+                      }`}
+                  >
+                    <UserCog className="h-4 w-4" /> Admin
+                  </Link>
+                  <Link
+                    to="/profile"
+                    className={`${baseClasses} ${location.pathname === "/profile" ? activeClasses : inactiveClasses
+                      }`}
+                  >
+                    <User className="h-4 w-4" /> Profil
+                  </Link>
+                </div>
+                :
+                isAuthenticated
+                  ?
+                  <Link
+                    to="/profile"
+                    className={`${baseClasses} ${location.pathname === "/profile" ? activeClasses : inactiveClasses
+                      }`}
+                  >
+                    <User className="h-4 w-4" /> Profil
+                  </Link>
+                  :
+                  ""
+            }
+            <Button variant="ghost" onClick={logout} size="icon">
+              <LogOut className="h-5 w-5 text-gray-600" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Menu Mobile via Sheet */}
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
-              <Menu className="h-4 w-4" />
+              <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-80 p-4">
+          <SheetContent side="left" className="w-64 p-4">
             <SheetHeader>
               <SheetTitle>Menu</SheetTitle>
-              <SheetDescription>Naviguer dans CESIZen</SheetDescription>
+              <SheetDescription className="border-b pb-4">
+                Naviguez dans CESIZen
+              </SheetDescription>
             </SheetHeader>
-            <nav className="flex flex-col space-y-4 mt-4">
-              <NavigationItems />
-            </nav>
+            <div className="mt-4">
+              <MobileNavigationItems />
+            </div>
           </SheetContent>
         </Sheet>
       </div>
