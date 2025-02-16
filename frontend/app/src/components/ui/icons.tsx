@@ -1,5 +1,5 @@
 import type React from "react"
-import { Loader2, Mail, Lock, User } from "lucide-react"
+import { Loader2, Mail, Lock, User, Home, Menu, LogOut, Search, Activity, Info, UserCog, Settings } from 'lucide-react'
 
 export const Icons = {
   logo: ({ className, ...props }: React.ComponentProps<"svg">) => (
@@ -48,5 +48,13 @@ export const Icons = {
   mail: Mail,
   lock: Lock,
   user: User,
+  home: Home,
+  info: Info,
+  activity: Activity,
+  userCog: UserCog,
+  menu: Menu,
+  logOut: LogOut,
+  search: Search,
+  settings: Settings
 }
 
