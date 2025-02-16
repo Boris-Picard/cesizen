@@ -251,7 +251,7 @@ export default function ExercisesPage() {
                     <tip.icon className="h-10 w-10 text-white" />
                   </div>
                   <h3 className="text-xl font-medium text-white mb-2">{tip.title}</h3>
-                  <p className="text-leather-200">{tip.description}</p>
+                  <p className="text-leather-50">{tip.description}</p>
                 </motion.div>
               ))}
             </div>
