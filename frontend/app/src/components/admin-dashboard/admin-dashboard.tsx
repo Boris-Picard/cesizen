@@ -12,9 +12,12 @@ import {
 } from "lucide-react"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-siderbar/app-sidebar"
-import { CartesianGrid, Line, LineChart, XAxis, ResponsiveContainer, Pie, PieChart, Cell, Tooltip } from "recharts"
+import { CartesianGrid, XAxis, Pie, PieChart, Cell, Label, Bar, BarChart, ResponsiveContainer } from "recharts"
 import { Button } from "@/components/ui/button"
 import AdminHeader from "./header/header"
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart"
+import { useMemo } from "react"
+import { useAuth } from "@/context/AuthContext"
 
 const lineChartData = [
   { month: "Lun", utilisateurs: 400, interactions: 240 },
@@ -33,7 +36,25 @@ const pieChartData = [
   { name: "Partage", value: 200, color: "#eae2db" },
 ]
 
+
 export default function AdminDashboard() {
+  const { user } = useAuth()
+
+  const totalInteractions = useMemo(
+    () => pieChartData.reduce((acc, cur) => acc + cur.value, 0),
+    []
+  )
+
+  const chartConfig: ChartConfig = {
+    utilisateurs: {
+      label: "Utilisateurs",
+      color: "#8d5f52",
+    },
+    interactions: {
+      label: "Interactions",
+      color: "#bda38c",
+    },
+  } satisfies ChartConfig
 
   const stats = [
     {
@@ -95,8 +116,8 @@ export default function AdminDashboard() {
               transition={{ duration: 0.5 }}
               className="mb-8"
             >
-              <h2 className="text-3xl font-bold text-modern-900 mb-2">Vue d'ensemble</h2>
-              <p className="text-modern-600">Bienvenue sur votre tableau de bord administrateur</p>
+              <h2 className="text-5xl font-bold text-modern-900 mb-2">Vue d'ensemble</h2>
+              <p className="text-modern-600">Bienvenue <span className="font-bold">{user?.firstname}</span> sur votre tableau de bord administrateur</p>
             </motion.div>
 
 
@@ -148,92 +169,123 @@ export default function AdminDashboard() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <Card className="bg-white shadow-lg rounded-3xl overflow-hidden border-none">
-                  <CardHeader className="border-b border-leather-200 bg-leather-50">
+                <Card className="flex flex-col rounded-3xl h-full">
+                  <CardHeader className="border-b border-leather-200 bg-leather-50 items-center rounded-t-3xl text-center">
                     <CardTitle className="text-xl font-bold text-leather-900">
                       Activité Utilisateurs et Interactions
                     </CardTitle>
-                    <CardDescription className="text-leather-600">Tendances hebdomadaires</CardDescription>
+                    <CardDescription className="text-leather-600">
+                      Tendances hebdomadaires
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-6">
-                    <ResponsiveContainer width="100%" height={300}>
-                      <LineChart data={lineChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                  <CardContent className="flex-1 pb-0 flex items-center justify-center">
+                    <ChartContainer config={chartConfig} className="mx-auto w-full h-[300px]">
+                      <BarChart data={lineChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#eae2db" />
-                        <XAxis dataKey="month" stroke="#8d5f52" />
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "#f8f5f2",
-                            border: "none",
-                            borderRadius: "8px",
-                            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                          }}
+                        <XAxis
+                          dataKey="month"
+                          tickLine={false}
+                          tickMargin={10}
+                          axisLine={false}
+                          tickFormatter={(value) => value.slice(0, 3)}
                         />
-                        <Line
-                          type="monotone"
+                        <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                        <ChartLegend content={<ChartLegendContent />} />
+                        <Bar
                           dataKey="utilisateurs"
-                          stroke="#8d5f52"
-                          strokeWidth={2}
-                          dot={false}
-                          activeDot={{ r: 8 }}
+                          stackId="a"
+                          fill="#8d5f52"
+                          radius={[0, 0, 4, 4]}
                         />
-                        <Line
-                          type="monotone"
+                        <Bar
                           dataKey="interactions"
-                          stroke="#bda38c"
-                          strokeWidth={2}
-                          dot={false}
-                          activeDot={{ r: 8 }}
+                          stackId="a"
+                          fill="#bda38c"
+                          radius={[4, 4, 0, 0]}
                         />
-                      </LineChart>
-                    </ResponsiveContainer>
+                      </BarChart>
+                    </ChartContainer>
                   </CardContent>
-                  <CardFooter className="bg-leather-50 border-t border-leather-200">
-                    <div className="flex items-center justify-between w-full text-sm">
-                      <span className="text-leather-600">Tendance en hausse de 5.2% cette semaine</span>
-                      <TrendingUp className="h-4 w-4 text-leather-600" />
+                  <CardFooter className="flex-col gap-2 text-sm border-t p-6 border-leather-200 bg-leather-50 items-center rounded-b-3xl text-center">
+                    <div className="flex items-center gap-2 font-medium leading-none">
+                      <TrendingUp className="h-4 w-4" />
+                      <span>Tendance en hausse de 5.2% cette semaine</span>
+                    </div>
+                    <div className="leading-none text-muted-foreground">
+                      Showing total visitors for the last 6 months
                     </div>
                   </CardFooter>
                 </Card>
               </motion.div>
 
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-                <Card className="bg-white shadow-lg rounded-3xl overflow-hidden border-none">
-                  <CardHeader className="border-b border-leather-200 bg-leather-50">
-                    <CardTitle className="text-xl font-bold text-leather-900">Distribution des Interactions</CardTitle>
-                    <CardDescription className="text-leather-600">Répartition sur les 6 derniers mois</CardDescription>
+                <Card className="flex flex-col rounded-3xl h-full">
+                  <CardHeader className="border-b border-leather-200 bg-leather-50 items-center rounded-t-3xl">
+                    <CardTitle className="text-xl font-bold text-leather-900">
+                      Distribution des Interactions
+                    </CardTitle>
+                    <CardDescription className="text-leather-600">
+                      Répartition sur les 6 derniers mois
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-6">
-                    <ResponsiveContainer width="100%" height={300}>
-                      <PieChart>
-                        <Pie
-                          data={pieChartData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={80}
-                          fill="#8884d8"
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {pieChartData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip
-                          contentStyle={{
-                            backgroundColor: "#f8f5f2",
-                            border: "none",
-                            borderRadius: "8px",
-                            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                          }}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
+                  <CardContent className="flex-1 pb-0 flex items-center justify-center">
+                    <ChartContainer config={chartConfig} className="mx-auto" style={{ height: 250 }}>
+                      <ResponsiveContainer>
+                        <PieChart>
+                          <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                          <Pie
+                            data={pieChartData}
+                            dataKey="value"
+                            nameKey="name"
+                            innerRadius={60}
+                            outerRadius={100}
+                            strokeWidth={5}
+                          >
+                            <Label
+                              content={({ viewBox }) => {
+                                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                                  return (
+                                    <text
+                                      x={viewBox.cx}
+                                      y={viewBox.cy}
+                                      textAnchor="middle"
+                                      dominantBaseline="middle"
+                                    >
+                                      <tspan
+                                        x={viewBox.cx}
+                                        y={viewBox.cy}
+                                        className="fill-foreground text-3xl font-bold"
+                                      >
+                                        {totalInteractions.toLocaleString()}
+                                      </tspan>
+                                      <tspan
+                                        x={viewBox.cx}
+                                        y={(viewBox.cy || 0) + 24}
+                                        className="fill-muted-foreground"
+                                      >
+                                        Interactions
+                                      </tspan>
+                                    </text>
+                                  )
+                                }
+                                return null
+                              }}
+                            />
+                            {pieChartData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
                   </CardContent>
-                  <CardFooter className="bg-leather-50 border-t border-leather-200">
-                    <div className="flex items-center justify-between w-full text-sm">
-                      <span className="text-leather-600">Commentaires en hausse de 12% ce mois-ci</span>
-                      <TrendingUp className="h-4 w-4 text-leather-600" />
+                  <CardFooter className="flex-col gap-2 text-sm border-t p-6 border-leather-200 bg-leather-50 items-center rounded-b-3xl">
+                    <div className="flex items-center gap-2 font-medium leading-none">
+                      <TrendingUp className="h-4 w-4" />
+                      <span>Commentaires en hausse de 12% ce mois-ci</span>
+                    </div>
+                    <div className="leading-none text-muted-foreground">
+                      Répartition des interactions sur les 6 derniers mois
                     </div>
                   </CardFooter>
                 </Card>
@@ -241,7 +293,7 @@ export default function AdminDashboard() {
             </div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              <h2 className="text-2xl font-bold text-leather-900 mb-6">Activités Récentes</h2>
+              <h2 className="text-5xl font-bold text-leather-900 mb-6">Activités Récentes</h2>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <Card className="bg-white shadow-lg rounded-3xl overflow-hidden border-none flex flex-col">
                   <CardHeader className="border-b border-leather-200 bg-leather-50 text-center">
@@ -299,7 +351,7 @@ export default function AdminDashboard() {
                             <p className="font-medium text-leather-900">{article.title}</p>
                             <p className="text-sm text-leather-600">{article.date}</p>
                           </div>
-                          <Badge className="bg-leather-100 text-leather-800">{article.type}</Badge>
+                          <Badge className="bg-leather-100 text-leather-800 hover:bg-primary/20">{article.type}</Badge>
                         </motion.div>
                       ))}
                     </div>

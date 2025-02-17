@@ -14,6 +14,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog"
+import { Icons } from "@/components/ui/icons"
 
 const userSchema = z.object({
   firstName: z.string().min(2, "Le prénom est requis."),
@@ -53,8 +54,9 @@ export default function AddUserModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-green-600 hover:bg-green-700 text-white transition-colors">
-          Ajouter un Utilisateur
+        <Button variant={"outline"}>
+          <Icons.userplus className="mr-2 h-4 w-4" />
+          Ajouter un utilisateur
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-lg p-10 bg-white rounded-lg shadow-2xl">

@@ -114,13 +114,11 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
   // Actions groupées
   const handleDeleteSelected = () => {
     const selectedIds = table.getFilteredSelectedRowModel().rows.map(row => row.original.id)
-    // Ici vous pouvez ajouter l'appel API pour supprimer
     alert("Supprimer les lignes avec ID : " + selectedIds.join(", "))
   }
 
   const handleExportSelected = () => {
     const selectedData = table.getFilteredSelectedRowModel().rows.map(row => row.original)
-    // Ici vous pouvez ajouter l'appel API pour exporter
     alert("Exporter les données : " + JSON.stringify(selectedData, null, 2))
   }
 
@@ -129,7 +127,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
       {/* Barre de filtrage et basculement des colonnes */}
       <div className="flex items-center justify-between">
         <Input
-          placeholder="Filtrer par email..."
+          placeholder="Rerchercher un utilisateur..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(e) => table.getColumn("email")?.setFilterValue(e.target.value)}
           className="max-w-sm"

@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   TreesIcon as Lungs,
   Wind,
@@ -21,18 +21,19 @@ import {
   Moon,
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/context/AuthContext"
 
 const ProfilePage = () => {
   const [selectedEmotion, setSelectedEmotion] = useState("")
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   const EmotionCard = ({ emotion, icon: Icon }: { emotion: string; icon: React.ElementType }) => (
     <Card
-      className={`cursor-pointer transition-all duration-300 rounded-3xl ${
-        selectedEmotion === emotion
-          ? "bg-leather-300 border-leather-500 shadow-lg scale-105"
-          : "bg-leather-50 hover:bg-leather-100"
-      }`}
+      className={`cursor-pointer transition-all duration-300 rounded-3xl ${selectedEmotion === emotion
+        ? "bg-leather-300 border-leather-500 shadow-lg scale-105"
+        : "bg-leather-50 hover:bg-leather-100"
+        }`}
       onClick={() => setSelectedEmotion(emotion)}
     >
       <CardContent className="flex flex-col items-center justify-center p-4">
@@ -59,11 +60,10 @@ const ProfilePage = () => {
             <Card className="rounded-3xl shadow-md overflow-hidden sticky top-20 bg-white border border-leather-200">
               <CardContent className="p-6 flex flex-col items-center text-center">
                 <Avatar className="w-24 h-24 mb-4 border-2 border-leather-300">
-                  <AvatarImage src="/placeholder-avatar.jpg" alt="Jean Dupont" />
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarFallback>{user?.firstname[0]}{user?.lastname[0]}</AvatarFallback>
                 </Avatar>
-                <h2 className="text-3xl font-semibold text-leather-800 mb-1">Jean Dupont</h2>
-                <p className="text-sm text-leather-600 mb-4">jean.dupont@example.com</p>
+                <h2 className="text-3xl font-semibold text-leather-800 mb-1">{user?.firstname} {user?.lastname}</h2>
+                <p className="text-sm text-leather-600 mb-4">{user?.username}</p>
                 <Button
                   className="w-full mb-6 bg-leather-600 hover:bg-leather-700 text-white text-sm py-2 px-4 rounded-md transition-all duration-300"
                   onClick={() => navigate("/profile/edit")}
@@ -75,7 +75,7 @@ const ProfilePage = () => {
                     <span className="text-sm font-medium text-leather-700">Niveau de bien-être</span>
                     <Badge className="bg-leather-200 text-leather-800 text-xs px-2 py-1">Intermédiaire</Badge>
                   </div>
-                  <Progress value={66} className="h-2 bg-leather-200"  />
+                  <Progress value={66} className="h-2 bg-leather-200" />
                 </div>
                 <div className="w-full space-y-3">
                   {[
@@ -122,13 +122,12 @@ const ProfilePage = () => {
                       </div>
                     </div>
                     <TrendingUp
-                      className={`h-6 w-6 ${
-                        stat.trend === "up"
-                          ? "text-green-500"
-                          : stat.trend === "down"
-                            ? "text-red-500"
-                            : "text-yellow-500"
-                      }`}
+                      className={`h-6 w-6 ${stat.trend === "up"
+                        ? "text-green-500"
+                        : stat.trend === "down"
+                          ? "text-red-500"
+                          : "text-yellow-500"
+                        }`}
                     />
                   </CardContent>
                 </Card>

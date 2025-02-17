@@ -5,6 +5,7 @@ import AdminHeader from "@/components/admin-dashboard/header/header"
 import { DataTable } from "@/components/ui/data-table"
 import { columns, User } from "./columns"
 import AddUserModal from "./add-user-modal"
+import { motion } from "framer-motion"
 
 export default function UsersComponents() {
     const [searchTerm, setSearchTerm] = useState("")
@@ -45,21 +46,32 @@ export default function UsersComponents() {
     )
 
     return (
-        <div>
+        <div className="bg-leather-200 min-h-screen">
             <SidebarProvider>
                 <AppSidebar />
                 <div className="flex-1">
                     <AdminHeader h1="Gestion des Utilisateurs" />
-                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                        <div className="mb-8 flex justify-between items-center">
-                            <h2 className="text-2xl font-semibold text-green-800">Liste des Utilisateurs</h2>
-                            <AddUserModal />
-                        </div>
-                        {loading ? (
-                            <p>Chargement...</p>
-                        ) : (
-                            <DataTable columns={columns} data={filteredData} />
-                        )}
+                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <motion.div
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="bg-white shadow-lg rounded-xl p-6 mb-8"
+                        >
+                            <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+                                <h2 className="text-3xl font-bold text-leather-800 mb-4 md:mb-0">Liste des Utilisateurs</h2>
+                                <div className="flex items-center space-x-4">
+                                    <AddUserModal />
+                                </div>
+                            </div>
+                            {loading ? (
+                                <div className="flex justify-center items-center h-64">
+                                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-leather-600"></div>
+                                </div>
+                            ) : (
+                                <DataTable columns={columns} data={filteredData} />
+                            )}
+                        </motion.div>
                     </main>
                 </div>
             </SidebarProvider>
