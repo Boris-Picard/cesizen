@@ -42,7 +42,7 @@ export default function AdminHeader({ h1 }: { h1: string }) {
               <Input
                 type="search"
                 placeholder="Rechercher..."
-                className="pl-10 pr-4 py-2 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full"
+                className="pl-10 pr-4 py-2 border-leather-300 focus:border-leather-500 focus:ring-leather-500"
               />
             </div>
             <Button variant="ghost" size="icon" className="text-leather-600 hover:bg-leather-100">
@@ -50,7 +50,7 @@ export default function AdminHeader({ h1 }: { h1: string }) {
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative rounded-full h-8 w-8 overflow-hidden hover:bg-inherit">
+                <Button variant="ghost" className="relative h-8 w-8 overflow-hidden hover:bg-inherit">
                   <Avatar>
                     <AvatarFallback>
                       {user?.firstname[0]}{user?.lastname[0]}

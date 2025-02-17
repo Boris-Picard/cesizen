@@ -2,30 +2,40 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Edit, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
+export type Role = {
+    id: number
+    role_nom: string
+  }
+
 export type User = {
     id: number
-    firstname: string
-    lastname: string
-    email: string
-    role: string
+    ut_prenom: string
+    ut_nom: string
+    ut_mail: string
+    role: Role
 }
 
 export const columns: ColumnDef<User>[] = [
     {
-        accessorKey: "firstname",
+        accessorKey: "id",
+        header: "ID",
+    },
+    {
+        accessorKey: "ut_prenom",
         header: "Prénom",
     },
     {
-        accessorKey: "lastname",
+        accessorKey: "ut_nom",
         header: "Nom",
     },
     {
-        accessorKey: "email",
+        accessorKey: "ut_mail",
         header: "Email",
     },
     {
         accessorKey: "role",
         header: "Rôle",
+        cell: ({ row }) => row.original.role.role_nom,
     },
     {
         id: "actions",

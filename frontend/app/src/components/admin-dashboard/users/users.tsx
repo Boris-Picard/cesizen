@@ -6,34 +6,46 @@ import { DataTable } from "@/components/ui/data-table"
 import { columns, User } from "./columns"
 import AddUserModal from "./add-user-modal"
 import { motion } from "framer-motion"
+import { useAuth } from "@/context/AuthContext"
 
 export default function UsersComponents() {
     const [searchTerm, setSearchTerm] = useState("")
     const [data, setData] = useState<User[]>([])
+    const { token } = useAuth()
 
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchUsers = async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-            const fakeUsers: User[] = [
-                { id: 1, firstname: "Alice", lastname: "Johnson", email: "alice@example.com", role: "Utilisateur" },
-                { id: 2, firstname: "Bob", lastname: "Smith", email: "bob@example.com", role: "Admin" },
-                { id: 3, firstname: "Carol", lastname: "Williams", email: "carol@example.com", role: "Utilisateur" },
-                { id: 4, firstname: "David", lastname: "Brown", email: "david@example.com", role: "Utilisateur" },
-                { id: 5, firstname: "Eva", lastname: "Green", email: "eva@example.com", role: "Admin" },
-                { id: 6, firstname: "Frank", lastname: "Miller", email: "frank@example.com", role: "Utilisateur" },
-                { id: 7, firstname: "Grace", lastname: "Lee", email: "grace@example.com", role: "Admin" },
-                { id: 8, firstname: "Henry", lastname: "Taylor", email: "henry@example.com", role: "Utilisateur" },
-                { id: 9, firstname: "Ivy", lastname: "Davis", email: "ivy@example.com", role: "Utilisateur" },
-                { id: 10, firstname: "Jack", lastname: "Wilson", email: "jack@example.com", role: "Admin" },
-                { id: 11, firstname: "Kate", lastname: "Miller", email: "kate@example.com", role: "Utilisateur" },
-                { id: 12, firstname: "Liam", lastname: "Anderson", email: "liam@example.com", role: "Admin" },
-                { id: 13, firstname: "Mia", lastname: "Robinson", email: "mia@example.com", role: "Utilisateur" },
-                { id: 14, firstname: "Noah", lastname: "Thompson", email: "noah@example.com", role: "Utilisateur" },
-                { id: 15, firstname: "Olivia", lastname: "Martinez", email: "olivia@example.com", role: "Admin" }
-            ]
-            setData(fakeUsers)
+            // await new Promise((resolve) => setTimeout(resolve, 1000))
+            // const fakeUsers: User[] = [
+            //     { id: 1, firstname: "Alice", lastname: "Johnson", email: "alice@example.com", role: "Utilisateur" },
+            //     { id: 2, firstname: "Bob", lastname: "Smith", email: "bob@example.com", role: "Admin" },
+            //     { id: 3, firstname: "Carol", lastname: "Williams", email: "carol@example.com", role: "Utilisateur" },
+            //     { id: 4, firstname: "David", lastname: "Brown", email: "david@example.com", role: "Utilisateur" },
+            //     { id: 5, firstname: "Eva", lastname: "Green", email: "eva@example.com", role: "Admin" },
+            //     { id: 6, firstname: "Frank", lastname: "Miller", email: "frank@example.com", role: "Utilisateur" },
+            //     { id: 7, firstname: "Grace", lastname: "Lee", email: "grace@example.com", role: "Admin" },
+            //     { id: 8, firstname: "Henry", lastname: "Taylor", email: "henry@example.com", role: "Utilisateur" },
+            //     { id: 9, firstname: "Ivy", lastname: "Davis", email: "ivy@example.com", role: "Utilisateur" },
+            //     { id: 10, firstname: "Jack", lastname: "Wilson", email: "jack@example.com", role: "Admin" },
+            //     { id: 11, firstname: "Kate", lastname: "Miller", email: "kate@example.com", role: "Utilisateur" },
+            //     { id: 12, firstname: "Liam", lastname: "Anderson", email: "liam@example.com", role: "Admin" },
+            //     { id: 13, firstname: "Mia", lastname: "Robinson", email: "mia@example.com", role: "Utilisateur" },
+            //     { id: 14, firstname: "Noah", lastname: "Thompson", email: "noah@example.com", role: "Utilisateur" },
+            //     { id: 15, firstname: "Olivia", lastname: "Martinez", email: "olivia@example.com", role: "Admin" }
+            // ]
+            const options = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                }
+            }
+            const response = await fetch("http://cesizen-api.localhost/api/utilisateurs", options)
+            const data = await response.json();
+
+            setData(data)
             setLoading(false)
         }
         fetchUsers()
@@ -41,8 +53,7 @@ export default function UsersComponents() {
 
     const filteredData = data.filter(
         (user) =>
-            user.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase())
+            user?.ut_prenom.toLowerCase().includes(searchTerm.toLowerCase()) 
     )
 
     return (
@@ -56,7 +67,7 @@ export default function UsersComponents() {
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white shadow-lg rounded-xl p-6 mb-8"
+                            className="bg-leather-50 shadow-lg rounded-xl p-6 mb-8"
                         >
                             <div className="flex flex-col md:flex-row justify-between items-center mb-6">
                                 <h2 className="text-3xl font-bold text-leather-800 mb-4 md:mb-0">Liste des Utilisateurs</h2>

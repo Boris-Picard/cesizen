@@ -128,9 +128,9 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
       <div className="flex items-center justify-between">
         <Input
           placeholder="Rerchercher un utilisateur..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(e) => table.getColumn("email")?.setFilterValue(e.target.value)}
-          className="max-w-sm"
+          value={(table.getColumn("ut_mail")?.getFilterValue() as string) ?? ""}
+          onChange={(e) => table.getColumn("ut_mail")?.setFilterValue(e.target.value)}
+          className="max-w-sm border-leather-300 focus:border-leather-500 focus:ring-leather-500"
         />
         <div className="flex items-center space-x-2">
           <span className="text-sm text-muted-foreground">
@@ -138,7 +138,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
           </span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button className="bg-leather-600 hover:bg-leather-700 text-white" size="sm">
                 Colonnes
               </Button>
             </DropdownMenuTrigger>
@@ -225,7 +225,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
                   </DialogHeader>
                   <DialogFooter>
                     <DialogClose asChild>
-                      <Button variant="outline" size="sm">
+                      <Button className="bg-leather-600 hover:bg-leather-700 text-white" size="sm">
                         Annuler
                       </Button>
                     </DialogClose>
@@ -237,7 +237,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
               </Dialog>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="outline" size="sm">
+                  <Button className="bg-leather-600 hover:bg-leather-700 text-white" size="sm">
                     Exporter
                   </Button>
                 </DialogTrigger>
@@ -250,11 +250,11 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
                   </DialogHeader>
                   <DialogFooter>
                     <DialogClose asChild>
-                      <Button variant="outline" size="sm">
+                      <Button className="bg-leather-600 hover:bg-leather-700 text-white" size="sm">
                         Annuler
                       </Button>
                     </DialogClose>
-                    <Button variant="outline" size="sm" onClick={handleExportSelected}>
+                    <Button className="bg-leather-600 hover:bg-leather-700 text-white" size="sm" onClick={handleExportSelected}>
                       Confirmer
                     </Button>
                   </DialogFooter>
@@ -267,7 +267,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
         <div className="flex items-center space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button className="bg-leather-600 hover:bg-leather-700 text-white" size="sm">
                 Lignes par page : {pagination.pageSize}
               </Button>
             </DropdownMenuTrigger>
@@ -287,16 +287,15 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
           </DropdownMenu>
           <div className="flex items-center space-x-2">
             <Button
-              variant="outline"
+              className="hidden lg:flex bg-leather-600 hover:bg-leather-700 text-white"
               size="sm"
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
-              className="hidden lg:flex"
             >
               <ChevronsLeft />
             </Button>
             <Button
-              variant="outline"
+              className="hidden lg:flex bg-leather-600 hover:bg-leather-700 text-white"
               size="sm"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
@@ -307,7 +306,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
               Page {pagination.pageIndex + 1} sur {table.getPageCount()}
             </span>
             <Button
-              variant="outline"
+              className="hidden lg:flex bg-leather-600 hover:bg-leather-700 text-white"
               size="sm"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
@@ -315,11 +314,10 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
               <ChevronRight />
             </Button>
             <Button
-              variant="outline"
               size="sm"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
-              className="hidden lg:flex"
+              className="hidden lg:flex bg-leather-600 hover:bg-leather-700 text-white"
             >
               <ChevronsRight />
             </Button>
