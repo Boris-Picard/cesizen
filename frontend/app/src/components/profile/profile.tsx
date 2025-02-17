@@ -24,26 +24,18 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/context/AuthContext"
 
 const ProfilePage = () => {
-  const [selectedEmotion, setSelectedEmotion] = useState("")
+  const [currentEmotion, setCurrentEmotion] = useState<number | null>(null);
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  const EmotionCard = ({ emotion, icon: Icon }: { emotion: string; icon: React.ElementType }) => (
-    <Card
-      className={`cursor-pointer transition-all duration-300 rounded-3xl ${selectedEmotion === emotion
-        ? "bg-leather-300 border-leather-500 shadow-lg scale-105"
-        : "bg-leather-50 hover:bg-leather-100"
-        }`}
-      onClick={() => setSelectedEmotion(emotion)}
-    >
-      <CardContent className="flex flex-col items-center justify-center p-4">
-        <Icon className={`w-8 h-8 ${selectedEmotion === emotion ? "text-leather-800" : "text-leather-600"} mb-2`} />
-        <p className={`text-sm font-medium ${selectedEmotion === emotion ? "text-leather-900" : "text-leather-700"}`}>
-          {emotion}
-        </p>
-      </CardContent>
-    </Card>
-  )
+  const emotions = [
+    { name: "Joie", color: "#FDE68A", icon: "😊" },
+    { name: "Tristesse", color: "#93C5FD", icon: "😢" },
+    { name: "Colère", color: "#FCA5A5", icon: "😠" },
+    { name: "Peur", color: "#D1D5DB", icon: "😨" },
+    { name: "Dégoût", color: "#6EE7B7", icon: "🤢" },
+    { name: "Surprise", color: "#C4B5FD", icon: "😲" },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-leather-50 to-leather-100 bg-opacity-50 py-12">
@@ -142,29 +134,45 @@ const ProfilePage = () => {
             >
               <Card className="rounded-3xl shadow-lg overflow-hidden bg-white border-2 border-leather-200">
                 <CardHeader className="p-6 bg-leather-100">
-                  <CardTitle className="text-xl font-bold text-leather-800">Tracker d'émotions</CardTitle>
+                  <CardTitle className="text-xl font-bold text-leather-800">
+                    Tracker d'émotions
+                  </CardTitle>
                   <CardDescription className="text-leather-600 text-base">
                     Comment vous sentez-vous aujourd'hui ?
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-6">
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-4">
-                    <EmotionCard emotion="Joie" icon={Smile} />
-                    <EmotionCard emotion="Calme" icon={Heart} />
-                    <EmotionCard emotion="Fatigue" icon={Timer} />
-                    <EmotionCard emotion="Stress" icon={BarChart} />
-                    <EmotionCard emotion="Tristesse" icon={Activity} />
-                    <EmotionCard emotion="Colère" icon={Wind} />
+                    {emotions.map((emotion, index) => (
+                      <motion.button
+                        key={emotion.name}
+                        className={`p-4 rounded-xl flex flex-col items-center justify-center transition-colors ${currentEmotion === index ? "ring-2 ring-leather-500" : ""
+                          }`}
+                        style={{ backgroundColor: emotion.color }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setCurrentEmotion(index)}
+                      >
+                        <span className="text-4xl mb-2">{emotion.icon}</span>
+                        <span className="text-sm font-medium text-leather-800">
+                          {emotion.name}
+                        </span>
+                      </motion.button>
+                    ))}
                   </div>
+
+                  {/* Boutons d'action qui apparaissent lors de la sélection */}
                   <AnimatePresence>
-                    {selectedEmotion && (
+                    {currentEmotion !== null && (
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         className="mt-4"
                       >
-                        <p className="text-leather-700 mb-2 text-base">Vous avez sélectionné : {selectedEmotion}</p>
+                        <p className="text-leather-700 mb-2 text-base">
+                          Vous avez sélectionné : {emotions[currentEmotion].name}
+                        </p>
                         <div className="flex gap-3">
                           <Button className="bg-leather-600 hover:bg-leather-700 text-white transition-colors duration-300 text-base py-2 px-4 rounded-full">
                             Enregistrer dans le journal
@@ -172,7 +180,7 @@ const ProfilePage = () => {
                           <Button
                             variant="outline"
                             className="text-leather-600 border-leather-300 hover:bg-leather-100 text-base py-2 px-4 rounded-full"
-                            onClick={() => setSelectedEmotion("")}
+                            onClick={() => setCurrentEmotion(null)}
                           >
                             Annuler
                           </Button>
@@ -182,6 +190,7 @@ const ProfilePage = () => {
                   </AnimatePresence>
                 </CardContent>
               </Card>
+
             </motion.div>
 
             {/* Activity and Recommendations */}

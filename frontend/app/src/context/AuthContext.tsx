@@ -63,7 +63,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<UserPayload | null>(
         token ? jwtDecode(token) : null
     );
-console.log(user);
 
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
 
