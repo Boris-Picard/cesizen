@@ -12,6 +12,8 @@ import { jwtDecode } from "jwt-decode";
 
 export interface UserPayload {
     username: string;
+    firstname: string;
+    lastname: string;
     exp: number;
     iat: number;
     roles: string[];
@@ -61,6 +63,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<UserPayload | null>(
         token ? jwtDecode(token) : null
     );
+console.log(user);
 
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
 

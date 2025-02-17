@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/context/AuthContext"
+import { Avatar, AvatarFallback } from "../ui/avatar"
 
 
 const LeftDesktopNavigationItems = () => {
@@ -138,12 +139,12 @@ const MobileNavigationItems = () => {
 }
 
 export const Navbar = () => {
-  const { logout, isAdmin, isAuthenticated } = useAuth()
+  const { logout, isAdmin, isAuthenticated, user } = useAuth()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-leather-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/" className="flex items-center space-x-2">
@@ -183,8 +184,12 @@ export const Navbar = () => {
             {isAuthenticated && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative rounded-full h-8 w-8 overflow-hidden">
-                    <Icons.user className="h-5 w-5" />
+                  <Button variant="ghost" className="relative rounded-full h-8 w-8 overflow-hidden hover:bg-inherit">
+                    <Avatar>
+                      <AvatarFallback>
+                        {user?.firstname[0]}{user?.lastname[0]}
+                      </AvatarFallback>
+                    </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-64 p-2">
@@ -194,27 +199,29 @@ export const Navbar = () => {
                     transition={{ duration: 0.2 }}
                   >
                     <div className="flex items-center space-x-2 p-2 mb-2 border-b border-leather-200">
-                      <img src="/placeholder-avatar.jpg" alt="User avatar" className="w-10 h-10 rounded-full" />
+                      <Avatar>
+                        <AvatarFallback>{user?.firstname[0]}{user?.lastname[0]}</AvatarFallback>
+                      </Avatar>
                       <div>
-                        <p className="font-medium text-leather-800">John Doe</p>
-                        <p className="text-sm text-leather-500">john.doe@example.com</p>
+                        <p className="font-medium text-leather-800">{user?.firstname} {user?.lastname}</p>
+                        <p className="text-sm text-leather-500">{user?.username}</p>
                       </div>
                     </div>
                     <DropdownMenuItem asChild>
                       <Link
                         to="/profile"
-                        className="flex items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors"
+                        className="flex items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors cursor-pointer"
                       >
-                        <Icons.user className="mr-2 h-4 w-4 text-leather-500" />
+                        <Icons.user className="mr-2 h-4 w-4" />
                         <span>Profil</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link
                         to="/profile/edit"
-                        className="flex items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors"
+                        className="flex items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors cursor-pointer"
                       >
-                        <Icons.settings className="mr-2 h-4 w-4 text-leather-500" />
+                        <Icons.settings className="mr-2 h-4 w-4" />
                         <span>Paramètres</span>
                       </Link>
                     </DropdownMenuItem>
@@ -222,9 +229,9 @@ export const Navbar = () => {
                       <DropdownMenuItem asChild>
                         <Link
                           to="/admin"
-                          className="flex items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors"
+                          className="flex items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors cursor-pointer"
                         >
-                          <Icons.userCog className="mr-2 h-4 w-4 text-leather-500" />
+                          <Icons.userCog className="mr-2 h-4 w-4" />
                           <span>Admin</span>
                         </Link>
                       </DropdownMenuItem>
@@ -232,7 +239,7 @@ export const Navbar = () => {
                     <DropdownMenuSeparator className="my-2" />
                     <DropdownMenuItem
                       onClick={logout}
-                      className="flex items-center px-2 py-2 rounded-md hover:bg-red-100 transition-colors text-red-600 hover:text-red-700"
+                      className="flex items-center px-2 py-2 rounded-md hover:bg-red-100 transition-colors cursor-pointer text-red-600 hover:text-red-700"
                     >
                       <Icons.logOut className="mr-2 h-4 w-4" />
                       <span>Déconnexion</span>
