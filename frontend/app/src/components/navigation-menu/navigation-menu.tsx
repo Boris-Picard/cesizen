@@ -169,7 +169,7 @@ export const Navbar = () => {
                   exit={{ width: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Input type="search" placeholder="Rechercher..." className="w-full" />
+                  <Input type="search" placeholder="Rechercher..." className="w-full border border-leather-300" />
                 </motion.div>
               )}
             </AnimatePresence>
