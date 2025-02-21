@@ -1,21 +1,25 @@
-import { useState, useEffect } from "react"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-siderbar/app-sidebar"
-import AdminHeader from "@/components/admin-dashboard/header/header"
-import { DataTable } from "@/components/ui/data-table"
-import { getColumns, User } from "./columns"
-import AddUserModal from "./add-user-modal"
-import { motion } from "framer-motion"
-import { useAuth } from "@/context/AuthContext"
-import EditUserModal from "./edit-user-modal"
+import { useState, useEffect } from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-siderbar/app-sidebar";
+import AdminHeader from "@/components/admin-dashboard/header/header";
+import { DataTable } from "@/components/ui/data-table";
+import { getColumns, User } from "./columns";
+import AddUserModal from "./add-user-modal";
+import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
+import EditUserModal from "./edit-user-modal";
+import DeleteUserModal from "./deleter-user-modal";
 
 export default function UsersComponents() {
-    const [searchTerm, setSearchTerm] = useState("")
-    const [data, setData] = useState<User[]>([])
-    const { token } = useAuth()
+    const [searchTerm, setSearchTerm] = useState("");
+    const [data, setData] = useState<User[]>([]);
+    const { token } = useAuth();
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
-    const [loading, setLoading] = useState(true)
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+    const [loading, setLoading] = useState(true);
+
+    const [selectedUserToDelete, setSelectedUserToDelete] = useState<User | null>(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -26,47 +30,39 @@ export default function UsersComponents() {
                     'Authorization': `Bearer ${token}`,
                 }
             }
-            const response = await fetch("http://cesizen-api.localhost/api/utilisateurs", options)
+            const response = await fetch("http://cesizen-api.localhost/api/utilisateurs", options);
             const data = await response.json();
 
-            setData(data)
-            setLoading(false)
+            setData(data);
+            setLoading(false);
             console.log(data);
-
         }
-        fetchUsers()
-    }, [])
+        fetchUsers();
+    }, [token]);
 
     const filteredData = data.filter(
         (user) =>
-            user?.ut_mail.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+            user?.ut_mail?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     const handleEdit = (user: User) => {
         setSelectedUser(user);
         setIsEditModalOpen(true);
     };
 
-    // Fonction de suppression
-    const handleDelete = async (user: User) => {
-        if (confirm(`Voulez-vous vraiment supprimer ${user.ut_nom} ?`)) {
-            try {
-                const options = {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                };
-                await fetch(`http://cesizen-api.localhost/api/utilisateurs/${user.id}`, options);
-                // Mettre à jour l'état local en supprimant l'utilisateur
-                setData((prev) => prev.filter((u) => u.id !== user.id));
-            } catch (error) {
-                console.error("Erreur lors de la suppression de l'utilisateur", error);
-            }
-        }
+    // Ancienne fonction de suppression remplacée par l'ouverture de la modale
+    const openDeleteModal = (user: User) => {
+        setSelectedUserToDelete(user);
+        setIsDeleteModalOpen(true);
     };
 
-    const columns = getColumns(handleEdit, handleDelete);
+    // Callback exécuté après confirmation de suppression dans DeleteUserModal
+    const handleDeleteConfirmed = (userId: number) => {
+        setData(prevData => prevData.filter(user => user.id !== userId));
+    };
+
+    // Par exemple, modifiez getColumns pour utiliser openDeleteModal à la place de handleDelete direct
+    const columns = getColumns(handleEdit, openDeleteModal);
 
     return (
         <div className="bg-leather-200 min-h-screen">
@@ -86,7 +82,9 @@ export default function UsersComponents() {
                                     Liste des Utilisateurs
                                 </h2>
                                 <div className="flex items-center space-x-4">
-                                    <AddUserModal />
+                                    <AddUserModal onUserAdded={(newUser) => {
+                                        setData((prevData) => [...prevData, newUser]);
+                                    }} />
                                 </div>
                             </div>
                             {selectedUser && (
@@ -95,20 +93,19 @@ export default function UsersComponents() {
                                     open={isEditModalOpen}
                                     onClose={() => setIsEditModalOpen(false)}
                                     onSave={(updatedUser) => {
-                                        // Met à jour le state "data" avec la nouvelle liste d'utilisateurs
                                         setData(prevData =>
-                                            // Pour chaque utilisateur de la liste
                                             prevData.map(u =>
-                                                // Si c'est l'utilisateur modifié
                                                 u.id === selectedUser.id
-                                                    // On fusionne l'utilisateur existant (u) avec les données mises à jour (updatedUser)
-                                                    // et on force la propriété "role" à reprendre la valeur de selectedUser.role 
-                                                    ? { ...u, ...updatedUser, role: selectedUser.role }
-                                                    // Sinon, on garde l'utilisateur inchangé
+                                                    ? {
+                                                        ...u,
+                                                        ...updatedUser,
+                                                        role: typeof updatedUser.role === 'string' ? selectedUser.role : updatedUser.role
+                                                    }
                                                     : u
                                             )
                                         );
                                     }}
+
                                 />
                             )}
                             {loading ? (
@@ -121,6 +118,15 @@ export default function UsersComponents() {
                         </motion.div>
                     </main>
                 </div>
+                {/* Affichage de la modale de suppression */}
+                {selectedUserToDelete && (
+                    <DeleteUserModal
+                        user={selectedUserToDelete}
+                        open={isDeleteModalOpen}
+                        onClose={() => setIsDeleteModalOpen(false)}
+                        onDelete={handleDeleteConfirmed}
+                    />
+                )}
             </SidebarProvider>
         </div>
     );
