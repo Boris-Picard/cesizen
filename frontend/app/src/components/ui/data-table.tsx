@@ -272,7 +272,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[100px]">
-              {([10, 20, 30, 40, 50] as const).map((taille) => (
+              {([5, 10, 20, 30, 40, 50] as const).map((taille) => (
                 <DropdownMenuItem
                   key={taille}
                   onClick={() =>

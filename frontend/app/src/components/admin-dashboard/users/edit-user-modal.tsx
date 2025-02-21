@@ -76,10 +76,22 @@ export default function EditUserModal({ user, open, onClose, onSave }: EditUserM
         getRoles()
     }, [open, token])
 
+
+    useEffect(() => {
+        form.reset({
+            ut_prenom: user.ut_prenom,
+            ut_nom: user.ut_nom,
+            ut_mail: user.ut_mail,
+            role: `/api/roles/${user.role.id}`,
+            ut_active: user.ut_active,
+        });
+        console.log(form);
+        
+    }, [user, form]);
+
+
     async function onSubmit(values: z.infer<typeof userSchema>) {
         const validData = userSchema.parse(values)
-        console.log(validData);
-
         const updatedUser = async () => {
             const options = {
                 method: "PATCH",
@@ -92,9 +104,6 @@ export default function EditUserModal({ user, open, onClose, onSave }: EditUserM
             const response = await fetch(`http://cesizen-api.localhost/api/utilisateurs/${user.id}`, options);
             const data = await response.json()
             console.log(data);
-
-            console.log(JSON.stringify(validData));
-
 
             onSave(data);
             form.reset(values);
