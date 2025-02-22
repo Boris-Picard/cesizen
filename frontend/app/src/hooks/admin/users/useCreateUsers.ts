@@ -33,7 +33,7 @@ export const userCreateSchema = z
 interface CreateUserInterface {
     validData: z.infer<typeof userCreateSchema>;
     onUserAdded: (user: User) => void;
-    form: any; 
+    form: any;
 }
 
 export function useCreateUsers() {

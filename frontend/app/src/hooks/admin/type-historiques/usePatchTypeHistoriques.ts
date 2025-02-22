@@ -1,0 +1,56 @@
+import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
+import { toast } from "@/hooks/useToast";
+import { z } from "zod";
+import { typeHistoriqueCreateSchema } from "./useCreateTypeHistoriques";
+
+interface PatchTypeHistoriqueInterface {
+    validData: z.infer<typeof typeHistoriqueCreateSchema>;
+    id: number;
+    onSave: (updatedData: z.infer<typeof typeHistoriqueCreateSchema>) => void;
+    form: any;
+    onClose: () => void;
+}
+
+export function usePatchTypeHistoriques() {
+    const { token } = useAuth();
+
+    const updatedTypeHistorique = async ({
+        validData,
+        id,
+        onSave,
+        form,
+        onClose,
+    }: PatchTypeHistoriqueInterface) => {
+        try {
+            const { data } = await axios.patch(
+                `http://cesizen-api.localhost/api/type_historiques/${id}`,
+                validData,
+                {
+                    headers: {
+                        "Content-Type": "application/merge-patch+json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            onSave(data);
+            form.reset(data);
+            onClose();
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                toast({
+                    variant: "destructive",
+                    title: error.response?.data?.title ?? "Une erreur est survenue",
+                    description: error.response?.data?.message,
+                });
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Une erreur est survenue",
+                });
+            }
+        }
+    };
+
+    return { updatedTypeHistorique };
+}
