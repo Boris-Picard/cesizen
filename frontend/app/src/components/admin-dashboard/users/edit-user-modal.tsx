@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { User } from "./columns"
 import { useEffect } from "react"
 import { usePatchUsers, userSchema } from "@/hooks/admin/users/usePatchUsers"
-import { useGetRoles } from "@/hooks/admin/users/useGetRoles"
+import { useGetRoles } from "@/hooks/admin/useGetRoles"
 
 interface EditUserModalProps {
     user: User;

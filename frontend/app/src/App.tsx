@@ -18,36 +18,38 @@ import AdminPage from '@/app/admin-dashboard/page';
 import { AdminRoute } from '@/components/routes/AdminRoute';
 import UsersPage from '@/app/admin-dashboard/users/page';
 import ArticlesPage from '@/app/admin-dashboard/articles/page';
+import RolesPage from './app/admin-dashboard/roles/page';
 
 function App() {
   return (
     <AuthProvider>
-        <Toaster />
-        <Routes>
-          <Route>
-            <Route element={<AdminRoute />}>
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/admin/articles" element={<ArticlesPage />} />
-              <Route path="/admin/users" element={<UsersPage />} />
-            </Route>
+      <Toaster />
+      <Routes>
+        <Route>
+          <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/articles" element={<ArticlesPage />} />
+            <Route path="/admin/users" element={<UsersPage />} />
+            <Route path="/admin/users/roles" element={<RolesPage />} />
           </Route>
-          <Route element={<PublicRoute />}>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-          </Route>
+        </Route>
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
 
-          <Route path="/reset-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password/reset/:token" element={<ResetPasswordPage />} />
-          <Route path="/account-confirmation/:token" element={<ConfirmAccountPage />} />
-          <Route element={<RequireAuth />}>
-            <Route path='/exercice-libre' element={<ExerciceLibrePage />} />
-            <Route path="/exercices" element={<ExercicesFrontPage />} />
-            <Route path="/" element={<HomePage />} />
-            <Route path="/informations" element={<InformationsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/profile/edit" element={<EditProfilePage />} />
-          </Route>
-        </Routes>
+        <Route path="/reset-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/reset/:token" element={<ResetPasswordPage />} />
+        <Route path="/account-confirmation/:token" element={<ConfirmAccountPage />} />
+        <Route element={<RequireAuth />}>
+          <Route path='/exercice-libre' element={<ExerciceLibrePage />} />
+          <Route path="/exercices" element={<ExercicesFrontPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/informations" element={<InformationsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/edit" element={<EditProfilePage />} />
+        </Route>
+      </Routes>
     </AuthProvider >
   );
 }

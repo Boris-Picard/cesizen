@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
-import { Edit, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Icons } from "@/components/ui/icons"
 
 export type Role = {
     id: number
@@ -44,14 +44,15 @@ export const getColumns = (handleEdit: (user: User) => void,
             header: "Actif",
         },
         {
+            header: "Actions",
             id: "actions",
             cell: ({ row }) => (
                 <div className="flex space-x-2">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(row.original)}>
-                        <Edit className="h-4 w-4" />
+                        <Icons.edit className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => handleDelete(row.original)}>
-                        <Trash2 className="h-4 w-4 " />
+                        <Icons.trash className="h-4 w-4 " />
                     </Button>
                 </div>
             ),

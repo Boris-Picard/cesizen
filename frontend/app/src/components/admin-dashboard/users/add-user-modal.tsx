@@ -18,7 +18,7 @@ import {
 import { Icons } from "@/components/ui/icons";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { User } from "./columns";
-import { useGetRoles } from "@/hooks/admin/users/useGetRoles";
+import { useGetRoles } from "@/hooks/admin/useGetRoles";
 import { useCreateUsers, userCreateSchema } from "@/hooks/admin/users/useCreateUsers";
 
 
