@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -18,46 +17,22 @@ import {
 } from "@/components/ui/dialog";
 import { Icons } from "@/components/ui/icons";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useAuth } from "@/context/AuthContext";
-import { Role, User } from "./columns";
+import { User } from "./columns";
+import { useGetRoles } from "@/hooks/admin/users/useGetRoles";
+import { useCreateUsers, userCreateSchema } from "@/hooks/admin/users/useCreateUsers";
 
-const userSchema = z
-  .object({
-    ut_prenom: z
-      .string()
-      .min(2, "Le prénom est requis.")
-      .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
-        message: "Le prénom ne doit pas contenir de chiffres ou de caractères spéciaux.",
-      }),
-    ut_nom: z
-      .string()
-      .min(2, "Le nom est requis.")
-      .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
-        message: "Le nom ne doit pas contenir de chiffres ou de caractères spéciaux.",
-      }),
-    ut_mail: z.string().email("Veuillez entrer une adresse e-mail valide."),
-    password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères."),
-    confirmPassword: z.string().min(8, "Confirmez votre mot de passe."),
-    role: z.string().min(1, "Veuillez sélectionner un rôle."),
-    active: z.boolean(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Les mots de passe ne correspondent pas.",
-    path: ["confirmPassword"],
-  });
+
 
 interface AddUserModalProps {
   onUserAdded: (user: User) => void;
 }
 
 export default function AddUserModal({ onUserAdded }: AddUserModalProps) {
-  const { token } = useAuth();
-  const [roles, setRoles] = useState<Array<Role>>([]);
-  // État pour contrôler l'ouverture de la modal
-  const [open, setOpen] = useState(false);
+  const { roles } = useGetRoles()
+  const { createUser, open, setOpen } = useCreateUsers()
 
-  const form = useForm<z.infer<typeof userSchema>>({
-    resolver: zodResolver(userSchema),
+  const form = useForm<z.infer<typeof userCreateSchema>>({
+    resolver: zodResolver(userCreateSchema),
     defaultValues: {
       ut_prenom: "",
       ut_nom: "",
@@ -69,49 +44,9 @@ export default function AddUserModal({ onUserAdded }: AddUserModalProps) {
     },
   });
 
-  useEffect(() => {
-    const getRoles = async () => {
-      const options = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await fetch("http://cesizen-api.localhost/api/roles", options);
-      const data = await response.json();
-      setRoles(data);
-    };
-    getRoles();
-  }, [token]);
-
-  async function onSubmit(values: z.infer<typeof userSchema>) {
-    const validData = userSchema.parse(values);
-    const createUser = async () => {
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          ut_prenom: validData.ut_prenom,
-          ut_nom: validData.ut_nom,
-          ut_mail: validData.ut_mail,
-          plainPassword: validData.password,
-          role: validData.role,
-          active: validData.active,
-        }),
-      };
-      const response = await fetch("http://cesizen-api.localhost/api/admin/register-user", options);
-      const { data } = await response.json();
-console.log(data);
-
-      onUserAdded(data);
-      form.reset();
-      setOpen(false);
-    };
-    createUser();
+  async function onSubmit(values: z.infer<typeof userCreateSchema>) {
+    const validData = userCreateSchema.parse(values);
+    await createUser({ validData, onUserAdded, form })
   }
 
   return (

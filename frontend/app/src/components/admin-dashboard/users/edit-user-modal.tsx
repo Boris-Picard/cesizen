@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import {
     Dialog,
-    DialogTrigger,
     DialogContent,
     DialogHeader,
     DialogTitle,
@@ -17,27 +16,10 @@ import {
 } from "@/components/ui/dialog"
 import { Icons } from "@/components/ui/icons"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Role, User } from "./columns"
-import { useAuth } from "@/context/AuthContext"
-import { useEffect, useState } from "react"
-
-const userSchema = z.object({
-    ut_prenom: z
-        .string()
-        .min(2, "Le prénom est requis.")
-        .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
-            message: "Le prénom ne doit pas contenir de chiffres ou de caractères spéciaux.",
-        }),
-    ut_nom: z
-        .string()
-        .min(2, "Le nom est requis.")
-        .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
-            message: "Le nom ne doit pas contenir de chiffres ou de caractères spéciaux.",
-        }),
-    ut_mail: z.string().email("Veuillez entrer une adresse e-mail valide."),
-    role: z.string().min(1, "Veuillez sélectionner un rôle."),
-    ut_active: z.boolean(),
-})
+import { User } from "./columns"
+import { useEffect } from "react"
+import { usePatchUsers, userSchema } from "@/hooks/admin/users/usePatchUsers"
+import { useGetRoles } from "@/hooks/admin/users/useGetRoles"
 
 interface EditUserModalProps {
     user: User;
@@ -47,8 +29,10 @@ interface EditUserModalProps {
 }
 
 export default function EditUserModal({ user, open, onClose, onSave }: EditUserModalProps) {
-    const { token } = useAuth()
-    const [roles, setRoles] = useState<Array<Role>>()
+    const { roles } = useGetRoles()
+    const { updatedUser } = usePatchUsers()
+
+
     const form = useForm<z.infer<typeof userSchema>>({
         resolver: zodResolver(userSchema),
         defaultValues: {
@@ -61,23 +45,6 @@ export default function EditUserModal({ user, open, onClose, onSave }: EditUserM
     })
 
     useEffect(() => {
-        const getRoles = async () => {
-            const options = {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                }
-            }
-            const response = await fetch("http://cesizen-api.localhost/api/roles", options)
-            const data = await response.json()
-            setRoles(data)
-        }
-        getRoles()
-    }, [open, token])
-
-
-    useEffect(() => {
         form.reset({
             ut_prenom: user.ut_prenom,
             ut_nom: user.ut_nom,
@@ -85,32 +52,14 @@ export default function EditUserModal({ user, open, onClose, onSave }: EditUserM
             role: `/api/roles/${user.role.id}`,
             ut_active: user.ut_active,
         });
-        console.log(form);
-        
     }, [user, form]);
 
 
     async function onSubmit(values: z.infer<typeof userSchema>) {
-        const validData = userSchema.parse(values)
-        const updatedUser = async () => {
-            const options = {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/merge-patch+json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(validData),
-            };
-            const response = await fetch(`http://cesizen-api.localhost/api/utilisateurs/${user.id}`, options);
-            const data = await response.json()
-            console.log(data);
-
-            onSave(data);
-            form.reset(values);
-            onClose();
-        }
-        updatedUser()
+        const validData = userSchema.parse(values);
+        await updatedUser({ validData, id: user.id, onClose, form, onSave });
     }
+
     return (
         <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose(); }}>
             <DialogContent className="sm:max-w-[500px] bg-white rounded-3xl p-8">
