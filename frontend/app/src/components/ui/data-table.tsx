@@ -56,7 +56,6 @@ export interface DataTableProps<TData extends { id: string | number }, TValue> {
 }
 
 export function DataTable<TData extends { id: string | number }, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
-  // Colonne de sélection
   const selectionColumn: ColumnDef<TData, unknown> = {
     id: "select",
     header: ({ table }) => (
@@ -83,6 +82,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [globalFilter, setGlobalFilter] = React.useState<string>("")
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({})
   const [pagination, setPagination] = React.useState<PaginationState>({
@@ -111,7 +111,6 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
     getFilteredRowModel: getFilteredRowModel(),
   })
 
-  // Actions groupées
   const handleDeleteSelected = () => {
     const selectedIds = table.getFilteredSelectedRowModel().rows.map(row => row.original.id)
     alert("Supprimer les lignes avec ID : " + selectedIds.join(", "))
@@ -127,9 +126,9 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
       {/* Barre de filtrage et basculement des colonnes */}
       <div className="flex items-center justify-between">
         <Input
-          placeholder="Rerchercher un utilisateur..."
-          value={(table.getColumn("ut_mail")?.getFilterValue() as string) ?? ""}
-          onChange={(e) => table.getColumn("ut_mail")?.setFilterValue(e.target.value)}
+          placeholder="Rechercher..."
+          value={globalFilter}
+          onChange={(e) => setGlobalFilter(e.target.value)}
           className="max-w-sm border-leather-300 focus:border-leather-500 focus:ring-leather-500"
         />
         <div className="flex items-center space-x-2">

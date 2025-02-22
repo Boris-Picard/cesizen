@@ -2,9 +2,11 @@ import { Role } from "@/components/admin-dashboard/users/columns";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "@/hooks/useToast";
 
 export function useGetRoles() {
     const [roles, setRoles] = useState<Array<Role>>([]);
+    const [loading, setLoading] = useState<boolean>(true)
     const { token } = useAuth();
 
     useEffect(() => {
@@ -18,11 +20,26 @@ export function useGetRoles() {
                 });
                 setRoles(data);
             } catch (error) {
-                console.error("Erreur lors de la récupération des rôles :", error);
+                if (error instanceof Error) {
+                    if (axios.isAxiosError(error)) {
+                        toast({
+                            variant: "destructive",
+                            title: error.response?.data?.title ?? "Une erreur est survenue",
+                            description: error.response?.data?.message,
+                        })
+                    }
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: "Une erreur est survenue",
+                    })
+                }
+            } finally {
+                setLoading(false);
             }
         };
         getRoles();
     }, [token]);
 
-    return { roles };
+    return { roles, loading, setRoles };
 }
