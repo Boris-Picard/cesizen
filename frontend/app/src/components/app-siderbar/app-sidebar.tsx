@@ -15,6 +15,7 @@ import {
   BarChart2,
   ChevronDown,
   LogOut,
+  PlusSquare,
 } from "lucide-react"
 import {
   Sidebar,
@@ -42,7 +43,6 @@ const menuItems = [
   { title: "Dashboard", url: "/admin", icon: Home },
   {
     title: "Utilisateurs",
-    url: "/admin/users",
     icon: Users,
     submenu: [
       { title: "Liste des Utilisateurs", url: "/admin/users", icon: User },
@@ -51,18 +51,27 @@ const menuItems = [
   },
   {
     title: "Contenus",
-    url: "/admin",
     icon: FileText,
     submenu: [
-      { title: "Articles", url: "/admin/articles", icon: Info },
-      { title: "Exercices", url: "/admin/exercises", icon: Activity },
+      { title: "Informations", url: "/admin/content/informations", icon: Info },
+      { title: "Exercices", url: "/admin/content/exercices", icon: Activity },
+    ],
+  },
+  {
+    title: "Types",
+    icon: Info,
+    submenu: [
+      { title: "Type d'information", url: "/admin/types/information", icon: Info },
+      { title: "Type d'interaction", url: "/admin/types/interaction", icon: Activity },
+      { title: "Type d'historique", url: "/admin/types/historique", icon: Clock },
     ],
   },
   { title: "Interactions", url: "/admin/interactions", icon: Activity, badge: "9+" },
   { title: "Historique", url: "/admin/history", icon: Clock },
   { title: "Validation", url: "/admin/validation", icon: CheckSquare, badge: "3" },
   { title: "Statistiques", url: "/admin/stats", icon: BarChart2 },
-]
+];
+
 
 export function AppSidebar() {
   const location = useLocation()
@@ -136,7 +145,7 @@ export function AppSidebar() {
                                   "flex items-center gap-3 text-leather-700 p-2 rounded-lg transition-all",
                                   "hover:bg-leather-100 hover:text-leather-900",
                                   location.pathname === subItem.url &&
-                                    "bg-leather-200 text-leather-900 font-medium hover:bg-leather-300",
+                                  "bg-leather-200 text-leather-900 font-medium hover:bg-leather-300",
                                 )}
                               >
                                 <subItem.icon className="w-5 h-5" />
@@ -154,7 +163,7 @@ export function AppSidebar() {
                                 "flex items-center gap-3 text-leather-700 p-2 rounded-lg transition-all",
                                 "hover:bg-leather-100 hover:text-leather-900",
                                 location.pathname === item.url &&
-                                  "bg-leather-200 text-leather-900 font-medium hover:bg-leather-300",
+                                "bg-leather-200 text-leather-900 font-medium hover:bg-leather-300",
                               )}
                             >
                               <item.icon className="w-5 h-5" />

@@ -2,8 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import LoginPage from "@/app/login/page";
 import RegisterPage from '@/app/register/page';
 import { AuthProvider } from "@/context/AuthContext";
-import { PublicRoute } from '@/components/routes/PublicRoute';
-import { RequireAuth } from '@/components/routes/RequireAuth';
+import { PublicRoute } from '@/routes/PublicRoute';
+import { RequireAuth } from '@/routes/RequireAuth';
 import HomePage from '@/app/homepage/page';
 import { Toaster } from '@/components/ui/toaster';
 import ExerciceLibrePage from '@/app/exercices/exercice-libre/pages';
@@ -15,10 +15,11 @@ import ConfirmAccountPage from '@/app/confirm-account/page';
 import ExercicesFrontPage from '@/app/exercices/page';
 import InformationsPage from '@/app/informations/page';
 import AdminPage from '@/app/admin-dashboard/page';
-import { AdminRoute } from '@/components/routes/AdminRoute';
+import { AdminRoute } from '@/routes/AdminRoute';
 import UsersPage from '@/app/admin-dashboard/users/page';
-import ArticlesPage from '@/app/admin-dashboard/articles/page';
+// import ArticlesPage from '@/app/admin-dashboard/articles/page';
 import RolesPage from './app/admin-dashboard/roles/page';
+import ExercicesPage from './app/admin-dashboard/exercices/page';
 
 function App() {
   return (
@@ -28,9 +29,10 @@ function App() {
         <Route>
           <Route element={<AdminRoute />}>
             <Route path="/admin" element={<AdminPage />} />
-            <Route path="/admin/articles" element={<ArticlesPage />} />
             <Route path="/admin/users" element={<UsersPage />} />
             <Route path="/admin/users/roles" element={<RolesPage />} />
+            {/* <Route path="/admin/articles" element={<ArticlesPage />} /> */}
+            <Route path="/admin/content/exercices" element={<ExercicesPage />} />
           </Route>
         </Route>
         <Route element={<PublicRoute />}>

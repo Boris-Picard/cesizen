@@ -96,6 +96,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
     state: {
       sorting,
       columnFilters,
+      globalFilter,
       columnVisibility,
       rowSelection,
       pagination,
@@ -103,6 +104,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({ colum
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),

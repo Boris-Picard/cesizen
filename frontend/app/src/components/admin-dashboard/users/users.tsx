@@ -11,17 +11,11 @@ import DeleteUserModal from "./deleter-user-modal";
 import { useGetUsers } from "@/hooks/admin/users/useGetUsers";
 
 export default function UsersComponents() {
-    const [searchTerm, setSearchTerm] = useState("");
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const [selectedUserToDelete, setSelectedUserToDelete] = useState<User | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const { users, loading, setUsers } = useGetUsers()
-
-    const filteredData = users.filter(
-        (user) =>
-            user?.ut_mail?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
     const handleEdit = (user: User) => {
         setSelectedUser(user);
@@ -88,7 +82,7 @@ export default function UsersComponents() {
                                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-leather-600"></div>
                                 </div>
                             ) : (
-                                <DataTable columns={columns} data={filteredData} />
+                                <DataTable columns={columns} data={users} />
                             )}
                         </motion.div>
                     </main>
