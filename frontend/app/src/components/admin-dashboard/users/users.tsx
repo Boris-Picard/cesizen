@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-siderbar/app-sidebar";
 import AdminHeader from "@/components/admin-dashboard/header/header";
@@ -6,41 +6,19 @@ import { DataTable } from "@/components/ui/data-table";
 import { getColumns, User } from "./columns";
 import AddUserModal from "./add-user-modal";
 import { motion } from "framer-motion";
-import { useAuth } from "@/context/AuthContext";
 import EditUserModal from "./edit-user-modal";
 import DeleteUserModal from "./deleter-user-modal";
+import { useGetUsers } from "@/hooks/admin/users/useGetUsers";
 
 export default function UsersComponents() {
     const [searchTerm, setSearchTerm] = useState("");
-    const [data, setData] = useState<User[]>([]);
-    const { token } = useAuth();
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-    const [loading, setLoading] = useState(true);
-
     const [selectedUserToDelete, setSelectedUserToDelete] = useState<User | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+    const { users, loading, setUsers } = useGetUsers()
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            const options = {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                }
-            }
-            const response = await fetch("http://cesizen-api.localhost/api/utilisateurs", options);
-            const data = await response.json();
-
-            setData(data);
-            setLoading(false);
-            console.log(data);
-        }
-        fetchUsers();
-    }, [token]);
-
-    const filteredData = data.filter(
+    const filteredData = users.filter(
         (user) =>
             user?.ut_mail?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -50,18 +28,15 @@ export default function UsersComponents() {
         setIsEditModalOpen(true);
     };
 
-    // Ancienne fonction de suppression remplacée par l'ouverture de la modale
     const openDeleteModal = (user: User) => {
         setSelectedUserToDelete(user);
         setIsDeleteModalOpen(true);
     };
 
-    // Callback exécuté après confirmation de suppression dans DeleteUserModal
     const handleDeleteConfirmed = (userId: number) => {
-        setData(prevData => prevData.filter(user => user.id !== userId));
+        setUsers(prevData => prevData.filter(user => user.id !== userId));
     };
 
-    // Par exemple, modifiez getColumns pour utiliser openDeleteModal à la place de handleDelete direct
     const columns = getColumns(handleEdit, openDeleteModal);
 
     return (
@@ -83,7 +58,7 @@ export default function UsersComponents() {
                                 </h2>
                                 <div className="flex items-center space-x-4">
                                     <AddUserModal onUserAdded={(newUser) => {
-                                        setData((prevData) => [...prevData, newUser]);
+                                        setUsers((prevData) => [...prevData, newUser]);
                                     }} />
                                 </div>
                             </div>
@@ -93,7 +68,7 @@ export default function UsersComponents() {
                                     open={isEditModalOpen}
                                     onClose={() => setIsEditModalOpen(false)}
                                     onSave={(updatedUser) => {
-                                        setData(prevData =>
+                                        setUsers(prevData =>
                                             prevData.map(u =>
                                                 u.id === selectedUser.id
                                                     ? {

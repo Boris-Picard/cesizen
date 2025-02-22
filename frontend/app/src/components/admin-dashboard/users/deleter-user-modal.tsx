@@ -1,9 +1,9 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext";
 import { User } from "./columns";
+import { useDeleteUsers } from "@/hooks/admin/users/useDeleteUsers";
 
-interface DeleteUserModalProps {
+export interface DeleteUserModalProps {
     user: User;
     open: boolean;
     onClose: () => void;
@@ -11,30 +11,7 @@ interface DeleteUserModalProps {
 }
 
 export default function DeleteUserModal({ user, open, onClose, onDelete }: DeleteUserModalProps) {
-    const { token } = useAuth();
-
-    async function handleDelete() {
-        try {
-            const options = {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-
-            const response = await fetch(`http://cesizen-api.localhost/api/utilisateurs/${user.id}`, options);
-            
-            if (response.ok) {
-                onDelete(user.id);
-                onClose();
-            } else {
-                console.error("Erreur lors de la suppression de l'utilisateur");
-            }
-        } catch (error) {
-            console.error("Erreur lors de la suppression de l'utilisateur", error);
-        }
-    }
+    const { handleDelete } = useDeleteUsers()
 
     return (
         <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose(); }}>
@@ -51,7 +28,7 @@ export default function DeleteUserModal({ user, open, onClose, onDelete }: Delet
                             Annuler
                         </Button>
                     </DialogClose>
-                    <Button type="button" onClick={handleDelete} className="bg-red-600 hover:bg-red-700 text-white ml-2">
+                    <Button type="button" onClick={() => handleDelete({ onDelete, onClose, id: user.id })} className="bg-red-600 hover:bg-red-700 text-white ml-2">
                         Supprimer
                     </Button>
                 </DialogFooter>
