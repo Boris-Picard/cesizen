@@ -1,35 +1,43 @@
+import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "@/hooks/useToast";
 
 interface userDeleteInterface {
-    id: number,
-    onClose: () => void,
-    onDelete: (userId: number) => void
+    id: number;
+    onClose: () => void;
+    onDelete: (userId: number) => void;
 }
 
 export function useDeleteUsers() {
-    const { token } = useAuth()
+    const { token } = useAuth();
 
-    async function handleDelete({ onDelete, onClose, id }: userDeleteInterface) {
+    async function handleDelete({ id, onDelete, onClose }: userDeleteInterface) {
         try {
-            const options = {
-                method: "DELETE",
+            await axios.delete(`http://cesizen-api.localhost/api/utilisateurs/${id}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
-            };
-
-            const response = await fetch(`http://cesizen-api.localhost/api/utilisateurs/${id}`, options);
-
-            if (response.ok) {
-                onDelete(id);
-                onClose();
-            } else {
-                console.error("Erreur lors de la suppression de l'utilisateur");
-            }
+            });
+            onDelete(id);
+            onClose();
         } catch (error) {
-            console.error("Erreur lors de la suppression de l'utilisateur", error);
+            if (error instanceof Error) {
+                if (axios.isAxiosError(error)) {
+                    toast({
+                        variant: "destructive",
+                        title: error.response?.data?.title ?? "Une erreur est survenue",
+                        description: error.response?.data?.message,
+                    })
+                }
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Une erreur est survenue",
+                })
+            }
         }
     }
-    return { handleDelete }
+
+    return { handleDelete };
 }
