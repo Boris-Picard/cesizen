@@ -21,8 +21,6 @@ import { User } from "./columns";
 import { useGetRoles } from "@/hooks/admin/useGetRoles";
 import { useCreateUsers, userCreateSchema } from "@/hooks/admin/users/useCreateUsers";
 
-
-
 interface AddUserModalProps {
   onUserAdded: (user: User) => void;
 }

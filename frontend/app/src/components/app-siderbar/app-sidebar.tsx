@@ -61,9 +61,9 @@ const menuItems = [
     title: "Types",
     icon: Info,
     submenu: [
-      { title: "Type d'information", url: "/admin/types/information", icon: Info },
-      { title: "Type d'interaction", url: "/admin/types/interaction", icon: Activity },
-      { title: "Type d'historique", url: "/admin/types/historique", icon: Clock },
+      { title: "Type d'information", url: "/admin/types/informations", icon: Info },
+      { title: "Type d'interaction", url: "/admin/types/interactions", icon: Activity },
+      { title: "Type d'historique", url: "/admin/types/historiques", icon: Clock },
     ],
   },
   { title: "Interactions", url: "/admin/interactions", icon: Activity, badge: "9+" },

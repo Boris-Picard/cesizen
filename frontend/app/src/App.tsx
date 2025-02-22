@@ -17,9 +17,12 @@ import InformationsPage from '@/app/informations/page';
 import AdminPage from '@/app/admin-dashboard/page';
 import { AdminRoute } from '@/routes/AdminRoute';
 import UsersPage from '@/app/admin-dashboard/users/page';
-// import ArticlesPage from '@/app/admin-dashboard/articles/page';
 import RolesPage from './app/admin-dashboard/roles/page';
 import ExercicesPage from './app/admin-dashboard/exercices/page';
+import { InformationsAdminPage } from './app/admin-dashboard/informations/page';
+import TypeInformationsPage from './app/admin-dashboard/type-informations/page';
+import TypeInteractionsPage from './app/admin-dashboard/type-interactions/page';
+import { TypeHistoriquesComponents } from './components/admin-dashboard/type-historiques/type-historiques';
 
 function App() {
   return (
@@ -31,8 +34,11 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/users" element={<UsersPage />} />
             <Route path="/admin/users/roles" element={<RolesPage />} />
-            {/* <Route path="/admin/articles" element={<ArticlesPage />} /> */}
+            <Route path="/admin/content/informations" element={<InformationsAdminPage />} />
             <Route path="/admin/content/exercices" element={<ExercicesPage />} />
+            <Route path="/admin/types/informations" element={<TypeInformationsPage />} />
+            <Route path="/admin/types/interactions" element={<TypeInteractionsPage />} />
+            <Route path="/admin/types/historiques" element={<TypeHistoriquesComponents />} />
           </Route>
         </Route>
         <Route element={<PublicRoute />}>
