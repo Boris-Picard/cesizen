@@ -6,14 +6,15 @@ export type ExerciceType = {
     id: number;
     ex_nom: string;
     ex_description: string;
-    ex_difficulty: string;
+    ex_difficulty: "Débutant" | "Intermédiaire" | "Avancé";
     ex_duration: number;
-    ex_benefits: string[]; 
     ex_inspiration: number;
     ex_apnee: number;
     ex_expiration: number;
     ex_active: boolean;
+    ex_benefits?: string[];
 };
+
 
 export const getColumns = (
     handleEdit: (exercice: ExerciceType) => void,
@@ -42,7 +43,7 @@ export const getColumns = (
         {
             accessorKey: "ex_benefits",
             header: "Bienfaits",
-            cell: ({ row }) => row.original.ex_benefits.join(", "),
+            cell: ({ row }) => row.original.ex_benefits?.join(", "),
         },
         {
             accessorKey: "ex_inspiration",

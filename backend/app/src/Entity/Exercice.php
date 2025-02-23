@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -18,17 +20,12 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     denormalizationContext: ['groups' => ['exercice:write']],
     // operations: [
     //     new Get(
-    //         security: "is_granted('ROLE_USER')",
-    //         securityMessage: "Vous devez être connecté pour accéder à cet exercice."
+    //         security: "object.isExActive() == true",
+    //         securityMessage: "Cet exercice est inactif."
     //     ),
-    //     new GetCollection(
-    //         security: "is_granted('ROLE_USER')",
-    //         securityMessage: "Vous devez être connecté pour accéder aux exercices.",
-    //         normalizationContext: ['groups' => ['exercice:read']]
-    //     ),
-    //     new Post()
     // ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['ex_active' => 'exact'])]
 #[ORM\Entity(repositoryClass: ExerciceRepository::class)]
 class Exercice
 {

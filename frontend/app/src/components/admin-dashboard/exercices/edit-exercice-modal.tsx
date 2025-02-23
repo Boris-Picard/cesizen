@@ -35,7 +35,7 @@ export default function EditExerciceModal({ exercice, open, onClose, onSave }: E
         defaultValues: {
             ex_nom: exercice.ex_nom,
             ex_description: exercice.ex_description,
-            ex_difficulty: exercice.ex_difficulty,
+            ex_difficulty: exercice.ex_difficulty as "Débutant" | "Intermédiaire" | "Avancé",
             ex_duration: exercice.ex_duration,
             ex_benefits: exercice.ex_benefits,
             ex_inspiration: exercice.ex_inspiration,
@@ -49,7 +49,7 @@ export default function EditExerciceModal({ exercice, open, onClose, onSave }: E
         form.reset({
             ex_nom: exercice.ex_nom,
             ex_description: exercice.ex_description,
-            ex_difficulty: exercice.ex_difficulty,
+            ex_difficulty: exercice.ex_difficulty as "Débutant" | "Intermédiaire" | "Avancé",
             ex_duration: exercice.ex_duration,
             ex_benefits: exercice.ex_benefits,
             ex_inspiration: exercice.ex_inspiration,
@@ -107,12 +107,12 @@ export default function EditExerciceModal({ exercice, open, onClose, onSave }: E
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="ex_difficulty" className="text-sm font-medium text-leather-700">
-                            Difficulté
+                            Difficulté (Débutant ou Intermédiaire ou Avancé)
                         </Label>
                         <Input
                             id="ex_difficulty"
                             {...form.register("ex_difficulty")}
-                            placeholder="Intermédiaire"
+                            placeholder="Débutant ou Intermédiaire ou Avancé"
                             className="py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
                         />
                         {form.formState.errors.ex_difficulty && (

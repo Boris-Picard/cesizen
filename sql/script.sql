@@ -30,9 +30,9 @@ CREATE TABLE
       ex_difficulty VARCHAR(50) NOT NULL,
       ex_duration INT CHECK (ex_duration > 0), 
       ex_benefits JSONB, 
-      ex_inspiration INT CHECK (ex_inspiration > 0),
-      ex_apnee INT CHECK (ex_apnee > 0),
-      ex_expiration INT CHECK (ex_expiration > 0),
+      ex_inspiration INT CHECK (ex_inspiration >= 0),
+      ex_apnee INT CHECK (ex_apnee >= 0),
+      ex_expiration INT CHECK (ex_expiration >= 0),
       ex_active BOOLEAN DEFAULT FALSE NOT NULL
    );
 

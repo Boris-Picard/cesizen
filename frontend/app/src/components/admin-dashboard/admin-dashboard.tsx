@@ -18,6 +18,7 @@ import AdminHeader from "./header/header"
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart"
 import { useMemo } from "react"
 import { useAuth } from "@/context/AuthContext"
+import { Link } from "react-router-dom"
 
 const lineChartData = [
   { month: "Lun", utilisateurs: 400, interactions: 240 },
@@ -371,7 +372,7 @@ export default function AdminDashboard() {
                     <p className="text-leather-600 mb-4 text-center">
                       Gérez et créez de nouveaux exercices pour les utilisateurs.
                     </p>
-                    <Button className="w-full bg-leather-600 hover:bg-leather-700 text-white transition-colors duration-300">
+                    <Button className="w-full bg-leather-600 rounded-full hover:bg-leather-700 text-white transition-colors duration-300">
                       Créer un nouvel exercice
                     </Button>
                   </CardContent>

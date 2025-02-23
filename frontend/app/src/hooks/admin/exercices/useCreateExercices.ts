@@ -8,7 +8,9 @@ import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
 export const exerciceCreateSchema = z.object({
     ex_nom: z.string().min(2, "Le nom de l'exercice est requis.").max(255, "Le nom doit comporter 200 caractères maximum"),
     ex_description: z.string().min(10, "La description doit comporter au moins 10 caractères.").max(255, "La description doit comporter 255 caractères maximum"),
-    ex_difficulty: z.string().nonempty("La difficulté est requise."),
+    ex_difficulty: z.enum(["Débutant", "Intermédiaire", "Avancé"], {
+        errorMap: () => ({ message: "La difficulté doit être 'Débutant', 'Intermédiaire' ou 'Avancé'" }),
+    }),
     ex_duration: z.number().positive("La valeur doit être supérieure à 0"),
     ex_benefits: z.array(z.string()).optional(),
     ex_inspiration: z.number().positive("La valeur doit être supérieure à 0"),

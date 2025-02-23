@@ -42,6 +42,7 @@ export const getColumns = (handleEdit: (user: User) => void,
         {
             accessorKey: "ut_active",
             header: "Actif",
+            cell: ({ row }) => (row.original.ut_active ? "Oui" : "Non"),
         },
         {
             header: "Actions",

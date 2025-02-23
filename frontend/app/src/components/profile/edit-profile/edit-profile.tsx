@@ -42,11 +42,11 @@ const EditProfileComponent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-leather-50 py-12">
+    <div className="min-h-screen bg-leather-200 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <Button
           variant="ghost"
-          className="mb-8 text-leather-600 hover:text-leather-800 text-lg"
+          className="mb-8 text-leather-600 hover:text-white text-lg"
           onClick={() => navigate("/profile")}
         >
           <ArrowLeft className="mr-2 h-5 w-5" />

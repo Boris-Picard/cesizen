@@ -38,7 +38,7 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-leather-50 to-leather-100 bg-opacity-50 py-12">
+    <div className="min-h-screen bg-leather-200 py-12">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-5xl font-bold text-leather-900 mb-8 text-center">Votre Espace Bien-être</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

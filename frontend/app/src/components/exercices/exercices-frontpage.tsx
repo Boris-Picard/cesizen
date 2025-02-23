@@ -1,84 +1,22 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Wind, Users, Star, Search, Play, Heart, Brain, Moon } from "lucide-react"
-import { Exercice } from "../admin-dashboard/exercices/column"
-import { useAuth } from "@/context/AuthContext"
-import axios from "axios"
+import { Wind, Search, Play, Heart, Brain, Moon, ArrowLeft } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import { ExerciceType } from "../admin-dashboard/exercices/column"
 
-// type Exercise = {
-//   id: number
-//   name: string
-//   description: string
-//   inspiration: number
-//   apnee: number
-//   expiration: number
-//   difficulty: "Débutant" | "Intermédiaire" | "Avancé"
-//   duration: string
-//   benefits: string[]
-//   stats: {
-//     users: number
-//     rating: number
-//   }
-// }
+type Difficulty = "débutant" | "intermédiaire" | "avancé";
 
-// const difficultyColors = {
-//   Débutant: "bg-leather-200 text-leather-800",
-//   Intermédiaire: "bg-leather-300 text-leather-900",
-//   Avancé: "bg-leather-400 text-white",
-// }
+const difficultyColors: Record<Difficulty, string> = {
+  débutant: "bg-leather-200 text-leather-800 hover:text-white",
+  intermédiaire: "bg-leather-300 text-leather-900 hover:text-white",
+  avancé: "bg-leather-400 text-white hover:text-white",
+};
 
-// const exercises: Exercise[] = [
-//   {
-//     id: 1,
-//     name: "Respiration carrée",
-//     description: "Une technique simple et efficace pour la gestion du stress",
-//     inspiration: 4,
-//     apnee: 4,
-//     expiration: 4,
-//     difficulty: "Débutant",
-//     duration: "5 min",
-//     benefits: ["Réduit le stress rapidement", "Améliore la concentration", "Facilite l'endormissement"],
-//     stats: {
-//       users: 1234,
-//       rating: 4.8,
-//     },
-//   },
-//   {
-//     id: 2,
-//     name: "Cohérence cardiaque",
-//     description: "Harmonisez votre rythme cardiaque et respiratoire",
-//     inspiration: 5,
-//     apnee: 0,
-//     expiration: 5,
-//     difficulty: "Intermédiaire",
-//     duration: "10 min",
-//     benefits: ["Régule le rythme cardiaque", "Diminue l'anxiété", "Améliore le sommeil"],
-//     stats: {
-//       users: 2156,
-//       rating: 4.9,
-//     },
-//   },
-//   {
-//     id: 3,
-//     name: "Respiration Wim Hof",
-//     description: "Une technique avancée pour repousser vos limites",
-//     inspiration: 30,
-//     apnee: 15,
-//     expiration: 15,
-//     difficulty: "Avancé",
-//     duration: "15 min",
-//     benefits: ["Renforce le système immunitaire", "Augmente l'énergie", "Améliore la récupération"],
-//     stats: {
-//       users: 956,
-//       rating: 4.7,
-//     },
-//   },
-// ]
 
 const practicalTips = [
   {
@@ -103,48 +41,51 @@ const practicalTips = [
   },
 ]
 
+interface ExerciceProps {
+  exercices: ExerciceType[] | null;
+}
 
-export default function ExercisesPage() {
-  const [exercises, setExercises] = useState<Exercice[]>()
-  const { token } = useAuth()
-  useEffect(() => {
-    const getExercices = async () => {
-      const { data } = await axios.get("http://cesizen-api.localhost/api/exercices", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      console.log(data);
-      setExercises(data)
-    }
-    getExercices()
-  }, [])
-
+export default function ExercisesPage({ exercices }: ExerciceProps) {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("all")
 
-  // const filteredExercises = exercises?.filter(
-  //   (exercise) =>
-  //     (activeTab === "all" || exercise.difficulty.toLowerCase() === activeTab) &&
-  //     (exercise.ex_nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       exercise.description.toLowerCase().includes(searchTerm.toLowerCase())),
-  // )
+  const filteredExercises = exercices?.filter((exercice) =>
+    (activeTab === "all" || exercice.ex_difficulty.toLowerCase() === activeTab) &&
+    (exercice.ex_nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      exercice.ex_description.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   return (
     <div className="min-h-screen bg-leather-200">
-      <header className="bg-leather-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center text-center">
-            <h1 className="text-5xl font-extrabold mb-4">Exercices de respiration</h1>
-            <p className="text-xl text-leather-200 max-w-2xl">
+      <div className="relative bg-gradient-to-b from-leather-800 to-leather-700 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20 animate-pulse-slow" />
+        <div className="relative container mx-auto px-4 sm:px-6 py-12 max-w-7xl lg:px-8">
+          <div className="flex items-center justify-start mb-6">
+            <Button
+              variant="ghost"
+              className="text-white hover:text-leather-800 transition-all duration-300 hover:bg-leather-100 rounded-full"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="hidden sm:inline">Retour</span>
+              <span className="sm:hidden">Retour</span>
+            </Button>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <h1 className="text-5xl font-extrabold text-white mb-4">Exercices de respiration</h1>
+            <p className="text-xl text-leather-200 max-w-2xl mx-auto">
               Découvrez votre équilibre intérieur et explorez nos exercices de respiration pour trouver celui qui vous
               convient le mieux.
             </p>
-          </div>
+          </motion.div>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col sm:flex-row gap-6 items-center justify-center mb-12">
@@ -190,7 +131,7 @@ export default function ExercisesPage() {
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence>
-            {filteredExercises.map((exercise) => (
+            {filteredExercises?.map((exercise: ExerciceType) => (
               <motion.div
                 key={exercise.id}
                 layout
@@ -199,59 +140,55 @@ export default function ExercisesPage() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card className="flex flex-col h-full cursor-pointer rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden group bg-white">
-                  <CardContent className="p-6 flex-grow flex flex-col justify-between">
-                    <div>
-                      <div className="flex justify-between items-start mb-4">
-                        <Badge className={`${difficultyColors[exercise.difficulty]} px-3 py-1 rounded-full`}>
-                          {exercise.difficulty}
-                        </Badge>
-                        <div className="flex items-center space-x-2 text-leather-600">
-                          <Users className="h-4 w-4" />
-                          <span className="text-sm font-medium">{exercise.stats.users}</span>
-                          <Star className="h-4 w-4 text-yellow-400" />
-                          <span className="text-sm font-medium">{exercise.stats.rating}</span>
+                <Link to={`${exercise.id}`}>
+                  <Card className="flex flex-col h-full cursor-pointer rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden group bg-white">
+                    <CardContent className="p-6 flex-grow flex flex-col justify-between">
+                      <div>
+                        <div className="flex justify-between items-start mb-4">
+                          <Badge className={`${difficultyColors[exercise.ex_difficulty.toLowerCase() as Difficulty]} px-3 py-1 rounded-full`}>
+                            {exercise.ex_difficulty}
+                          </Badge>
+                          {/* Si vous n'avez pas de stats dans l'API, supprimez cette partie */}
+                        </div>
+                        <h2 className="text-2xl font-bold text-leather-900 mb-2">{exercise.ex_nom}</h2>
+                        <p className="text-leather-600 mb-4">{exercise.ex_description}</p>
+                        <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-leather-50 rounded-3xl">
+                          <div className="text-center">
+                            <p className="text-sm font-medium text-leather-600">Inspiration</p>
+                            <p className="text-2xl font-bold text-leather-800">{exercise.ex_inspiration}s</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-sm font-medium text-leather-600">Apnée</p>
+                            <p className="text-2xl font-bold text-leather-800">{exercise.ex_apnee}s</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-sm font-medium text-leather-600">Expiration</p>
+                            <p className="text-2xl font-bold text-leather-800">{exercise.ex_expiration}s</p>
+                          </div>
+                        </div>
+                        <div className="mb-6">
+                          <h3 className="text-lg font-semibold text-leather-900 mb-2">Bienfaits</h3>
+                          <ul className="space-y-2">
+                            {exercise.ex_benefits?.map((benefit, index) => (
+                              <li key={index} className="flex items-center space-x-2">
+                                <Wind className="h-5 w-5 text-leather-500" />
+                                <span className="text-leather-700">{benefit}</span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       </div>
-                      <h2 className="text-2xl font-bold text-leather-900 mb-2">{exercise.name}</h2>
-                      <p className="text-leather-600 mb-4">{exercise.description}</p>
-                      <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-leather-50 rounded-3xl">
-                        <div className="text-center">
-                          <p className="text-sm font-medium text-leather-600">Inspiration</p>
-                          <p className="text-2xl font-bold text-leather-800">{exercise.inspiration}s</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-sm font-medium text-leather-600">Rétention</p>
-                          <p className="text-2xl font-bold text-leather-800">{exercise.apnee}s</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="text-sm font-medium text-leather-600">Expiration</p>
-                          <p className="text-2xl font-bold text-leather-800">{exercise.expiration}s</p>
-                        </div>
-                      </div>
-                      <div className="mb-6">
-                        <h3 className="text-lg font-semibold text-leather-900 mb-2">Bienfaits</h3>
-                        <ul className="space-y-2">
-                          {exercise.benefits.map((benefit, index) => (
-                            <li key={index} className="flex items-center space-x-2">
-                              <Wind className="h-5 w-5 text-leather-500" />
-                              <span className="text-leather-700">{benefit}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                    <Button className="w-full bg-leather-600 hover:bg-leather-700 text-white font-semibold py-3 rounded-full transition-colors duration-300">
-                      <Play className="mr-2 h-5 w-5" />
-                      Commencer ({exercise.duration})
-                    </Button>
-                  </CardContent>
-                </Card>
+                      <Button className="w-full bg-leather-600 hover:bg-leather-700 text-white font-semibold py-3 rounded-full transition-colors duration-300">
+                        <Play className="mr-2 h-5 w-5" />
+                        Commencer ({exercise.ex_duration} minutes)
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
-
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

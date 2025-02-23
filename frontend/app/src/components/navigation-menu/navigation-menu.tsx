@@ -169,7 +169,7 @@ export const Navbar = () => {
                   exit={{ width: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Input type="search" placeholder="Rechercher..." className="w-full border border-leather-300" />
+                  <Input type="search" placeholder="Rechercher..." className="w-full rounded-full border border-leather-300" />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -177,7 +177,7 @@ export const Navbar = () => {
               variant="ghost"
               size="icon"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="text-leather-600 hover:bg-leather-50 hover:text-leather-700"
+              className="text-leather-600 hover:bg-leather-50 hover:text-leather-700 rounded-full"
             >
               <Icons.search className="h-5 w-5" />
             </Button>
@@ -210,7 +210,7 @@ export const Navbar = () => {
                     <DropdownMenuItem asChild>
                       <Link
                         to="/profile"
-                        className="flex items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors cursor-pointer"
+                        className="flex items-center px-2 py-2 rounded-3xl hover:bg-leather-100 transition-colors cursor-pointer"
                       >
                         <Icons.user className="mr-2 h-4 w-4" />
                         <span>Profil</span>
@@ -219,7 +219,7 @@ export const Navbar = () => {
                     <DropdownMenuItem asChild>
                       <Link
                         to="/profile/edit"
-                        className="flex items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors cursor-pointer"
+                        className="flex items-center px-2 py-2 rounded-3xl hover:bg-leather-100 transition-colors cursor-pointer"
                       >
                         <Icons.settings className="mr-2 h-4 w-4" />
                         <span>Paramètres</span>
@@ -229,7 +229,7 @@ export const Navbar = () => {
                       <DropdownMenuItem asChild>
                         <Link
                           to="/admin"
-                          className="flex items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors cursor-pointer"
+                          className="flex items-center px-2 py-2 rounded-3xl hover:bg-leather-100 transition-colors cursor-pointer"
                         >
                           <Icons.userCog className="mr-2 h-4 w-4" />
                           <span>Admin</span>
@@ -239,7 +239,7 @@ export const Navbar = () => {
                     <DropdownMenuSeparator className="my-2" />
                     <DropdownMenuItem
                       onClick={logout}
-                      className="flex items-center px-2 py-2 rounded-md hover:bg-red-100 transition-colors cursor-pointer text-red-600 hover:text-red-700"
+                      className="flex items-center px-2 py-2 rounded-3xl hover:bg-red-100 transition-colors cursor-pointer text-red-600 hover:text-red-700"
                     >
                       <Icons.logOut className="mr-2 h-4 w-4" />
                       <span>Déconnexion</span>

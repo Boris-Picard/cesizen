@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Book, Brain, Leaf, Wind, Search } from "lucide-react"
+import { Book, Brain, Leaf, Wind, Search, ArrowLeft } from "lucide-react"
 import informationsImg from "@/assets/informations.avif"
 import { useNavigate } from "react-router-dom"
 
@@ -69,7 +69,6 @@ const InformationsPage = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // Simulate data fetching
     setArticles(fakeData)
   }, [])
 
@@ -82,17 +81,34 @@ const InformationsPage = () => {
 
   return (
     <div className="min-h-screen bg-leather-50">
-      <header className="bg-leather-800 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center text-center">
-            <h1 className="text-5xl font-extrabold mb-4">Santé Mentale & Bien-être</h1>
-            <p className="text-xl text-leather-200 max-w-2xl">
+      <div className="relative bg-gradient-to-b from-leather-800 to-leather-700 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20 animate-pulse-slow" />
+        <div className="relative container mx-auto px-4 sm:px-6 py-12 max-w-7xl lg:px-8">
+          <div className="flex items-center justify-start mb-6">
+            <Button
+              variant="ghost"
+              className="text-white hover:text-leather-800 transition-all duration-300 hover:bg-leather-100 rounded-full"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="hidden sm:inline">Retour</span>
+              <span className="sm:hidden">Retour</span>
+            </Button>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <h1 className="text-5xl font-extrabold text-white mb-4">Santé Mentale & Bien-être</h1>
+            <p className="text-xl text-leather-200 max-w-2xl mx-auto">
               Explorez nos ressources pour améliorer votre bien-être mental et émotionnel. Trouvez l'équilibre intérieur
               qui vous convient.
             </p>
-          </div>
+          </motion.div>
         </div>
-      </header>
+      </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col sm:flex-row gap-6 items-center justify-center mb-12">
