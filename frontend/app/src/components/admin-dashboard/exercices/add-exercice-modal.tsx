@@ -31,7 +31,7 @@ export default function AddExerciceModal({ onExerciceAdded }: AddExerciceModalPr
         defaultValues: {
             ex_nom: "",
             ex_description: "",
-            ex_difficulty: "",
+            ex_difficulty: "Débutant",
             ex_duration: 1,
             ex_benefits: [],
             ex_inspiration: 1,
@@ -95,12 +95,12 @@ export default function AddExerciceModal({ onExerciceAdded }: AddExerciceModalPr
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="ex_difficulty" className="text-sm font-medium text-leather-700">
-                            Difficulté
+                            Difficulté (Débutant ou Intermédiaire ou Avancé)
                         </Label>
                         <Input
                             id="ex_difficulty"
                             {...form.register("ex_difficulty")}
-                            placeholder="Intermédiaire"
+                            placeholder="Débutant ou Intermédiaire ou Avancé"
                             className="py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
                         />
                         {form.formState.errors.ex_difficulty && (
