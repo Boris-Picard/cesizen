@@ -36,7 +36,7 @@ export default function AddInformationModal({ onInformationAdded }: AddInformati
             info_titre: "",
             info_description: "",
             info_contenu: "",
-            info_active: true,
+            info_active: false,
             typeInformation: "",
         },
     });
@@ -133,7 +133,7 @@ export default function AddInformationModal({ onInformationAdded }: AddInformati
                                     </SelectTrigger>
                                     <SelectContent>
                                         {typeInformations.map(({ id, type_info_nom }) => (
-                                            <SelectItem key={id} value={type_info_nom}>
+                                            <SelectItem key={id} value={`/api/type_informations/${id}`}>
                                                 {type_info_nom}
                                             </SelectItem>
                                         ))}

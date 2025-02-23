@@ -48,6 +48,7 @@ security:
     - { path: ^/api/docs, roles: PUBLIC_ACCESS }
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
     - { path: ^/api/exercices, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/api/information, roles: [ROLE_USER, ROLE_ADMIN] }
     - { path: ^/api, roles: ROLE_ADMIN }
     - { path: ^/admin/*, roles: ROLE_ADMIN }
 
