@@ -22,7 +22,7 @@ export const userCreateSchema = z
         ut_mail: z.string().email("Veuillez entrer une adresse e-mail valide."),
         password: z.string().min(8, "Le mot de passe doit comporter au moins 8 caractères."),
         confirmPassword: z.string().min(8, "Confirmez votre mot de passe."),
-        role: z.string().min(1, "Veuillez sélectionner un rôle."),
+        role: z.string().nonempty("Veuillez sélectionner un rôle."),
         active: z.boolean(),
     })
     .refine((data) => data.password === data.confirmPassword, {

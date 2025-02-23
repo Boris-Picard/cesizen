@@ -2,20 +2,13 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
-import { ExerciceInterface } from "./useCreateExercices";
-
-export const exerciceSchema = z.object({
-    ex_nom: z.string().min(2, "Le nom de l'exercice est requis."),
-    ex_inspiration: z.number().positive("La valeur doit être supérieure à 0"),
-    ex_apnee: z.number().positive("La valeur doit être supérieure à 0"),
-    ex_expiration: z.number().positive("La valeur doit être supérieure à 0"),
-    ex_active: z.boolean(),
-});
+import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
+import { exerciceCreateSchema } from "./useCreateExercices";
 
 interface PatchExerciceInterface {
-    validData: z.infer<typeof exerciceSchema>;
+    validData: z.infer<typeof exerciceCreateSchema>;
     id: number;
-    onSave: (exercice: ExerciceInterface) => void;
+    onSave: (exercice: ExerciceType) => void;
     form: any;
     onClose: () => void;
 }

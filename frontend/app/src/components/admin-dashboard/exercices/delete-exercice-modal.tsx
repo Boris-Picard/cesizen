@@ -1,10 +1,10 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Exercice } from "./column";
 import { useDeleteExercices } from "@/hooks/admin/exercices/useDeleteExercices";
+import { ExerciceType } from "./column";
 
 export interface DeleteExerciceModalProps {
-    exercice: Exercice;
+    exercice: ExerciceType;
     open: boolean;
     onClose: () => void;
     onDelete: (exId: number) => void;

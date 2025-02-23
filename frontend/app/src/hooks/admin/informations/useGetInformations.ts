@@ -12,17 +12,16 @@ export function useGetInformations() {
     useEffect(() => {
         const getInformations = async () => {
             try {
-                const { data } = await axios.get("http://cesizen-api.localhost/api/information", {
+                const response = await axios.get("http://cesizen-api.localhost/api/information", {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                const mappedData = data.map((info: any) => ({
-                    ...info,
-                    id: info.id,
-                }));
-                setInformations(mappedData);
+                const data = response.data
+                setInformations(data);
+                console.log(data);
+                
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     toast({

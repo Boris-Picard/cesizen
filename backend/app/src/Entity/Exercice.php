@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\ExerciceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +16,18 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     normalizationContext: ['groups' => ['exercice:read']],
     denormalizationContext: ['groups' => ['exercice:write']],
+    // operations: [
+    //     new Get(
+    //         security: "is_granted('ROLE_USER')",
+    //         securityMessage: "Vous devez être connecté pour accéder à cet exercice."
+    //     ),
+    //     new GetCollection(
+    //         security: "is_granted('ROLE_USER')",
+    //         securityMessage: "Vous devez être connecté pour accéder aux exercices.",
+    //         normalizationContext: ['groups' => ['exercice:read']]
+    //     ),
+    //     new Post()
+    // ]
 )]
 #[ORM\Entity(repositoryClass: ExerciceRepository::class)]
 class Exercice
@@ -26,6 +41,22 @@ class Exercice
     #[ORM\Column(length: 200)]
     #[Groups(['exercice:read', 'exercice:write', 'utilisateur:read'])]
     private ?string $ex_nom = null;
+
+    #[ORM\Column(type: "text", nullable: true)]
+    #[Groups(['exercice:read', 'exercice:write'])]
+    private ?string $ex_description = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(['exercice:read', 'exercice:write'])]
+    private ?string $ex_difficulty = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['exercice:read', 'exercice:write'])]
+    private ?int $ex_duration = null;
+
+    #[ORM\Column(type: "json", nullable: true)]
+    #[Groups(['exercice:read', 'exercice:write'])]
+    private ?array $ex_benefits = [];
 
     #[ORM\Column(nullable: true)]
     #[Groups(['exercice:read', 'exercice:write'])]
@@ -52,7 +83,7 @@ class Exercice
     private Collection $utilisateurs;
 
     /**
-     * @var Collection<int, Interaction>    
+     * @var Collection<int, Interaction>
      */
     #[ORM\OneToMany(targetEntity: Interaction::class, mappedBy: 'exercice')]
     private Collection $interactions;
@@ -62,6 +93,8 @@ class Exercice
         $this->utilisateurs = new ArrayCollection();
         $this->interactions = new ArrayCollection();
     }
+
+    // Getters et setters pour tous les champs
 
     public function getId(): ?int
     {
@@ -76,7 +109,50 @@ class Exercice
     public function setExNom(string $ex_nom): static
     {
         $this->ex_nom = $ex_nom;
+        return $this;
+    }
 
+    public function getExDescription(): ?string
+    {
+        return $this->ex_description;
+    }
+
+    public function setExDescription(?string $ex_description): static
+    {
+        $this->ex_description = $ex_description;
+        return $this;
+    }
+
+    public function getExDifficulty(): ?string
+    {
+        return $this->ex_difficulty;
+    }
+
+    public function setExDifficulty(?string $ex_difficulty): static
+    {
+        $this->ex_difficulty = $ex_difficulty;
+        return $this;
+    }
+
+    public function getExDuration(): ?int
+    {
+        return $this->ex_duration;
+    }
+
+    public function setExDuration(?int $ex_duration): static
+    {
+        $this->ex_duration = $ex_duration;
+        return $this;
+    }
+
+    public function getExBenefits(): ?array
+    {
+        return $this->ex_benefits;
+    }
+
+    public function setExBenefits(?array $ex_benefits): static
+    {
+        $this->ex_benefits = $ex_benefits;
         return $this;
     }
 
@@ -88,7 +164,6 @@ class Exercice
     public function setExInspiration(?int $ex_inspiration): static
     {
         $this->ex_inspiration = $ex_inspiration;
-
         return $this;
     }
 
@@ -100,7 +175,6 @@ class Exercice
     public function setExApnee(?int $ex_apnee): static
     {
         $this->ex_apnee = $ex_apnee;
-
         return $this;
     }
 
@@ -112,7 +186,6 @@ class Exercice
     public function setExExpiration(?int $ex_expiration): static
     {
         $this->ex_expiration = $ex_expiration;
-
         return $this;
     }
 
@@ -124,7 +197,6 @@ class Exercice
     public function setExActive(bool $ex_active): static
     {
         $this->ex_active = $ex_active;
-
         return $this;
     }
 
@@ -142,7 +214,6 @@ class Exercice
             $this->utilisateurs->add($utilisateur);
             $utilisateur->addExercice($this);
         }
-
         return $this;
     }
 
@@ -151,7 +222,6 @@ class Exercice
         if ($this->utilisateurs->removeElement($utilisateur)) {
             $utilisateur->removeExercice($this);
         }
-
         return $this;
     }
 
@@ -169,19 +239,16 @@ class Exercice
             $this->interactions->add($interaction);
             $interaction->setExercice($this);
         }
-
         return $this;
     }
 
     public function removeInteraction(Interaction $interaction): static
     {
         if ($this->interactions->removeElement($interaction)) {
-            // set the owning side to null (unless already changed)
             if ($interaction->getExercice() === $this) {
                 $interaction->setExercice(null);
             }
         }
-
         return $this;
     }
 }

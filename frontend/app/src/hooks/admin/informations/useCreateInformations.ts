@@ -10,7 +10,7 @@ export const informationCreateSchema = z.object({
     info_description: z.string().min(10, "La description doit comporter au moins 10 caractères."),
     info_contenu: z.string().min(10, "Le contenu doit comporter au moins 10 caractères."),
     info_active: z.boolean(),
-    typeInformation: z.string().min(1, "Le type d'information est requis."),
+    typeInformation: z.string().nonempty("Le type d'information est requis."),
 });
 
 interface CreateInformationInterface {
@@ -25,7 +25,7 @@ export function useCreateInformations() {
 
     const createInformation = async ({ validData, onInformationAdded, form }: CreateInformationInterface) => {
         console.log(validData);
-        
+
         try {
             const { data } = await axios.post(
                 "http://cesizen-api.localhost/api/information",

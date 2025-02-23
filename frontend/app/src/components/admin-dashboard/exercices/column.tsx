@@ -1,18 +1,24 @@
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/ui/icons"
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/ui/icons";
 
-export type Exercice = {
+export type ExerciceType = {
     id: number;
     ex_nom: string;
+    ex_description: string;
+    ex_difficulty: string;
+    ex_duration: number;
+    ex_benefits: string[]; 
     ex_inspiration: number;
     ex_apnee: number;
     ex_expiration: number;
     ex_active: boolean;
 };
 
-export const getColumns = (handleEdit: (exercice: Exercice) => void,
-    handleDelete: (exercice: Exercice) => void): ColumnDef<Exercice>[] => [
+export const getColumns = (
+    handleEdit: (exercice: ExerciceType) => void,
+    handleDelete: (exercice: ExerciceType) => void
+): ColumnDef<ExerciceType>[] => [
         {
             accessorKey: "id",
             header: "ID",
@@ -22,12 +28,29 @@ export const getColumns = (handleEdit: (exercice: Exercice) => void,
             header: "Nom",
         },
         {
+            accessorKey: "ex_description",
+            header: "Description",
+        },
+        {
+            accessorKey: "ex_difficulty",
+            header: "Difficulté",
+        },
+        {
+            accessorKey: "ex_duration",
+            header: "Durée (m)",
+        },
+        {
+            accessorKey: "ex_benefits",
+            header: "Bienfaits",
+            cell: ({ row }) => row.original.ex_benefits.join(", "),
+        },
+        {
             accessorKey: "ex_inspiration",
             header: "Inspiration (s)",
         },
         {
             accessorKey: "ex_apnee",
-            header: "Apnee (s)",
+            header: "Apnée (s)",
         },
         {
             accessorKey: "ex_expiration",
@@ -36,19 +59,20 @@ export const getColumns = (handleEdit: (exercice: Exercice) => void,
         {
             accessorKey: "ex_active",
             header: "Actif",
+            cell: ({ row }) => (row.original.ex_active ? "Oui" : "Non"),
         },
         {
             header: "Actions",
             id: "actions",
             cell: ({ row }) => (
                 <div className="flex space-x-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(row.original)} >
+                    <Button variant="ghost" size="icon" onClick={() => handleEdit(row.original)}>
                         <Icons.edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(row.original)} >
+                    <Button variant="ghost" size="icon" onClick={() => handleDelete(row.original)}>
                         <Icons.trash className="h-4 w-4" />
                     </Button>
                 </div>
             ),
         },
-    ]
+    ];

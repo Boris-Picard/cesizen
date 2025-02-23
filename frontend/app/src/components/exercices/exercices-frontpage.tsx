@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -6,76 +6,79 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Wind, Users, Star, Search, Play, Heart, Brain, Moon } from "lucide-react"
+import { Exercice } from "../admin-dashboard/exercices/column"
+import { useAuth } from "@/context/AuthContext"
+import axios from "axios"
 
-type Exercise = {
-  id: number
-  name: string
-  description: string
-  inspiration: number
-  apnee: number
-  expiration: number
-  difficulty: "Débutant" | "Intermédiaire" | "Avancé"
-  duration: string
-  benefits: string[]
-  stats: {
-    users: number
-    rating: number
-  }
-}
+// type Exercise = {
+//   id: number
+//   name: string
+//   description: string
+//   inspiration: number
+//   apnee: number
+//   expiration: number
+//   difficulty: "Débutant" | "Intermédiaire" | "Avancé"
+//   duration: string
+//   benefits: string[]
+//   stats: {
+//     users: number
+//     rating: number
+//   }
+// }
 
-const difficultyColors = {
-  Débutant: "bg-leather-200 text-leather-800",
-  Intermédiaire: "bg-leather-300 text-leather-900",
-  Avancé: "bg-leather-400 text-white",
-}
+// const difficultyColors = {
+//   Débutant: "bg-leather-200 text-leather-800",
+//   Intermédiaire: "bg-leather-300 text-leather-900",
+//   Avancé: "bg-leather-400 text-white",
+// }
 
-const exercises: Exercise[] = [
-  {
-    id: 1,
-    name: "Respiration carrée",
-    description: "Une technique simple et efficace pour la gestion du stress",
-    inspiration: 4,
-    apnee: 4,
-    expiration: 4,
-    difficulty: "Débutant",
-    duration: "5 min",
-    benefits: ["Réduit le stress rapidement", "Améliore la concentration", "Facilite l'endormissement"],
-    stats: {
-      users: 1234,
-      rating: 4.8,
-    },
-  },
-  {
-    id: 2,
-    name: "Cohérence cardiaque",
-    description: "Harmonisez votre rythme cardiaque et respiratoire",
-    inspiration: 5,
-    apnee: 0,
-    expiration: 5,
-    difficulty: "Intermédiaire",
-    duration: "10 min",
-    benefits: ["Régule le rythme cardiaque", "Diminue l'anxiété", "Améliore le sommeil"],
-    stats: {
-      users: 2156,
-      rating: 4.9,
-    },
-  },
-  {
-    id: 3,
-    name: "Respiration Wim Hof",
-    description: "Une technique avancée pour repousser vos limites",
-    inspiration: 30,
-    apnee: 15,
-    expiration: 15,
-    difficulty: "Avancé",
-    duration: "15 min",
-    benefits: ["Renforce le système immunitaire", "Augmente l'énergie", "Améliore la récupération"],
-    stats: {
-      users: 956,
-      rating: 4.7,
-    },
-  },
-]
+// const exercises: Exercise[] = [
+//   {
+//     id: 1,
+//     name: "Respiration carrée",
+//     description: "Une technique simple et efficace pour la gestion du stress",
+//     inspiration: 4,
+//     apnee: 4,
+//     expiration: 4,
+//     difficulty: "Débutant",
+//     duration: "5 min",
+//     benefits: ["Réduit le stress rapidement", "Améliore la concentration", "Facilite l'endormissement"],
+//     stats: {
+//       users: 1234,
+//       rating: 4.8,
+//     },
+//   },
+//   {
+//     id: 2,
+//     name: "Cohérence cardiaque",
+//     description: "Harmonisez votre rythme cardiaque et respiratoire",
+//     inspiration: 5,
+//     apnee: 0,
+//     expiration: 5,
+//     difficulty: "Intermédiaire",
+//     duration: "10 min",
+//     benefits: ["Régule le rythme cardiaque", "Diminue l'anxiété", "Améliore le sommeil"],
+//     stats: {
+//       users: 2156,
+//       rating: 4.9,
+//     },
+//   },
+//   {
+//     id: 3,
+//     name: "Respiration Wim Hof",
+//     description: "Une technique avancée pour repousser vos limites",
+//     inspiration: 30,
+//     apnee: 15,
+//     expiration: 15,
+//     difficulty: "Avancé",
+//     duration: "15 min",
+//     benefits: ["Renforce le système immunitaire", "Augmente l'énergie", "Améliore la récupération"],
+//     stats: {
+//       users: 956,
+//       rating: 4.7,
+//     },
+//   },
+// ]
 
 const practicalTips = [
   {
@@ -100,16 +103,34 @@ const practicalTips = [
   },
 ]
 
+
 export default function ExercisesPage() {
+  const [exercises, setExercises] = useState<Exercice[]>()
+  const { token } = useAuth()
+  useEffect(() => {
+    const getExercices = async () => {
+      const { data } = await axios.get("http://cesizen-api.localhost/api/exercices", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(data);
+      setExercises(data)
+    }
+    getExercices()
+  }, [])
+
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("all")
 
-  const filteredExercises = exercises.filter(
-    (exercise) =>
-      (activeTab === "all" || exercise.difficulty.toLowerCase() === activeTab) &&
-      (exercise.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        exercise.description.toLowerCase().includes(searchTerm.toLowerCase())),
-  )
+  // const filteredExercises = exercises?.filter(
+  //   (exercise) =>
+  //     (activeTab === "all" || exercise.difficulty.toLowerCase() === activeTab) &&
+  //     (exercise.ex_nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       exercise.description.toLowerCase().includes(searchTerm.toLowerCase())),
+  // )
 
   return (
     <div className="min-h-screen bg-leather-200">

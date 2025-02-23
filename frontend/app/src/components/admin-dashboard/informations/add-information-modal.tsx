@@ -133,7 +133,7 @@ export default function AddInformationModal({ onInformationAdded }: AddInformati
                                     </SelectTrigger>
                                     <SelectContent>
                                         {typeInformations.map(({ id, type_info_nom }) => (
-                                            <SelectItem key={id} value={`/api/type_informations/${id}`}>
+                                            <SelectItem key={id} value={type_info_nom}>
                                                 {type_info_nom}
                                             </SelectItem>
                                         ))}

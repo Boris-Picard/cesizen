@@ -34,7 +34,8 @@ security:
     refresh:
       pattern: ^/api/token/refresh
       stateless: true
-    jwt: ~
+    jwt:
+      ~
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -46,7 +47,8 @@ security:
   access_control:
     - { path: ^/api/docs, roles: PUBLIC_ACCESS }
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/exercices, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/api, roles: ROLE_ADMIN }
     - { path: ^/admin/*, roles: ROLE_ADMIN }
 
 when@test:

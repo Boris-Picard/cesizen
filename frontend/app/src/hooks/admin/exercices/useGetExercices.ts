@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
-import { ExerciceInterface } from "./useCreateExercices";
+import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
 
 export function useGetExercices() {
-    const [exercices, setExercices] = useState<ExerciceInterface[]>([]);
+    const [exercices, setExercices] = useState<ExerciceType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const { token } = useAuth();
 
