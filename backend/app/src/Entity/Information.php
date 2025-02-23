@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['information:read']],
-    denormalizationContext: ['groups' => ['information:write']]
+    denormalizationContext: ['groups' => ['information:write']],
 )]
 #[ORM\Entity(repositoryClass: InformationRepository::class)]
 class Information
@@ -25,19 +25,19 @@ class Information
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['information:read', 'utilisateur:read'])]
+    #[Groups(['information:read','information:write', 'utilisateur:read'])]
     private ?string $info_titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['information:read', 'utilisateur:read'])]
+    #[Groups(['information:read','information:write', 'utilisateur:read'])]
     private ?string $info_description = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['information:read', 'utilisateur:read'])]
+    #[Groups(['information:read','information:write', 'utilisateur:read'])]
     private ?string $info_contenu = null;
 
     #[ORM\Column]
-    #[Groups(['information:read', 'utilisateur:read'])]
+    #[Groups(['information:read','information:write', 'utilisateur:read'])]
     private ?bool $info_active = null;
 
     /**

@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -16,8 +16,12 @@ import {
 import { useEffect } from "react";
 import { usePatchInformations } from "@/hooks/admin/informations/usePatchInformations";
 import { Information } from "./column";
-import { Icons } from "@/components/ui/icons";
+import Wysiwyg from "react-simple-wysiwyg";
+
 import { informationCreateSchema } from "@/hooks/admin/informations/useCreateInformations";
+import { Switch } from "@/components/ui/switch";
+import { useGetTypeInformations } from "@/hooks/admin/useGetTypeInformations";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface EditInformationModalProps {
     information: Information;
@@ -26,8 +30,14 @@ interface EditInformationModalProps {
     onSave: (values: z.infer<typeof informationCreateSchema>) => void;
 }
 
-export default function EditInformationModal({ information, open, onClose, onSave }: EditInformationModalProps) {
+export default function EditInformationModal({
+    information,
+    open,
+    onClose,
+    onSave,
+}: EditInformationModalProps) {
     const { updatedInformation } = usePatchInformations();
+    const { typeInformations } = useGetTypeInformations()
 
     const form = useForm<z.infer<typeof informationCreateSchema>>({
         resolver: zodResolver(informationCreateSchema),
@@ -36,7 +46,9 @@ export default function EditInformationModal({ information, open, onClose, onSav
             info_description: information.info_description,
             info_contenu: information.info_contenu,
             info_active: information.info_active,
-            typeInformation: `/api/information/${information.typeInformation.id}`,
+            typeInformation: information.typeInformation
+                ? `/api/type_informations/${information.typeInformation.id}`
+                : "",
         },
     });
 
@@ -46,7 +58,9 @@ export default function EditInformationModal({ information, open, onClose, onSav
             info_description: information.info_description,
             info_contenu: information.info_contenu,
             info_active: information.info_active,
-            typeInformation: `/api/information/${information.typeInformation.id}`,
+            typeInformation: information.typeInformation
+                ? `/api/type_informations/${information.typeInformation.id}`
+                : "",
         });
     }, [information, form]);
 
@@ -57,27 +71,24 @@ export default function EditInformationModal({ information, open, onClose, onSav
 
     return (
         <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose(); }}>
-            <DialogContent className="sm:max-w-[500px] bg-white rounded-3xl p-8">
+            <DialogContent className="max-w-xl bg-white rounded-3xl p-8">
                 <DialogHeader>
                     <DialogTitle className="text-3xl font-bold text-leather-800">Modifier l'information</DialogTitle>
                     <DialogDescription className="text-leather-600">
                         Modifiez les informations ci-dessous.
                     </DialogDescription>
                 </DialogHeader>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="info_titre" className="text-sm font-medium text-leather-700">
                             Titre
                         </Label>
-                        <div className="relative">
-                            <Icons.edit className="absolute left-3 top-1/2 transform -translate-y-1/2 text-leather-400" />
-                            <Input
-                                id="info_titre"
-                                {...form.register("info_titre")}
-                                placeholder="Titre de l'information"
-                                className="pl-10 py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
-                            />
-                        </div>
+                        <Input
+                            id="info_titre"
+                            {...form.register("info_titre")}
+                            placeholder="Titre de l'information"
+                            className="w-full py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
+                        />
                         {form.formState.errors.info_titre && (
                             <p className="text-sm text-red-600">{form.formState.errors.info_titre.message}</p>
                         )}
@@ -86,11 +97,16 @@ export default function EditInformationModal({ information, open, onClose, onSav
                         <Label htmlFor="info_description" className="text-sm font-medium text-leather-700">
                             Description
                         </Label>
-                        <Input
-                            id="info_description"
-                            {...form.register("info_description")}
-                            placeholder="Description"
-                            className="py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
+                        <Controller
+                            control={form.control}
+                            name="info_description"
+                            render={({ field }) => (
+                                <Wysiwyg
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    placeholder="Description de l'information"
+                                />
+                            )}
                         />
                         {form.formState.errors.info_description && (
                             <p className="text-sm text-red-600">{form.formState.errors.info_description.message}</p>
@@ -100,23 +116,66 @@ export default function EditInformationModal({ information, open, onClose, onSav
                         <Label htmlFor="info_contenu" className="text-sm font-medium text-leather-700">
                             Contenu
                         </Label>
-                        <Input
-                            id="info_contenu"
-                            {...form.register("info_contenu")}
-                            placeholder="Contenu"
-                            className="py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
+                        <Controller
+                            control={form.control}
+                            name="info_contenu"
+                            render={({ field }) => (
+                                <Wysiwyg
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    placeholder="Contenu de l'information"
+                                />
+                            )}
                         />
                         {form.formState.errors.info_contenu && (
                             <p className="text-sm text-red-600">{form.formState.errors.info_contenu.message}</p>
                         )}
                     </div>
-                    <DialogFooter className="sm:justify-start">
+                    <div className="space-y-2">
+                        <Label htmlFor="typeInformation" className="text-sm font-medium text-leather-700">
+                            Type d'information
+                        </Label>
+                        <Controller
+                            name="typeInformation"
+                            control={form.control}
+                            render={({ field }) => (
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <SelectTrigger className="w-full rounded-full border-leather-300 focus:border-leather-500 focus:ring-leather-500">
+                                        <SelectValue placeholder="Sélectionnez un type d'information" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {typeInformations.map(({ id, type_info_nom }) => (
+                                            <SelectItem key={id} value={`/api/type_informations/${id}`}>
+                                                {type_info_nom}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        {form.formState.errors.typeInformation && (
+                            <p className="text-sm text-red-600">{form.formState.errors.typeInformation.message}</p>
+                        )}
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Controller
+                            name="info_active"
+                            control={form.control}
+                            render={({ field }) => (
+                                <Switch id="info_active" checked={field.value} onCheckedChange={field.onChange} />
+                            )}
+                        />
+                        <Label htmlFor="info_active" className="text-sm font-medium text-leather-700">
+                            Information actif
+                        </Label>
+                    </div>
+                    <DialogFooter className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2">
                         <DialogClose asChild>
                             <Button type="button" variant="outline" className="text-leather-600 border-leather-300">
                                 Annuler
                             </Button>
                         </DialogClose>
-                        <Button type="submit" className="bg-leather-600 hover:bg-leather-700 text-white ml-2">
+                        <Button type="submit" className="bg-leather-600 hover:bg-leather-700 text-white">
                             Enregistrer les modifications
                         </Button>
                     </DialogFooter>

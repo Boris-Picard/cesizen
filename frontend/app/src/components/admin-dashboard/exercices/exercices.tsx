@@ -4,25 +4,25 @@ import { AppSidebar } from "@/components/app-siderbar/app-sidebar";
 import AdminHeader from "@/components/admin-dashboard/header/header";
 import { DataTable } from "@/components/ui/data-table";
 import { motion } from "framer-motion";
-import { getColumns, Exercice } from "./column";
+import { ExerciceType, getColumns } from "./column";
 import AddExerciceModal from "./add-exercice-modal";
 import EditExerciceModal from "./edit-exercice-modal";
 import DeleteExerciceModal from "./delete-exercice-modal";
 import { useGetExercices } from "@/hooks/admin/exercices/useGetExercices";
 
 export function ExercicesComponents() {
-    const [selectedExercice, setSelectedExercice] = useState<Exercice | null>(null);
+    const [selectedExercice, setSelectedExercice] = useState<ExerciceType | null>(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-    const [selectedExerciceToDelete, setSelectedExerciceToDelete] = useState<Exercice | null>(null);
+    const [selectedExerciceToDelete, setSelectedExerciceToDelete] = useState<ExerciceType | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const { exercices, loading, setExercices } = useGetExercices();
 
-    const handleEdit = (exercice: Exercice) => {
+    const handleEdit = (exercice: ExerciceType) => {
         setSelectedExercice(exercice);
         setIsEditModalOpen(true);
     };
 
-    const openDeleteModal = (exercice: Exercice) => {
+    const openDeleteModal = (exercice: ExerciceType) => {
         setSelectedExerciceToDelete(exercice);
         setIsDeleteModalOpen(true);
     };
