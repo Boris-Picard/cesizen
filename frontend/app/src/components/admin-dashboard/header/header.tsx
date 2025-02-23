@@ -21,7 +21,7 @@ export default function AdminHeader({ h1 }: { h1: string }) {
     <header className="sticky top-0 z-50 w-full border-b border-leather-300 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 ">
       {/* Toggle pour desktop : caché sur mobile, visible en desktop */}
       <SidebarTrigger
-        className="hidden md:flex md:absolute md:left-4 md:top-1/2 md:transform md:-translate-y-1/2 p-2 rounded-md bg-leather-100 text-leather-600 hover:bg-leather-200 transition-colors items-center justify-center"
+        className="hidden md:flex md:absolute md:left-4 md:top-1/2 md:transform md:-translate-y-1/2 p-2 rounded-3xl bg-leather-100 text-leather-600 hover:bg-leather-200 transition-colors items-center justify-center"
       />
 
       {/* Contenu centré */}
@@ -30,7 +30,7 @@ export default function AdminHeader({ h1 }: { h1: string }) {
           {/* Sur mobile, affiche le toggle inline */}
           <div className="flex items-center gap-4">
             <SidebarTrigger
-              className="md:hidden flex p-2 rounded-md bg-leather-100 text-leather-600 hover:bg-leather-200 transition-colors items-center justify-center"
+              className="md:hidden flex p-2 rounded-3xl bg-leather-100 text-leather-600 hover:bg-leather-200 transition-colors items-center justify-center"
             />
             <h1 className="text-2xl font-semibold text-leather-800">{h1}</h1>
           </div>
@@ -42,15 +42,15 @@ export default function AdminHeader({ h1 }: { h1: string }) {
               <Input
                 type="search"
                 placeholder="Rechercher..."
-                className="pl-10 pr-4 py-2 border-leather-300 focus:border-leather-500 focus:ring-leather-500"
+                className="pl-10 pr-4 py-2 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full"
               />
             </div>
-            <Button variant="ghost" size="icon" className="text-leather-600 hover:bg-leather-100">
+            <Button variant="ghost" size="icon" className="text-leather-600 hover:bg-leather-100 rounded-full">
               <Bell className="h-5 w-5" />
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 overflow-hidden hover:bg-inherit">
+                <Button variant="ghost" className="relative h-8 w-8 overflow-hidden hover:bg-inherit rounded-full">
                   <Avatar>
                     <AvatarFallback>
                       {user?.firstname[0]}{user?.lastname[0]}
@@ -76,7 +76,7 @@ export default function AdminHeader({ h1 }: { h1: string }) {
                   <DropdownMenuItem asChild>
                     <Link
                       to="/profile"
-                      className="group flex cursor-pointer items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors"
+                      className="group flex cursor-pointer items-center px-2 py-2 rounded-3xl hover:bg-leather-100 transition-colors"
                     >
                       <Icons.user className="mr-2 h-4 w-4" />
                       <span>Profil</span>
@@ -85,7 +85,7 @@ export default function AdminHeader({ h1 }: { h1: string }) {
                   <DropdownMenuItem asChild>
                     <Link
                       to="/profile/edit"
-                      className="flex cursor-pointer items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors"
+                      className="flex cursor-pointer items-center px-2 py-2 rounded-3xl hover:bg-leather-100 transition-colors"
                     >
                       <Icons.settings className="mr-2 h-4 w-4" />
                       <span>Paramètres</span>
@@ -95,7 +95,7 @@ export default function AdminHeader({ h1 }: { h1: string }) {
                     <DropdownMenuItem asChild>
                       <Link
                         to="/admin"
-                        className="flex cursor-pointer items-center px-2 py-2 rounded-md hover:bg-leather-100 transition-colors"
+                        className="flex cursor-pointer items-center px-2 py-2 rounded-3xl hover:bg-leather-100 transition-colors"
                       >
                         <Icons.userCog className="mr-2 h-4 w-4" />
                         <span>Admin</span>
@@ -105,7 +105,7 @@ export default function AdminHeader({ h1 }: { h1: string }) {
                   <DropdownMenuSeparator className="my-2" />
                   <DropdownMenuItem
                     onClick={logout}
-                    className="flex cursor-pointer items-center px-2 py-2 rounded-md hover:bg-red-100 transition-colors text-red-600 hover:text-red-700"
+                    className="flex cursor-pointer items-center px-2 py-2 rounded-3xl hover:bg-red-100 transition-colors text-red-600 hover:text-red-700"
                   >
                     <Icons.logOut className="mr-2 h-4 w-4" />
                     <span>Déconnexion</span>
