@@ -18,8 +18,6 @@ export function useGetInteractions() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                console.log(data);
-
                 setInteractions(data);
             } catch (error) {
                 if (error instanceof Error) {

@@ -9,6 +9,8 @@ import { Wind, Search, Play, Heart, Brain, Moon, ArrowLeft } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { ExerciceType } from "../admin-dashboard/exercices/column"
 import { useCreateInteraction } from "@/hooks/api/useCreateInteractions"
+import { TypeInteraction } from "../admin-dashboard/type-interactions/columns"
+import { UserPayload } from "@/context/AuthContext"
 
 type Difficulty = "débutant" | "intermédiaire" | "avancé";
 
@@ -43,10 +45,12 @@ const practicalTips = [
 ]
 
 interface ExerciceProps {
-  exercices: ExerciceType[] | null;
+  exercices: ExerciceType[];
+  interaction: TypeInteraction | undefined
+  user: UserPayload | null
 }
 
-export default function ExercisesPage({ exercices }: ExerciceProps) {
+export default function ExercisesPage({ exercices, interaction, user }: ExerciceProps) {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("all")
@@ -144,9 +148,9 @@ export default function ExercisesPage({ exercices }: ExerciceProps) {
               >
                 <Link to={`${exercise.id}`} onClick={() => createInteraction({
                   inter_date_de_debut: new Date().toISOString(),
-                  utilisateur: `/api/utilisateurs/1`,
+                  utilisateur: `/api/utilisateurs/${user?.id}`,
                   exercice: `/api/exercices/${exercise.id}`,
-                  typeInteraction: "/api/type_interactions/1",
+                  typeInteraction: `/api/type_interactions/${interaction?.id}`,
                 })}>
                   <Card className="flex flex-col h-full cursor-pointer rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden group bg-white">
                     <CardContent className="p-6 flex-grow flex flex-col justify-between">

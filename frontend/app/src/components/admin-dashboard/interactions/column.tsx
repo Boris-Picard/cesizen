@@ -1,26 +1,17 @@
 import { ColumnDef } from "@tanstack/react-table";
+import { Information } from "../informations/column";
+import { ExerciceType } from "../exercices/column";
+import { User } from "../users/columns";
+import { TypeInteraction } from "../type-interactions/columns";
 
 export type Interaction = {
     id: number;
-    inter_date_de_debut: string;
-    inter_date_de_fin?: string;
-    information?: {
-        id: number;
-        info_titre: string;
-    };
-    exercice?: {
-        id: number;
-        ex_nom: string;
-    };
-    utilisateur?: {
-        id: number;
-        ut_prenom: string;
-        ut_nom: string;
-    };
-    typeInteraction: {
-        id: number;
-        type_inter_libelle: string;
-    };
+    inter_date_de_debut: Date;
+    inter_date_de_fin?: Date;
+    information?: Information;
+    exercice?: ExerciceType;
+    utilisateur?: User;
+    typeInteraction: TypeInteraction;
 };
 
 export const getColumns = (): ColumnDef<Interaction>[] => [

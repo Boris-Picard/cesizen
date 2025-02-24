@@ -3,6 +3,8 @@ import { useGetExercicesId } from "@/hooks/exercices/useGetExercicesId";
 import ExerciceDetail from "@/components/exercices/exercices-detail-page/exercices-detail-page";
 import { Navbar } from "@/components/navigation-menu/navigation-menu";
 import { motion } from "framer-motion"
+import { useGetTypeInteractions } from "@/hooks/admin/type-interactions/useGetTypeInteractions";
+import { useAuth } from "@/context/AuthContext";
 
 const Loader = () => (
     <motion.div
@@ -20,9 +22,11 @@ export default function ExercicesDetailPage() {
     const { id } = useParams();
     const { exercice, loading } = useGetExercicesId(id);
     const navigate = useNavigate();
+    const { typeInteractions } = useGetTypeInteractions()
+    const { user } = useAuth()
 
-    // Si l'exercice est introuvable ou inactif, vous pouvez rediriger
-    // (vous pouvez aussi gérer cela directement dans votre hook ou dans ExerciceDetail)
+    const interaction = typeInteractions.find((inter) => inter.type_inter_libelle === 'exercice')
+
     if (!loading && !exercice) {
         navigate("/exercices");
         return null;
@@ -31,7 +35,7 @@ export default function ExercicesDetailPage() {
     return (
         <div className="min-h-screen">
             <Navbar />
-            {loading ? <Loader /> : <ExerciceDetail exercice={exercice} />}
+            {loading ? <Loader /> : <ExerciceDetail exercice={exercice} user={user} typeInteraction={interaction} />}
         </div>
     );
 }
