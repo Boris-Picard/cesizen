@@ -11,6 +11,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 export interface UserPayload {
+    id: number;
     username: string;
     firstname: string;
     lastname: string;

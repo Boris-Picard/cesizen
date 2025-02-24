@@ -9,6 +9,11 @@ import { Card } from "@/components/ui/card"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import WelcomeState from "./welcome-state"
 import type { ExerciceType } from "@/components/admin-dashboard/exercices/column"
+import { useCreateInteraction } from "@/hooks/api/useCreateInteractions"
+import { useParams } from "react-router-dom"
+import { TypeInteraction } from "@/components/admin-dashboard/type-interactions/columns"
+import { UserPayload } from "@/context/AuthContext"
+import { usePatchInteractions } from "@/hooks/admin/interactions/usePatchInteractions"
 
 interface ParameterCardProps {
   phases: {
@@ -102,9 +107,11 @@ const BenefitsCard: React.FC<BenefitsCardProps> = ({ benefits, isActive }) => {
 
 interface ExerciceDetailProps {
   exercice: ExerciceType | null
+  typeInteraction: TypeInteraction | undefined
+  user: UserPayload | null
 }
 
-export default function ExercicePage({ exercice }: ExerciceDetailProps) {
+export default function ExercicePage({ exercice, typeInteraction, user }: ExerciceDetailProps) {
   const [isActive, setIsActive] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [currentPhase, setCurrentPhase] = useState<"inspiration" | "apnee" | "expiration">("inspiration")
@@ -113,18 +120,38 @@ export default function ExercicePage({ exercice }: ExerciceDetailProps) {
   const [totalTime, setTotalTime] = useState(0)
   const [isCompleted, setIsCompleted] = useState(false)
   const timerRef = useRef<number | null>(null)
+  const { patchInteraction } = usePatchInteractions()
+  const { createInteraction, lastInteractionId } = useCreateInteraction()
 
-  // Ajout d'un état pour le démarrage initial
+  useEffect(() => {
+    if (isCompleted && lastInteractionId) {
+      const updateInteraction = async () => {
+        try {
+          await patchInteraction({
+            id: lastInteractionId,
+            inter_date_de_fin: new Date().toISOString(),
+            utilisateur: `/api/utilisateurs/${user?.id}`,
+            exercice: `/api/exercices/${exercice?.id}`,
+            typeInteraction: `/api/type_interactions/${typeInteraction?.id}`,
+          });
+        } catch (error) {
+          console.error("Erreur lors de la mise à jour de l'interaction", error);
+        }
+      };
+      updateInteraction();
+    }
+  }, [isCompleted, lastInteractionId, patchInteraction, user, exercice, typeInteraction]);
+
+
+
   const [hasStarted, setHasStarted] = useState(false)
 
-  // Conversion et calculs améliorés
   const totalDurationInSeconds = (exercice?.ex_duration ?? 0) * 60
   const cycleDurationInSeconds =
     (exercice?.ex_inspiration ?? 0) + (exercice?.ex_apnee ?? 0) + (exercice?.ex_expiration ?? 0)
   const totalCycles = cycleDurationInSeconds > 0 ? Math.floor(totalDurationInSeconds / cycleDurationInSeconds) : 0
   const cycleDuration = cycleDurationInSeconds
 
-  // Calcul du temps restant pour la session
   const remainingTotalTime = totalDurationInSeconds - Math.floor(totalTime / 1000)
 
   const getPhaseConfig = useCallback(() => {
@@ -582,7 +609,15 @@ export default function ExercicePage({ exercice }: ExerciceDetailProps) {
                     </p>
                     <Button
                       size="lg"
-                      onClick={handleReset}
+                      onClick={() => {
+                        handleReset(),
+                          createInteraction({
+                            inter_date_de_debut: new Date().toISOString(),
+                            utilisateur: `/api/utilisateurs/${user?.id}`,
+                            exercice: `/api/exercices/${exercice?.id}`,
+                            typeInteraction: `/api/type_interactions/${typeInteraction?.id}`,
+                          })
+                      }}
                       className="bg-leather-600 hover:bg-leather-700 text-white transition-all duration-300"
                     >
                       <RotateCcw className="mr-2 h-5 w-5" />

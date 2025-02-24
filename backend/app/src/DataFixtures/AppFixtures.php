@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Exercice;
 use App\Entity\Role;
+use App\Entity\TypeInteraction;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -182,6 +183,16 @@ class AppFixtures extends Fixture
         $r2 = new Role();
         $r2->setRoleNom('ROLE_ADMIN');
         $manager->persist($r2);
+
+
+
+        $ti1 = new TypeInteraction();
+        $ti1->setTypeInterLibelle('exercice');
+        $manager->persist($ti1);
+
+        $ti2 = new TypeInteraction();
+        $ti2->setTypeInterLibelle('information');
+        $manager->persist($ti2);
 
         $manager->flush();
     }

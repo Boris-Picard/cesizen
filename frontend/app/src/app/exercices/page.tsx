@@ -1,5 +1,7 @@
 import BreathingExercises from "@/components/exercices/exercices-frontpage";
 import { Navbar } from "@/components/navigation-menu/navigation-menu";
+import { useAuth } from "@/context/AuthContext";
+import { useGetTypeInteractions } from "@/hooks/admin/type-interactions/useGetTypeInteractions";
 import { useGetExercicesFront } from "@/hooks/exercices/useGetExercicesFront";
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom";
@@ -19,6 +21,10 @@ const Loader = () => (
 export default function ExercicesFrontPage() {
     const { exercices, loading } = useGetExercicesFront();
     const navigate = useNavigate();
+    const { typeInteractions } = useGetTypeInteractions()
+    const { user } = useAuth()
+
+    const interaction = typeInteractions.find((inter) => inter.type_inter_libelle === 'exercice')
 
     if (!loading && !exercices) {
         navigate(-1)
@@ -27,7 +33,7 @@ export default function ExercicesFrontPage() {
     return (
         <div className="min-h-screen">
             <Navbar />
-            {loading ? <Loader /> : <BreathingExercises exercices={exercices} />}
+            {loading ? <Loader /> : <BreathingExercises exercices={exercices} interaction={interaction} user={user} />}
         </div>
     )
 }
