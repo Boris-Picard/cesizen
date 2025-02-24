@@ -3,7 +3,7 @@ import EditProfileComponent from "@/components/profile/edit-profile/edit-profile
 
 export default function EditProfilePage() {
     return (
-        <div className="min-h-screen bg-green-50">
+        <div className="min-h-screen ">
             <Navbar />
             <EditProfileComponent />
         </div>

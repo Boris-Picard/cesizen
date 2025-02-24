@@ -2,7 +2,7 @@ import { TypeHistoriquesComponents } from "@/components/admin-dashboard/type-his
 
 export default function TypeInteractionsPage() {
     return (
-        <div className="min-h-screen bg-green-50">
+        <div className="min-h-screen ">
             <TypeHistoriquesComponents />
         </div>
     )

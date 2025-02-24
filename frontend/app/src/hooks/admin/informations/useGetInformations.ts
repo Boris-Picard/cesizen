@@ -12,13 +12,12 @@ export function useGetInformations() {
     useEffect(() => {
         const getInformations = async () => {
             try {
-                const response = await axios.get("http://cesizen-api.localhost/api/information", {
+                const { data } = await axios.get("http://cesizen-api.localhost/api/information", {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                const data = response.data
                 setInformations(data);
                 console.log(data);
                 

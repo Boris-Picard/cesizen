@@ -24,6 +24,7 @@ import TypeInformationsPage from './app/admin-dashboard/type-informations/page';
 import TypeInteractionsPage from './app/admin-dashboard/type-interactions/page';
 import { TypeHistoriquesComponents } from './components/admin-dashboard/type-historiques/type-historiques';
 import ExercicesDetailPage from './app/exercices/exercices-detail-page/page';
+import { InteractionsPage } from './app/admin-dashboard/interactions/page';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path="/admin/types/informations" element={<TypeInformationsPage />} />
             <Route path="/admin/types/interactions" element={<TypeInteractionsPage />} />
             <Route path="/admin/types/historiques" element={<TypeHistoriquesComponents />} />
+            <Route path="/admin/interactions" element={<InteractionsPage />} />
           </Route>
         </Route>
         <Route element={<PublicRoute />}>

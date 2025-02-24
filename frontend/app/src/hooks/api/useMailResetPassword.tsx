@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast } from "./useToast";
+import { toast } from "../useToast";
 import axios from "axios";
 
 interface submitDataInterface {

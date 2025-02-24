@@ -2,7 +2,7 @@ import { InformationsComponents } from "@/components/admin-dashboard/information
 
 export function InformationsAdminPage() {
     return (
-        <div className="min-h-screen bg-green-50">
+        <div className="min-h-screen">
             <InformationsComponents />
         </div>
     )

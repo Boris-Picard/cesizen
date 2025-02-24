@@ -2,7 +2,7 @@ import { MailResetPassword } from "@/components/mail-reset-password/mail-reset-p
 
 export default function ForgotPasswordPage() {
   return (
-    <div className="min-h-screen bg-green-50">
+    <div className="min-h-screen ">
       <MailResetPassword />
     </div>
   )

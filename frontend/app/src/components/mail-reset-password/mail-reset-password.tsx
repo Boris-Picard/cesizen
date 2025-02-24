@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Icons } from "@/components/ui/icons"
 import { Link } from "react-router-dom"
-import useMailResetPassword from "@/hooks/useMailResetPassword";
+import useMailResetPassword from "@/hooks/api/useMailResetPassword";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse e-mail valide." }),
