@@ -14,12 +14,10 @@ interface InteractionInterface {
 
 export function useCreateInteraction() {
   const { token } = useAuth();
-  const [interactionIds, setInteractionIds] = useState<number[]>(() => {
-    const stored = localStorage.getItem("interactionIds");
-    return stored ? JSON.parse(stored) : [];
+  const [lastInteractionId, setLastInteractionId] = useState<number | null>(() => {
+    const stored = localStorage.getItem("lastInteractionId");
+    return stored ? JSON.parse(stored) : null;
   });
-
-  const lastInteractionId = interactionIds.length > 0 ? interactionIds[interactionIds.length - 1] : null;
 
   const createInteraction = async (interactionData: InteractionInterface) => {
     try {
@@ -33,10 +31,8 @@ export function useCreateInteraction() {
           },
         }
       );
-      const newId = data.id;
-      const newIds = [...interactionIds, newId];
-      setInteractionIds(newIds);
-      localStorage.setItem("interactionIds", JSON.stringify(newIds));
+      setLastInteractionId(data.id);
+      localStorage.setItem("lastInteractionId", JSON.stringify(data.id));
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast({
@@ -53,5 +49,5 @@ export function useCreateInteraction() {
     }
   };
 
-  return { createInteraction, interactionIds, lastInteractionId };
+  return { createInteraction, lastInteractionId };
 }
