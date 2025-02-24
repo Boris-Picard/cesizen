@@ -1,7 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
-import { Interaction } from "@/components/admin-dashboard/interactions/column";
 
 export interface PatchInteractionData {
     id: number | null;
@@ -29,8 +28,6 @@ export function usePatchInteractions() {
                     },
                 }
             );
-            console.log(data);
-            
         } catch (error) {
             if (error instanceof Error) {
                 if (axios.isAxiosError(error)) {
