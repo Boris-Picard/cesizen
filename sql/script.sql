@@ -86,12 +86,12 @@ CREATE TABLE
 CREATE TABLE
    IF NOT EXISTS historique (
       histo_id SERIAL PRIMARY KEY,
-      histo_id_obj INT NOT NULL,
-      histo_nom_table VARCHAR(100) NOT NULL,
-      histo_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-      histo_ancienne_valeur TEXT NOT NULL,
-      histo_nouvelle_valeur TEXT NOT NULL,
-      type_histo_id INT NOT NULL,
+      histo_id_obj INT,
+      histo_nom_table VARCHAR(100),
+      histo_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      histo_ancienne_valeur TEXT,
+      histo_nouvelle_valeur TEXT,
+      type_histo_id INT,
       FOREIGN KEY (type_histo_id) REFERENCES type_historique (type_histo_id)
    );
 
@@ -100,10 +100,10 @@ CREATE TABLE
       inter_id SERIAL PRIMARY KEY,
       inter_date_de_debut TIMESTAMP NOT NULL,
       inter_date_de_fin TIMESTAMP,
-      info_id INT NOT NULL,
+      info_id INT,
       type_inter_id INT NOT NULL,
-      ex_id INT NOT NULL,
-      ut_id INT NOT NULL,
+      ex_id INT,
+      ut_id INT,
       FOREIGN KEY (info_id) REFERENCES information (info_id),
       FOREIGN KEY (type_inter_id) REFERENCES type_interaction (type_inter_id),
       FOREIGN KEY (ex_id) REFERENCES exercice (ex_id),
@@ -137,3 +137,47 @@ CREATE TABLE
       FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id),
       FOREIGN KEY (info_id) REFERENCES information (info_id)
    );
+
+CREATE OR REPLACE FUNCTION log_interaction_trigger()
+RETURNS TRIGGER AS $$
+DECLARE
+    dynamic_type_histo_id INT;
+BEGIN
+    IF NEW.inter_date_de_fin IS NULL THEN
+       SELECT type_histo_id 
+         INTO dynamic_type_histo_id 
+         FROM type_historique 
+         WHERE type_histo_libelle = 'Interaction Créée'
+         LIMIT 1;
+    ELSE
+       SELECT type_histo_id 
+         INTO dynamic_type_histo_id 
+         FROM type_historique 
+         WHERE type_histo_libelle = 'Interaction Terminée'
+         LIMIT 1;
+    END IF;
+
+    INSERT INTO historique (
+       histo_id_obj,
+       histo_nom_table,
+       histo_date,
+       histo_ancienne_valeur,
+       histo_nouvelle_valeur,
+       type_histo_id
+    )
+    VALUES (
+       NEW.inter_id,
+       'interaction',
+       NOW(),
+       '', 
+       row_to_json(NEW)::text,
+       dynamic_type_histo_id
+    );
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_log_interaction
+AFTER INSERT ON interaction
+FOR EACH ROW
+EXECUTE FUNCTION log_interaction_trigger();

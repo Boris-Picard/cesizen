@@ -8,6 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Wind, Search, Play, Heart, Brain, Moon, ArrowLeft } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { ExerciceType } from "../admin-dashboard/exercices/column"
+import { useCreateInteraction } from "@/hooks/api/useCreateInteractions"
 
 type Difficulty = "débutant" | "intermédiaire" | "avancé";
 
@@ -49,6 +50,7 @@ export default function ExercisesPage({ exercices }: ExerciceProps) {
   const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("all")
+  const { createInteraction } = useCreateInteraction()
 
   const filteredExercises = exercices?.filter((exercice) =>
     (activeTab === "all" || exercice.ex_difficulty.toLowerCase() === activeTab) &&
@@ -140,7 +142,12 @@ export default function ExercisesPage({ exercices }: ExerciceProps) {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
               >
-                <Link to={`${exercise.id}`}>
+                <Link to={`${exercise.id}`} onClick={() => createInteraction({
+                  inter_date_de_debut: new Date().toISOString(),
+                  utilisateur: `/api/utilisateurs/1`,
+                  exercice: `/api/exercices/${exercise.id}`,
+                  typeInteraction: "/api/type_interactions/1",
+                })}>
                   <Card className="flex flex-col h-full cursor-pointer rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden group bg-white">
                     <CardContent className="p-6 flex-grow flex flex-col justify-between">
                       <div>
@@ -215,8 +222,8 @@ export default function ExercisesPage({ exercices }: ExerciceProps) {
             </div>
           </div>
         </motion.div>
-      </main>
-    </div>
+      </main >
+    </div >
   )
 }
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useToast } from "./useToast";
+import { useToast } from "../useToast";
 
 interface submitDataInterface {
     firstName: string

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Icons } from "@/components/ui/icons"
 import { Link } from "react-router-dom"
-import useLoginUser from "@/hooks/useLoginUser"
+import useLoginUser from "@/hooks/api/useLoginUser"
 
 const loginSchema = z.object({
   email: z.string().email("Veuillez entrer une adresse e-mail valide."),

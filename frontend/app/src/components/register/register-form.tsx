@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch"
 import { Icons } from "@/components/ui/icons"
 import { Link } from "react-router-dom"
 import authImg from "@/assets/auth-img.jpg"
-import { useRegisterUser } from "@/hooks/useRegisterUser";
+import { useRegisterUser } from "@/hooks/api/useRegisterUser";
 
 const registerSchema = z
   .object({

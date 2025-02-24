@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Icons } from "@/components/ui/icons"
 import { Link, useParams } from "react-router-dom"
-import useResetPasswordUser from "@/hooks/useResetPasswordUser";
+import useResetPasswordUser from "@/hooks/api/useResetPasswordUser";
 
 const resetPasswordSchema = z
   .object({

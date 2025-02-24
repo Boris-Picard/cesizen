@@ -2,7 +2,7 @@ import { TypeInteractionsComponents } from "@/components/admin-dashboard/type-in
 
 export default function TypeInteractionsPage() {
     return (
-        <div className="min-h-screen bg-green-50">
+        <div className="min-h-screen ">
             <TypeInteractionsComponents />
         </div>
     )

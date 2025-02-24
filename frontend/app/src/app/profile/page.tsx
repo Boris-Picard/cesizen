@@ -3,7 +3,7 @@ import UserDashboard from "@/components/profile/profile";
 
 export default function ProfilePage() {
     return (
-        <div className="min-h-screen bg-green-50">
+        <div className="min-h-screen ">
             <Navbar />
             <UserDashboard />
         </div>
