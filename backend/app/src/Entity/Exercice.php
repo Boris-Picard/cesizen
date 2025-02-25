@@ -36,7 +36,7 @@ class Exercice
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
-    #[Groups(['exercice:read', 'exercice:write', 'utilisateur:read'])]
+    #[Groups(['exercice:read', 'exercice:write', 'utilisateur:read', 'interaction:read'])]
     private ?string $ex_nom = null;
 
     #[ORM\Column(type: "text", nullable: true)]

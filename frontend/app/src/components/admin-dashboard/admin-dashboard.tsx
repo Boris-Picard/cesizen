@@ -18,31 +18,72 @@ import AdminHeader from "./header/header"
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart"
 import { useMemo } from "react"
 import { useAuth } from "@/context/AuthContext"
-import { Link } from "react-router-dom"
-
-const lineChartData = [
-  { month: "Lun", utilisateurs: 400, interactions: 240 },
-  { month: "Mar", utilisateurs: 300, interactions: 139 },
-  { month: "Mer", utilisateurs: 200, interactions: 980 },
-  { month: "Jeu", utilisateurs: 278, interactions: 390 },
-  { month: "Ven", utilisateurs: 189, interactions: 480 },
-  { month: "Sam", utilisateurs: 239, interactions: 380 },
-  { month: "Dim", utilisateurs: 349, interactions: 430 },
-]
-
-const pieChartData = [
-  { name: "Consultation", value: 400, color: "#8d5f52" },
-  { name: "Commentaire", value: 300, color: "#bda38c" },
-  { name: "Like", value: 300, color: "#d4c3b3" },
-  { name: "Partage", value: 200, color: "#eae2db" },
-]
-
+import { useGetUsers } from "@/hooks/admin/users/useGetUsers"
+import { useNavigate } from "react-router-dom"
+import { useGetExercices } from "@/hooks/admin/exercices/useGetExercices"
+import { useGetInteractions } from "@/hooks/admin/interactions/useGetInteractions"
 
 export default function AdminDashboard() {
+  const navigate = useNavigate()
   const { user } = useAuth()
+  const { users, newUsersPercentage, totalUsers } = useGetUsers()
+  const { exercices, totalExercices } = useGetExercices()
+  const { interactions, getTotalInteractions, newInteractionsPercentage, totalInteractionsDay } = useGetInteractions()
+
+  const filterUsersActive = users.filter((u) => u.ut_active === true)
+  const filterExercicesActive = exercices.filter((ex) => ex.ex_active === true)
+  const slicedExercices = filterExercicesActive.slice(0, 4)
+
+  const trendUpOrDownUsers = newUsersPercentage > 0 ? true : false
+  const trendUpOrDownInteractions = newInteractionsPercentage > 0 ? true : false
+
+  const sortedUsers = [...filterUsersActive].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+  const slicedUsers = sortedUsers.slice(0, 3)
+
+  const daysOfWeek = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+  const interactionsByDay = interactions.reduce((acc: any, interaction) => {
+    const dayIndex = new Date(interaction.inter_date_de_debut).getDay();
+    const dayName = daysOfWeek[dayIndex];
+
+    acc[dayName] = (acc[dayName] || 0) + 1;
+    return acc;
+  }, {});
+  const usersByDay = users.reduce((acc: any, user) => {
+    const dayIndex = new Date(user.createdAt).getDay();
+    const dayName = daysOfWeek[dayIndex];
+
+    acc[dayName] = (acc[dayName] || 0) + 1;
+    return acc;
+  }, {});
+
+  const lineChartData = daysOfWeek.map(day => ({
+    month: day,
+    utilisateurs: usersByDay[day] || 0,
+    interactions: interactionsByDay[day] || 0
+  }));
+
+  const counts = interactions.reduce((acc: any, interaction) => {
+    const libelle = interaction.typeInteraction.type_inter_libelle;
+    acc[libelle] = (acc[libelle] || 0) + 1;
+    return acc;
+  }, {});
+
+  const uniqueTypeInteractions = Object.entries(counts).map(([libelle, count]) => ({
+    libelle,
+    count
+  }));
+
+  const pieChartData = uniqueTypeInteractions.map(({ libelle, count }) => {
+    return { name: libelle, value: count, color: "#8d5f52" }
+  }
+
+  );
+
 
   const totalInteractions = useMemo(
-    () => pieChartData.reduce((acc, cur) => acc + cur.value, 0),
+    () => pieChartData.reduce((acc: any, cur) => acc + cur.value, 0),
     []
   )
 
@@ -60,19 +101,19 @@ export default function AdminDashboard() {
   const stats = [
     {
       title: "Total Utilisateurs",
-      value: "1,234",
+      value: totalUsers,
       icon: Users,
       color: "from-leather-600 to-leather-500",
-      trend: "+5.2%",
-      trendUp: true,
+      trend: `${newUsersPercentage} %`,
+      trendUp: trendUpOrDownUsers,
+      link: "/admin/users"
     },
     {
       title: "Exercices Actifs",
-      value: "56",
+      value: totalExercices,
       icon: Activity,
       color: "from-leather-500 to-leather-400",
-      trend: "+2.4%",
-      trendUp: true,
+      link: "/admin/content/exercices"
     },
     {
       title: "Articles Publiés",
@@ -81,22 +122,22 @@ export default function AdminDashboard() {
       color: "from-leather-400 to-leather-300",
       trend: "-0.5%",
       trendUp: false,
+      link: "/admin/users"
     },
     {
       title: "Interactions Aujourd'hui",
-      value: "152",
+      value: totalInteractionsDay,
       icon: Zap,
       color: "from-leather-300 to-leather-200",
-      trend: "+12.3%",
-      trendUp: true,
+      trend: `${newInteractionsPercentage} %`,
+      trendUp: trendUpOrDownInteractions,
+      link: "/admin/interactions"
     },
   ]
 
-  const recentUsers = [
-    { name: "Alice Johnson", email: "alice@example.com", joinDate: "2023-05-15" },
-    { name: "Bob Smith", email: "bob@example.com", joinDate: "2023-05-14" },
-    { name: "Carol Williams", email: "carol@example.com", joinDate: "2023-05-13" },
-  ]
+  const recentUsers = slicedUsers.map(({ ut_nom, ut_prenom, ut_mail, createdAt }) => {
+    return { name: `${ut_prenom}  ${ut_nom}`, email: ut_mail, joinDate: new Date(createdAt).toLocaleString() }
+  })
 
   const recentArticles = [
     { title: "Comprendre la Santé Mentale", type: "Santé", date: "2023-05-15" },
@@ -141,9 +182,9 @@ export default function AdminDashboard() {
                         <div className={`p-3 rounded-full bg-gradient-to-br ${stat.color}`}>
                           <stat.icon className="h-6 w-6 text-white" />
                         </div>
-                        <Badge variant={stat.trendUp ? "default" : "destructive"} className="text-xs font-semibold">
+                        {stat.trend ? <Badge variant={stat.trendUp ? "default" : "destructive"} className="text-xs font-semibold">
                           {stat.trend}
-                        </Badge>
+                        </Badge> : ""}
                       </div>
                       <div>
                         <p className="text-sm font-medium text-leather-600 mb-1">{stat.title}</p>
@@ -153,6 +194,7 @@ export default function AdminDashboard() {
                         <Button
                           variant="ghost"
                           className="w-full justify-between text-leather-600 hover:bg-leather-500 h-auto font-medium group"
+                          onClick={() => navigate(stat.link)}
                         >
                           Voir les détails
                           <ChevronRight className="h-5 w-5 ml-2 transition-transform group-hover:translate-x-1" />
@@ -208,13 +250,13 @@ export default function AdminDashboard() {
                     </ChartContainer>
                   </CardContent>
                   <CardFooter className="flex-col gap-2 text-sm border-t p-6 border-leather-200 bg-leather-50 items-center rounded-b-3xl text-center">
-                    <div className="flex items-center gap-2 font-medium leading-none">
+                    {/* <div className="flex items-center gap-2 font-medium leading-none">
                       <TrendingUp className="h-4 w-4" />
                       <span>Tendance en hausse de 5.2% cette semaine</span>
                     </div>
                     <div className="leading-none text-muted-foreground">
                       Showing total visitors for the last 6 months
-                    </div>
+                    </div> */}
                   </CardFooter>
                 </Card>
               </motion.div>
@@ -281,13 +323,13 @@ export default function AdminDashboard() {
                     </ChartContainer>
                   </CardContent>
                   <CardFooter className="flex-col gap-2 text-sm border-t p-6 border-leather-200 bg-leather-50 items-center rounded-b-3xl">
-                    <div className="flex items-center gap-2 font-medium leading-none">
+                    {/* <div className="flex items-center gap-2 font-medium leading-none">
                       <TrendingUp className="h-4 w-4" />
                       <span>Commentaires en hausse de 12% ce mois-ci</span>
                     </div>
                     <div className="leading-none text-muted-foreground">
                       Répartition des interactions sur les 6 derniers mois
-                    </div>
+                    </div> */}
                   </CardFooter>
                 </Card>
               </motion.div>
@@ -328,7 +370,7 @@ export default function AdminDashboard() {
                     </div>
                   </CardContent>
                   <CardFooter className="bg-leather-50 border-t border-leather-200 p-4 text-center">
-                    <Button variant="link" className="w-full text-leather-600 hover:text-leather-800">
+                    <Button variant="link" className="w-full text-leather-600 hover:text-leather-800" onClick={() => navigate("/admin/users")}>
                       Voir tous les utilisateurs
                     </Button>
                   </CardFooter>
@@ -368,16 +410,27 @@ export default function AdminDashboard() {
                   <CardHeader className="border-b border-leather-200 bg-leather-50 text-center">
                     <CardTitle className="text-xl font-bold text-leather-900">Gestion des Exercices</CardTitle>
                   </CardHeader>
-                  <CardContent className="flex-grow p-6">
-                    <p className="text-leather-600 mb-4 text-center">
-                      Gérez et créez de nouveaux exercices pour les utilisateurs.
-                    </p>
-                    <Button className="w-full bg-leather-600 rounded-full hover:bg-leather-700 text-white transition-colors duration-300">
-                      Créer un nouvel exercice
-                    </Button>
+                  <CardContent className="flex-grow p-0">
+                    <div className="divide-y divide-leather-200">
+                      {slicedExercices.map((exercice, index) => (
+                        <motion.div
+                          key={exercice.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          className="flex items-center justify-between p-4 hover:bg-leather-50 transition-colors"
+                        >
+                          <div>
+                            <p className="font-medium text-leather-900">{exercice.ex_nom}</p>
+                          </div>
+                          <Badge className="bg-leather-100 text-leather-800 hover:bg-primary/20">{exercice.ex_difficulty}</Badge>
+                        </motion.div>
+                      ))}
+                    </div>
                   </CardContent>
                   <CardFooter className="bg-leather-50 border-t border-leather-200 p-4 text-center">
-                    <Button variant="link" className="w-full text-leather-600 hover:text-leather-800">
+                    <Button variant="link" className="w-full text-leather-600 hover:text-leather-800"
+                      onClick={() => navigate("/admin/content/exercices")}>
                       Voir tous les exercices
                     </Button>
                   </CardFooter>

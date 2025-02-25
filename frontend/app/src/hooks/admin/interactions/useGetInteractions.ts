@@ -7,6 +7,7 @@ import { Interaction } from "@/components/admin-dashboard/interactions/column";
 export function useGetInteractions() {
     const [interactions, setInteractions] = useState<Array<Interaction>>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [getTotalInteractions, setGetTotalInteractions] = useState<number>(0)
     const { token } = useAuth();
 
     useEffect(() => {
@@ -19,6 +20,7 @@ export function useGetInteractions() {
                     },
                 });
                 setInteractions(data);
+                setGetTotalInteractions(data.length)
             } catch (error) {
                 if (error instanceof Error) {
                     if (axios.isAxiosError(error)) {
@@ -41,5 +43,10 @@ export function useGetInteractions() {
         getInteractions();
     }, [token]);
 
-    return { interactions, loading, setInteractions };
+    const oneDay = new Date(Date.now() - 1 * 24 * 60 * 60 * 1000);
+    const newInteractions = interactions.filter((interaction) => new Date(interaction.inter_date_de_debut) > oneDay);
+    const totalInteractionsDay = newInteractions.length
+    const newInteractionsPercentage = interactions.length > 0 ? (newInteractions.length / interactions.length) * 100 : 0;
+
+    return { interactions, loading, setInteractions, getTotalInteractions, newInteractionsPercentage, totalInteractionsDay };
 }

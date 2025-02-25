@@ -25,7 +25,7 @@ class Information
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['information:read','information:write', 'utilisateur:read'])]
+    #[Groups(['information:read','information:write', 'utilisateur:read', 'interaction:read'])]
     private ?string $info_titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
