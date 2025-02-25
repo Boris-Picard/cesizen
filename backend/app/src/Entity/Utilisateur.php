@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UtilisateurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -20,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
 #[UniqueEntity('ut_mail')]
+#[ApiFilter(SearchFilter::class, properties: ['ut_active' => 'exact'])]
 class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -57,6 +61,10 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['utilisateur:read', 'utilisateur:write'])]
     #[ORM\Column(name: "ut_active")]
     private ?bool $ut_active = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups(['utilisateur:read'])]
+    private ?\DateTimeInterface $createdAt = null;
 
     /**
      * @var Role|null
@@ -114,9 +122,21 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->informations = new ArrayCollection();
         $this->interactions = new ArrayCollection();
         $this->validations = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     // --- Getters et Setters existants ---
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
 
     public function getId(): ?int
     {

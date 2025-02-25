@@ -13,6 +13,7 @@ export type User = {
     ut_nom: string
     ut_mail: string
     role: Role
+    createdAt: string
     ut_active?: boolean
 }
 
@@ -38,6 +39,11 @@ export const getColumns = (handleEdit: (user: User) => void,
             accessorKey: "role",
             header: "Rôle",
             cell: ({ row }) => row.original.role.role_nom,
+        },
+        {
+            accessorKey: "createdAt",
+            header: "Date de création",
+            cell: ({ row }) => new Date(row.original.createdAt).toLocaleString(),
         },
         {
             accessorKey: "ut_active",

@@ -6,6 +6,7 @@ import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
 
 export function useGetExercices() {
     const [exercices, setExercices] = useState<ExerciceType[]>([]);
+    const [totalExercices, setTotalExercices] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(true);
     const { token } = useAuth();
 
@@ -19,6 +20,7 @@ export function useGetExercices() {
                     },
                 });
                 setExercices(data);
+                setTotalExercices(data.length)
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     toast({
@@ -39,5 +41,5 @@ export function useGetExercices() {
         getExercices();
     }, [token]);
 
-    return { exercices, loading, setExercices };
+    return { exercices, loading, setExercices, totalExercices };
 }

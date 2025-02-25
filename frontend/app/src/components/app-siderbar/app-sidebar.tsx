@@ -15,7 +15,6 @@ import {
   BarChart2,
   ChevronDown,
   LogOut,
-  PlusSquare,
 } from "lucide-react"
 import {
   Sidebar,
@@ -34,7 +33,6 @@ import { Link, useLocation } from "react-router-dom"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAuth } from "@/context/AuthContext"
 import { cn } from "@/lib/utils"
@@ -66,9 +64,9 @@ const menuItems = [
       { title: "Type d'historique", url: "/admin/types/historiques", icon: Clock },
     ],
   },
-  { title: "Interactions", url: "/admin/interactions", icon: Activity, badge: "9+" },
+  { title: "Interactions", url: "/admin/interactions", icon: Activity },
   { title: "Historique", url: "/admin/history", icon: Clock },
-  { title: "Validation", url: "/admin/validation", icon: CheckSquare, badge: "3" },
+  { title: "Validation", url: "/admin/validation", icon: CheckSquare },
   { title: "Statistiques", url: "/admin/stats", icon: BarChart2 },
 ];
 
@@ -168,11 +166,6 @@ export function AppSidebar() {
                             >
                               <item.icon className="w-5 h-5" />
                               <span>{item.title}</span>
-                              {item.badge && (
-                                <Badge variant="secondary" className="ml-auto bg-leather-300 text-leather-800">
-                                  {item.badge}
-                                </Badge>
-                              )}
                             </Link>
                           </SidebarMenuButton>
                         </SidebarMenuItem>

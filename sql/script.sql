@@ -60,17 +60,17 @@ CREATE TABLE
       type_histo_libelle VARCHAR(100) NOT NULL
    );
 
-CREATE TABLE
-   IF NOT EXISTS utilisateur (
-      ut_id SERIAL PRIMARY KEY,
-      ut_nom VARCHAR(255) NOT NULL,
-      ut_prenom VARCHAR(200) NOT NULL,
-      ut_mail VARCHAR(255) UNIQUE NOT NULL,
-      ut_password VARCHAR(255) NOT NULL,
-      ut_active BOOLEAN DEFAULT FALSE NOT NULL,
-      role_id INT NOT NULL,
-      FOREIGN KEY (role_id) REFERENCES role (role_id)
-   );
+CREATE TABLE IF NOT EXISTS utilisateur (
+  ut_id SERIAL PRIMARY KEY,
+  ut_nom VARCHAR(255) NOT NULL,
+  ut_prenom VARCHAR(200) NOT NULL,
+  ut_mail VARCHAR(255) UNIQUE NOT NULL,
+  ut_password VARCHAR(255) NOT NULL,
+  ut_active BOOLEAN DEFAULT FALSE NOT NULL,
+  role_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (role_id) REFERENCES role (role_id)
+);
 
 CREATE TABLE
    IF NOT EXISTS information (
