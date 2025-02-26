@@ -6,7 +6,9 @@ import { toast } from "@/hooks/useToast";
 import { TypeInteraction } from "@/components/admin-dashboard/type-interactions/columns";
 
 export const typeInteractionCreateSchema = z.object({
-    type_inter_libelle: z.string().min(3, "Le libellé est requis.").max(100, "Le type d'interaction est trop long"),
+    type_inter_libelle: z.enum(["Exercice", "Information"], {
+        errorMap: () => ({ message: "Le type d'interaction doit être 'Exercice' ou 'Information'" }),
+    }),
 });
 
 interface CreateTypeInteractionInterface {

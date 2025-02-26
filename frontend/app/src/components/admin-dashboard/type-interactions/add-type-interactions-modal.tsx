@@ -28,7 +28,7 @@ export default function AddTypeInteractionModal({ onTypeInteractionAdded }: AddT
     const form = useForm<z.infer<typeof typeInteractionCreateSchema>>({
         resolver: zodResolver(typeInteractionCreateSchema),
         defaultValues: {
-            type_inter_libelle: "",
+            type_inter_libelle: "Exercice",
         },
     });
 
@@ -55,12 +55,12 @@ export default function AddTypeInteractionModal({ onTypeInteractionAdded }: AddT
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="type_inter_libelle" className="text-sm font-medium text-leather-700">
-                            Libellé du type
+                            Libellé du type. (Exercice ou Information)
                         </Label>
                         <Input
                             id="type_inter_libelle"
                             {...form.register("type_inter_libelle")}
-                            placeholder="Libellé du type d'interaction"
+                            placeholder="Exercice ou Information"
                             className="py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
                         />
                         {form.formState.errors.type_inter_libelle && (

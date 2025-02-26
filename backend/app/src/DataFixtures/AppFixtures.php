@@ -187,11 +187,11 @@ class AppFixtures extends Fixture
 
 
         $ti1 = new TypeInteraction();
-        $ti1->setTypeInterLibelle('exercice');
+        $ti1->setTypeInterLibelle('Exercice');
         $manager->persist($ti1);
 
         $ti2 = new TypeInteraction();
-        $ti2->setTypeInterLibelle('information');
+        $ti2->setTypeInterLibelle('Information');
         $manager->persist($ti2);
 
         $manager->flush();

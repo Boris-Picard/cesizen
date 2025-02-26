@@ -59,14 +59,14 @@ export default function EditTypeInteractionModal({ typeInteraction, open, onClos
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="type_inter_libelle" className="text-sm font-medium text-leather-700">
-                            Libellé
+                            Libellé. (Exercice ou Information)
                         </Label>
                         <div className="relative">
                             <Icons.edit className="absolute left-3 top-1/2 transform -translate-y-1/2 text-leather-400" />
                             <Input
                                 id="type_inter_libelle"
                                 {...form.register("type_inter_libelle")}
-                                placeholder="Libellé du type d'interaction"
+                                placeholder="Exercice ou Information"
                                 className="pl-10 py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
                             />
                         </div>
