@@ -4,7 +4,7 @@ import { Icons } from "@/components/ui/icons";
 
 export type TypeInteraction = {
     id: number;
-    type_inter_libelle: string;
+    type_inter_libelle: "Exercice" | "Information";
 };
 
 export const getColumns = (
