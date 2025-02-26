@@ -13,7 +13,7 @@ export function useGetInformationsFront() {
         const getInformations = async () => {
             try {
                 const { data } = await axios.get(
-                    "http://cesizen-api.localhost/api/informations?in_active=true",
+                    "http://cesizen-api.localhost/api/information?info_active=true",
                     {
                         headers: {
                             "Content-Type": "application/json",
@@ -24,6 +24,8 @@ export function useGetInformationsFront() {
                 setInformations(data);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
+                    console.log(error);
+                    
                     toast({
                         variant: "destructive",
                         title: error.response?.data?.title ?? "Une erreur est survenue",

@@ -71,7 +71,7 @@ export default function EditInformationModal({
 
     return (
         <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose(); }}>
-            <DialogContent className="max-w-xl bg-white rounded-3xl p-8">
+            <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl p-8">
                 <DialogHeader>
                     <DialogTitle className="text-3xl font-bold text-leather-800">Modifier l'information</DialogTitle>
                     <DialogDescription className="text-leather-600">

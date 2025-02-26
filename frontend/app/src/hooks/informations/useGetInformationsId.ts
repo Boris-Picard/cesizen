@@ -13,7 +13,7 @@ export function useGetInformationsId(id: string | undefined) {
         const fetchInformation = async () => {
             try {
                 const { data } = await axios.get(
-                    `http://cesizen-api.localhost/api/informations/${id}`,
+                    `http://cesizen-api.localhost/api/information/${id}`,
                     {
                         headers: {
                             "Content-Type": "application/json",

@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { ArrowLeft, Share2, Bookmark, BookmarkCheck, ChevronLeft, ChevronRight } from "lucide-react"
@@ -8,89 +6,37 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import DOMPurify from "isomorphic-dompurify"
-
-interface InfoType {
-  info_id: number
-  info_titre: string
-  info_description: string
-  info_contenu: string
-  type_info_id: number
-}
+import { Information } from "@/components/admin-dashboard/informations/column"
+import { toast } from "@/hooks/useToast"
 
 interface InfoDetailProps {
-  params: {
-    id: string
-  }
+  information: Information | null
 }
 
-// Exemple de données avec du contenu WYSIWYG plus simple
-const mockInfo = {
-  info_id: 1,
-  info_titre: "La respiration carrée",
-  info_description:
-    "Découvrez les bienfaits de la respiration carrée pour la gestion du stress et l'anxiété. Cette technique ancestrale, également connue sous le nom de respiration en boîte, est utilisée depuis des siècles pour ses effets apaisants sur le corps et l'esprit.",
-  info_contenu: `
-    <h2>Qu'est-ce que la respiration carrée ?</h2>
-    <p>La respiration carrée, ou respiration en boîte, est une technique de respiration profonde qui peut aider à calmer l'esprit et réduire le stress. Cette technique suit un schéma simple en quatre étapes égales, comme les quatre côtés d'un carré.</p>
-
-    <h3>Les quatre phases de la respiration carrée :</h3>
-    <ul>
-      <li>Inspirez lentement et profondément pendant 4 secondes</li>
-      <li>Retenez votre respiration pendant 4 secondes</li>
-      <li>Expirez doucement pendant 4 secondes</li>
-      <li>Retenez votre souffle pendant 4 secondes</li>
-    </ul>
-
-    <h2>Bienfaits</h2>
-    <p>Cette technique de respiration offre de nombreux avantages pour votre bien-être physique et mental :</p>
-    <ul>
-      <li>Réduit le stress et l'anxiété</li>
-      <li>Améliore la concentration</li>
-      <li>Aide à gérer les émotions fortes</li>
-      <li>Favorise un sommeil réparateur</li>
-    </ul>
-
-    <h2>Comment pratiquer ?</h2>
-    <p>Trouvez un endroit calme et une position confortable. Vous pouvez pratiquer cette technique assis ou allongé. Commencez par quelques respirations normales pour vous détendre, puis suivez le rythme de la respiration carrée.</p>
-
-    <blockquote>La respiration est le pont entre le corps et l'esprit. Pratiquez régulièrement pour en ressentir tous les bienfaits.</blockquote>
-
-    <h3>Conseils pour une pratique optimale</h3>
-    <ul>
-      <li>Pratiquez dans un environnement calme</li>
-      <li>Maintenez une posture droite mais détendue</li>
-      <li>Commencez par des sessions courtes</li>
-      <li>Augmentez progressivement la durée</li>
-    </ul>
-  `,
-  type_info_id: 1,
-}
-
-const typeInfos = [
-  { id: 1, name: "Techniques de respiration" },
-  { id: 2, name: "Méditation" },
-  { id: 3, name: "Bien-être" },
-]
-
-export function InformationsDetailPageComponents({ params }: InfoDetailProps) {
+export function InformationsDetailPageComponents({ information }: InfoDetailProps) {
   const [isBookmarked, setIsBookmarked] = useState(false)
+  console.log(information?.info_contenu);
 
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: mockInfo.info_titre,
-          text: mockInfo.info_description,
+          title: information?.info_titre,
+          text: information?.info_description,
           url: window.location.href,
         })
       } catch (error) {
-        console.log("Erreur de partage:", error)
+        toast({
+          variant: "destructive",
+          title: "Une erreur est survenue",
+          description: "Impossible de partager l'article",
+        });
       }
     }
   }
 
   return (
-    <div className="min-h-screen bg-leather-50">
+    <div className=" bg-leather-50">
       {/* Header amélioré */}
       <div className="relative bg-gradient-to-b from-leather-800 to-leather-700">
         <motion.div
@@ -180,7 +126,7 @@ export function InformationsDetailPageComponents({ params }: InfoDetailProps) {
                     variant="secondary"
                     className="bg-leather-700/30 text-leather-100 border-leather-600/30 mb-4 px-4 py-1"
                   >
-                    {typeInfos.find((t) => t.id === mockInfo.type_info_id)?.name}
+                    {information?.typeInformation.type_info_nom}
                   </Badge>
                 </motion.div>
 
@@ -190,7 +136,7 @@ export function InformationsDetailPageComponents({ params }: InfoDetailProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.7 }}
                 >
-                  {mockInfo.info_titre}
+                  {information?.info_titre}
                 </motion.h1>
 
                 <motion.div
@@ -199,7 +145,9 @@ export function InformationsDetailPageComponents({ params }: InfoDetailProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.9 }}
                 >
-                  <p className="text-base sm:text-lg text-leather-100 leading-relaxed">{mockInfo.info_description}</p>
+                  <div className="text-base sm:text-lg text-leather-100 leading-relaxed text-ellipsis" dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(information?.info_description, { sanitize: true }),
+                  }}></div>
                 </motion.div>
               </div>
             </Card>
@@ -221,7 +169,7 @@ export function InformationsDetailPageComponents({ params }: InfoDetailProps) {
                 prose-ul:mt-4 prose-li:mt-2 prose-p:mt-4 first:prose-p:mt-0
                 prose-blockquote:my-8"
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(mockInfo.info_contenu),
+                  __html: DOMPurify.sanitize(information?.info_contenu, { sanitize: true }),
                 }}
               />
             </div>
@@ -231,7 +179,7 @@ export function InformationsDetailPageComponents({ params }: InfoDetailProps) {
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Button
               variant="outline"
-              className="rounded-2xl p-4 h-auto text-left flex items-center border-leather-200 hover:bg-leather-50 group"
+              className="rounded-2xl p-4 h-auto text-left flex items-center justify-start border-leather-200 hover:bg-leather-50 group"
             >
               <ChevronLeft className="h-5 w-5 mr-2 flex-shrink-0 group-hover:-translate-x-1 transition-transform" />
               <div>
