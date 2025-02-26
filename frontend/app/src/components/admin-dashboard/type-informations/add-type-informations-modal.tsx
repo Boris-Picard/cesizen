@@ -28,7 +28,7 @@ export default function AddTypeInformationModal({ onTypeInformationAdded }: AddT
     const form = useForm<z.infer<typeof typeInformationCreateSchema>>({
         resolver: zodResolver(typeInformationCreateSchema),
         defaultValues: {
-            type_info_nom: "",
+            type_info_nom: "Santé mentale",
         },
     });
 
@@ -55,12 +55,12 @@ export default function AddTypeInformationModal({ onTypeInformationAdded }: AddT
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="type_info_nom" className="text-sm font-medium text-leather-700">
-                            Nom du type
+                            Nom du type. (Santé mentale, Gestion du stress, Exercices de respiration)
                         </Label>
                         <Input
                             id="type_info_nom"
                             {...form.register("type_info_nom")}
-                            placeholder="Nom du type d'information"
+                            placeholder="Santé mentale, Gestion du stress, Exercices de respiration"
                             className="py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
                         />
                         {form.formState.errors.type_info_nom && (

@@ -6,7 +6,9 @@ import { toast } from "@/hooks/useToast";
 import { TypeInformation } from "@/components/admin-dashboard/type-informations/column";
 
 export const typeInformationCreateSchema = z.object({
-  type_info_nom: z.string().min(3, "Le nom du type est requis.").max(100, "Le nom du type est trop long"),
+  type_info_nom: z.enum(["Santé mentale", "Gestion du stress", "Exercices de respiration"], {
+    errorMap: () => ({ message: "Le type d'information doit être 'Santé mentale', 'Gestion du stress' ou 'Exercices de respiration'" }),
+  }),
 });
 
 interface CreateTypeInformationInterface {

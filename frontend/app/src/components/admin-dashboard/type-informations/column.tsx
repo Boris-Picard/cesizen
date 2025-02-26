@@ -4,7 +4,7 @@ import { Icons } from "@/components/ui/icons";
 
 export type TypeInformation = {
     id: number;
-    type_info_nom: string;
+    type_info_nom: "Santé mentale" | "Gestion du stress" | "Exercices de respiration";
 };
 
 export const getColumns = (
