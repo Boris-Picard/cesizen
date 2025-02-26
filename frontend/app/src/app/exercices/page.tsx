@@ -24,7 +24,7 @@ export default function ExercicesFrontPage() {
     const { typeInteractions } = useGetTypeInteractions()
     const { user } = useAuth()
 
-    const interaction = typeInteractions.find((inter) => inter.type_inter_libelle === 'exercice')
+    const interaction = typeInteractions.find((inter) => inter.type_inter_libelle === 'Exercice')
 
     if (!loading && !exercices) {
         navigate(-1)

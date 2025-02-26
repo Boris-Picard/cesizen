@@ -1,6 +1,6 @@
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, act } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Book, Brain, Leaf, Wind, Search, ArrowLeft } from "lucide-react"
 import informationsImg from "@/assets/informations.avif"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { Information } from "../admin-dashboard/informations/column"
 
 type Article = {
   id: number
@@ -54,6 +55,7 @@ const fakeData: Article[] = [
   },
 ]
 
+
 const categories = [
   { label: "Tous", value: "all", icon: Book },
   { label: "Santé mentale", value: "sante", icon: Brain },
@@ -61,22 +63,21 @@ const categories = [
   { label: "Exercices de respiration", value: "respiration", icon: Wind },
 ]
 
-const InformationsPage = () => {
-  const [articles, setArticles] = useState<Article[]>([])
+interface informationsComponentsInterface {
+  informationsData: Information[]
+}
+
+export const InformationsComponents = ({ informationsData }: informationsComponentsInterface) => {
   const [filter, setFilter] = useState<string>("all")
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const navigate = useNavigate()
 
-  useEffect(() => {
-    setArticles(fakeData)
-  }, [])
-
-  const filteredArticles = articles.filter(
+  const filterArticles = informationsData.filter(
     (article) =>
-      (filter === "all" || article.type === filter) &&
-      (article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        article.content.toLowerCase().includes(searchTerm.toLowerCase())),
+      (filter === "all" || article.typeInformation.type_info_nom === filter) &&
+      (article.info_titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        article.info_contenu.toLowerCase().includes(searchTerm.toLowerCase())),
   )
 
   return (
@@ -140,7 +141,7 @@ const InformationsPage = () => {
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence>
-            {filteredArticles.map((article) => (
+            {filterArticles.map((article) => (
               <motion.div
                 key={article.id}
                 layout
@@ -149,33 +150,34 @@ const InformationsPage = () => {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card
-                  className={`flex flex-col h-full cursor-pointer rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden group ${article.color}`}
-                  onClick={() => setSelectedArticle(article)}
-                >
-                  <div className="h-48 relative overflow-hidden">
-                    <article.icon
-                      className={`absolute inset-0 m-auto h-24 w-24 ${article.textColor} transition-transform group-hover:scale-110`}
-                    />
-                  </div>
-                  <CardContent className="p-6 flex-grow flex flex-col justify-between">
-                    <div>
-                      <Badge className={`mb-2 bg-white/20 ${article.textColor}`}>{article.type}</Badge>
-                      <h2
-                        className={`text-2xl font-bold ${article.textColor} mb-2 transition-transform group-hover:translate-y-[-4px]`}
-                      >
-                        {article.title}
-                      </h2>
-                      <p className={`${article.textColor} mb-4 line-clamp-3 opacity-90`}>{article.content}</p>
+                <Link to={`/informations/${article.id}`}>
+                  <Card
+                    className={`flex flex-col h-full cursor-pointer rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden group`}
+                  >
+                    <div className="h-48 relative overflow-hidden">
+                      {/* <article.icon
+                      className={`absolute inset-0 m-auto h-24 w-24  transition-transform group-hover:scale-110`}
+                    /> */}
                     </div>
-                    <Button
+                    <CardContent className="p-6 flex-grow flex flex-col justify-between">
+                      <div>
+                        <Badge className={`mb-2 bg-white/20 `}>{article.typeInformation.type_info_nom}</Badge>
+                        <h2
+                          className={`text-2xl font-bold  mb-2 transition-transform group-hover:translate-y-[-4px]`}
+                        >
+                          {article.info_titre}
+                        </h2>
+                        <p className={` mb-4 line-clamp-3 opacity-90`}>{article.info_contenu}</p>
+                      </div>
+                      {/* <Button
                       variant="outline"
                       className={`w-full py-2 border-current ${article.textColor} hover:bg-white/20 transition-colors`}
                     >
                       Lire la suite
-                    </Button>
-                  </CardContent>
-                </Card>
+                    </Button> */}
+                    </CardContent>
+                  </Card>
+                </Link>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -251,6 +253,3 @@ const InformationsPage = () => {
     </div>
   )
 }
-
-export default InformationsPage
-

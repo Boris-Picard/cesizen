@@ -45,7 +45,7 @@ export default function AdminHeader({ h1 }: { h1: string }) {
                 className="pl-10 pr-4 py-2 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full"
               />
             </div>
-            <Button variant="ghost" size="icon" className="text-leather-600 hover:bg-leather-100 rounded-full">
+            <Button variant="ghost" size="icon" className="text-leather-600 hover:bg-leather-800 rounded-full">
               <Bell className="h-5 w-5" />
             </Button>
             <DropdownMenu>

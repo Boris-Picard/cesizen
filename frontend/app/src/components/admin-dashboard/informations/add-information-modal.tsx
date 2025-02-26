@@ -57,7 +57,7 @@ export default function AddInformationModal({ onInformationAdded }: AddInformati
                     Ajouter une information
                 </Button>
             </DialogTrigger>
-            <DialogContent className="w-full max-w-xl bg-white rounded-3xl p-6 sm:p-8">
+            <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl p-6 sm:p-8">
                 <DialogHeader>
                     <DialogTitle className="text-2xl sm:text-3xl font-bold text-leather-800">
                         Ajouter une information
