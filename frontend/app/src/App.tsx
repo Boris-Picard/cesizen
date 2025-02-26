@@ -25,6 +25,7 @@ import TypeInteractionsPage from './app/admin-dashboard/type-interactions/page';
 import { TypeHistoriquesComponents } from './components/admin-dashboard/type-historiques/type-historiques';
 import ExercicesDetailPage from './app/exercices/exercices-detail-page/page';
 import { InteractionsPage } from './app/admin-dashboard/interactions/page';
+import { InformationsDetailPage } from './app/informations/informations-detail-page/informations-detail-page';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           <Route path="/exercices/:id" element={<ExercicesDetailPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/informations" element={<InformationsPage />} />
+          <Route path="/informations/:id" element={<InformationsDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/edit" element={<EditProfilePage />} />
         </Route>

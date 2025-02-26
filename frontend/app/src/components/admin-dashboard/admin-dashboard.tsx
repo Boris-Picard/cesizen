@@ -218,7 +218,7 @@ export default function AdminDashboard() {
                       Activité Utilisateurs et Interactions
                     </CardTitle>
                     <CardDescription className="text-leather-600">
-                      Tendances hebdomadaires
+                      Tendances du jour
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1 pb-0 flex items-center justify-center">
@@ -268,7 +268,7 @@ export default function AdminDashboard() {
                       Distribution des Interactions
                     </CardTitle>
                     <CardDescription className="text-leather-600">
-                      Répartition sur les 6 derniers mois
+                      Répartition sur les 24 dernieres heures
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1 pb-0 flex items-center justify-center">
@@ -299,7 +299,7 @@ export default function AdminDashboard() {
                                         y={viewBox.cy}
                                         className="fill-foreground text-3xl font-bold"
                                       >
-                                        {totalInteractions.toLocaleString()}
+                                        {getTotalInteractions}
                                       </tspan>
                                       <tspan
                                         x={viewBox.cx}
