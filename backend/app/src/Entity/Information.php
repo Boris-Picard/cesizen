@@ -28,28 +28,29 @@ class Information
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['information:read','information:write', 'utilisateur:read', 'interaction:read'])]
+    #[Groups(['information:read', 'information:write', 'utilisateur:read', 'interaction:read'])]
     private ?string $info_titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['information:read','information:write', 'utilisateur:read'])]
+    #[Groups(['information:read', 'information:write', 'utilisateur:read'])]
     private ?string $info_description = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['information:read','information:write', 'utilisateur:read'])]
+    #[Groups(['information:read', 'information:write', 'utilisateur:read'])]
     private ?string $info_contenu = null;
 
     #[ORM\Column]
-    #[Groups(['information:read','information:write', 'utilisateur:read'])]
+    #[Groups(['information:read', 'information:write', 'utilisateur:read'])]
     private ?bool $info_active = null;
 
-    /**
-     * @var Collection<int, Utilisateur>
-     */
-    #[ORM\ManyToMany(targetEntity: Utilisateur::class, mappedBy: 'informations')]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups(['information:read'])]
-    #[MaxDepth(1)]
-    private Collection $utilisateurs;
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\ManyToOne(targetEntity: Utilisateur::class, inversedBy: "informations")]
+    #[ORM\JoinColumn(name: "ut_id", referencedColumnName: "ut_id", nullable: false)]
+    #[Groups(['information:read', 'information:write'])]
+    private ?Utilisateur $createdBy = null;
 
     #[ORM\ManyToOne(targetEntity: TypeInformation::class, inversedBy: "informations")]
     #[ORM\JoinColumn(name: "type_info_id", referencedColumnName: "type_info_id", nullable: false)]
@@ -65,8 +66,30 @@ class Information
 
     public function __construct()
     {
-        $this->utilisateurs = new ArrayCollection();
         $this->interactions = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getCreatedBy(): ?Utilisateur
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(Utilisateur $createdBy): static
+    {
+        $this->createdBy = $createdBy;
+        return $this;
     }
 
     public function getId(): ?int
@@ -118,33 +141,6 @@ class Information
     public function setInfoActive(bool $info_active): static
     {
         $this->info_active = $info_active;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Utilisateur>
-     */
-    public function getUtilisateurs(): Collection
-    {
-        return $this->utilisateurs;
-    }
-
-    public function addUtilisateur(Utilisateur $utilisateur): static
-    {
-        if (!$this->utilisateurs->contains($utilisateur)) {
-            $this->utilisateurs->add($utilisateur);
-            $utilisateur->addInformation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUtilisateur(Utilisateur $utilisateur): static
-    {
-        if ($this->utilisateurs->removeElement($utilisateur)) {
-            $utilisateur->removeInformation($this);
-        }
 
         return $this;
     }

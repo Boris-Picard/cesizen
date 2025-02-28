@@ -7,6 +7,8 @@ import { Information } from "@/components/admin-dashboard/informations/column";
 export function useGetInformations() {
     const [informations, setInformations] = useState<Information[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [totalInformations, setTotalInformations] = useState<number>(0)
+    const [informationsActive, setInformationsActive] = useState<Information[] | null>([])
     const { token } = useAuth();
 
     useEffect(() => {
@@ -18,9 +20,12 @@ export function useGetInformations() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setInformations(data);
                 console.log(data);
                 
+                const totalActiveInformations = data.filter((article: Information) => article.info_active)
+                setInformationsActive(totalActiveInformations)
+                setInformations(data);
+                setTotalInformations(totalActiveInformations.length)
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     toast({
@@ -41,5 +46,5 @@ export function useGetInformations() {
         getInformations();
     }, [token]);
 
-    return { informations, loading, setInformations };
+    return { informations, loading, setInformations, totalInformations, informationsActive };
 }

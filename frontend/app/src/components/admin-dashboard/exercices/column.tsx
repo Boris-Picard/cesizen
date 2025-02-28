@@ -31,6 +31,10 @@ export const getColumns = (
         {
             accessorKey: "ex_description",
             header: "Description",
+            cell: ({ row }) => {
+                const content = row.original.ex_description;
+                return <div className="line-clamp-3" dangerouslySetInnerHTML={{ __html: content }} />;
+            },
         },
         {
             accessorKey: "ex_difficulty",
