@@ -12,6 +12,8 @@ export function useDeleteUsers() {
     const { token } = useAuth();
 
     async function handleDelete({ id, onDelete, onClose }: userDeleteInterface) {
+        console.log(id);
+        
         try {
             await axios.delete(`http://cesizen-api.localhost/api/utilisateurs/${id}`, {
                 headers: {

@@ -80,6 +80,9 @@ CREATE TABLE
       info_contenu TEXT NOT NULL,
       info_active BOOLEAN DEFAULT FALSE NOT NULL,
       type_info_id INT NOT NULL,
+      ut_id INT NOT NULL, 
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id),
       FOREIGN KEY (type_info_id) REFERENCES type_information (type_info_id)
    );
 

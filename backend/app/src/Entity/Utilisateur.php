@@ -32,12 +32,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['utilisateur:read'])]
     private ?int $id = null;
 
-    #[Groups(['utilisateur:read', 'utilisateur:write', 'interaction:read'])]
+    #[Groups(['utilisateur:read', 'utilisateur:write', 'interaction:read', 'information:read'])]
     #[Assert\NotBlank(message: "Le nom ne peut pas être vide", groups: ['registration'])]
     #[ORM\Column(name: "ut_nom", length: 255)]
     private ?string $ut_nom = null;
 
-    #[Groups(['utilisateur:read', 'utilisateur:write', 'interaction:read'])]
+    #[Groups(['utilisateur:read', 'utilisateur:write', 'interaction:read', 'information:read'])]
     #[Assert\NotBlank(message: "Le prénom ne peut pas être vide", groups: ['registration'])]
     #[ORM\Column(name: "ut_prenom", length: 200)]
     private ?string $ut_prenom = null;
@@ -90,7 +90,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Information>
      */
-    #[ORM\ManyToMany(targetEntity: Information::class, inversedBy: "utilisateurs")]
+    #[ORM\OneToMany(targetEntity: Information::class, mappedBy: "createdBy")]
     #[ORM\JoinTable(
         name: "creer",
         joinColumns: [new ORM\JoinColumn(name: "ut_id", referencedColumnName: "ut_id")],

@@ -1,84 +1,74 @@
-import type React from "react"
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Book, Brain, Leaf, Wind, Search, ArrowLeft } from "lucide-react";
+import informationsImg from "@/assets/informations.avif";
+import { Link, useNavigate } from "react-router-dom";
+import { Information } from "../admin-dashboard/informations/column";
+import DOMPurify from "isomorphic-dompurify"
 
-import { useState, useEffect, act } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Book, Brain, Leaf, Wind, Search, ArrowLeft } from "lucide-react"
-import informationsImg from "@/assets/informations.avif"
-import { Link, useNavigate } from "react-router-dom"
-import { Information } from "../admin-dashboard/informations/column"
+// Les catégories avec leur icône pour les Tabs
+const categories = [
+  { label: "Tous", value: "all", icon: Book },
+  { label: "Santé mentale", value: "Santé mentale", icon: Brain },
+  { label: "Gestion du stress", value: "Gestion du stress", icon: Leaf },
+  { label: "Exercices de respiration", value: "Exercices de respiration", icon: Wind },
+];
 
-type Article = {
-  id: number
-  type: "sante" | "stress" | "respiration"
-  title: string
-  content: string
-  icon: React.ElementType
-  color: string
-  textColor: string
-}
+type TypeInfoKey = "Santé mentale" | "Gestion du stress" | "Exercices de respiration";
 
-const fakeData: Article[] = [
-  {
-    id: 1,
-    type: "sante",
-    title: "Comprendre la Santé Mentale",
-    content:
-      "La santé mentale englobe notre bien-être émotionnel, psychologique et social. Découvrez comment prendre soin de vous et cultiver un esprit sain.",
-    icon: Brain,
+const colorMapping: Record<TypeInfoKey, { color: string; textColor: string }> = {
+  "Santé mentale": {
     color: "bg-leather-200",
     textColor: "text-leather-900",
   },
-  {
-    id: 2,
-    type: "stress",
-    title: "Gestion du Stress",
-    content:
-      "Le stress est une réaction naturelle face aux défis. Apprenez des techniques efficaces pour gérer votre stress au quotidien.",
-    icon: Leaf,
+  "Gestion du stress": {
     color: "bg-leather-300",
     textColor: "text-leather-950",
   },
-  {
-    id: 3,
-    type: "respiration",
-    title: "Exercices de Respiration",
-    content:
-      "Les exercices de respiration, comme la cohérence cardiaque, permettent de réduire le stress et d'améliorer la concentration.",
-    icon: Wind,
+  "Exercices de respiration": {
     color: "bg-leather-400",
     textColor: "text-white",
   },
-]
+};
 
+const iconMapping: Record<TypeInfoKey, React.FC<React.SVGProps<SVGSVGElement>>> = {
+  "Santé mentale": Brain,
+  "Gestion du stress": Leaf,
+  "Exercices de respiration": Wind,
+};
 
-const categories = [
-  { label: "Tous", value: "all", icon: Book },
-  { label: "Santé mentale", value: "sante", icon: Brain },
-  { label: "Gestion du stress", value: "stress", icon: Leaf },
-  { label: "Exercices de respiration", value: "respiration", icon: Wind },
-]
-
-interface informationsComponentsInterface {
-  informationsData: Information[]
+interface InformationsComponentsInterface {
+  informationsData: Information[];
 }
 
-export const InformationsComponents = ({ informationsData }: informationsComponentsInterface) => {
-  const [filter, setFilter] = useState<string>("all")
-  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const navigate = useNavigate()
+export const InformationsComponents = ({ informationsData }: InformationsComponentsInterface) => {
+  const [filter, setFilter] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
-  const filterArticles = informationsData.filter(
+  const addedData = informationsData.map((article) => {
+    const key = article.typeInformation.type_info_nom as TypeInfoKey;
+    const IconComponent = iconMapping[key];
+    const iconClasses = "absolute inset-0 m-auto h-24 w-24 transition-transform group-hover:scale-110";
+    return {
+      ...article,
+      color: colorMapping[key],
+      Icon: IconComponent,
+      iconClasses,
+    };
+  });
+
+  const filterArticles = addedData.filter(
     (article) =>
       (filter === "all" || article.typeInformation.type_info_nom === filter) &&
       (article.info_titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        article.info_contenu.toLowerCase().includes(searchTerm.toLowerCase())),
-  )
+        article.info_contenu.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   return (
     <div className="min-h-screen bg-leather-50">
@@ -151,30 +141,26 @@ export const InformationsComponents = ({ informationsData }: informationsCompone
                 transition={{ duration: 0.3 }}
               >
                 <Link to={`/informations/${article.id}`}>
-                  <Card
-                    className={`flex flex-col h-full cursor-pointer rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden group`}
-                  >
+                  <Card className={`${article.color.color} flex flex-col h-full cursor-pointer rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden group`}>
                     <div className="h-48 relative overflow-hidden">
-                      {/* <article.icon
-                      className={`absolute inset-0 m-auto h-24 w-24  transition-transform group-hover:scale-110`}
-                    /> */}
+                      <article.Icon className={article.iconClasses} />
                     </div>
                     <CardContent className="p-6 flex-grow flex flex-col justify-between">
                       <div>
-                        <Badge className={`mb-2 bg-white/20 `}>{article.typeInformation.type_info_nom}</Badge>
-                        <h2
-                          className={`text-2xl font-bold  mb-2 transition-transform group-hover:translate-y-[-4px]`}
-                        >
+                        <Badge className="mb-2 ">{article.typeInformation.type_info_nom}</Badge>
+                        <h2 className="text-2xl font-bold mb-2 transition-transform group-hover:translate-y-[-4px]">
                           {article.info_titre}
                         </h2>
-                        <p className={` mb-4 line-clamp-3 opacity-90`}>{article.info_contenu}</p>
+                        <div className="mb-4 line-clamp-3 opacity-90" dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(article?.info_contenu),
+                        }}></div>
                       </div>
-                      {/* <Button
-                      variant="outline"
-                      className={`w-full py-2 border-current ${article.textColor} hover:bg-white/20 transition-colors`}
-                    >
-                      Lire la suite
-                    </Button> */}
+                      <Button
+                        variant="outline"
+                        className={`w-full py-2 border-current ${article.color.textColor} transition-colors`}
+                      >
+                        Lire la suite
+                      </Button>
                     </CardContent>
                   </Card>
                 </Link>
@@ -214,42 +200,6 @@ export const InformationsComponents = ({ informationsData }: informationsCompone
           </div>
         </motion.div>
       </main>
-
-      {/* Article Modal */}
-      <AnimatePresence>
-        {selectedArticle && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-            onClick={() => setSelectedArticle(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className={`${selectedArticle.color} rounded-3xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center mb-6">
-                <selectedArticle.icon className={`h-16 w-16 ${selectedArticle.textColor} mr-4`} />
-                <div>
-                  <h2 className={`text-3xl font-bold ${selectedArticle.textColor} mb-2`}>{selectedArticle.title}</h2>
-                  <Badge className={`bg-white/20 ${selectedArticle.textColor}`}>{selectedArticle.type}</Badge>
-                </div>
-              </div>
-              <p className={`${selectedArticle.textColor} mb-6 opacity-90`}>{selectedArticle.content}</p>
-              <Button
-                className={`w-full bg-white/20 hover:bg-white/30 ${selectedArticle.textColor}`}
-                onClick={() => setSelectedArticle(null)}
-              >
-                Fermer
-              </Button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
-  )
-}
+  );
+};

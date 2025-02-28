@@ -22,12 +22,14 @@ import { useGetUsers } from "@/hooks/admin/users/useGetUsers"
 import { useNavigate } from "react-router-dom"
 import { useGetExercices } from "@/hooks/admin/exercices/useGetExercices"
 import { useGetInteractions } from "@/hooks/admin/interactions/useGetInteractions"
+import { useGetInformations } from "@/hooks/admin/informations/useGetInformations"
 
 export default function AdminDashboard() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const { users, newUsersPercentage, totalUsers } = useGetUsers()
   const { exercices, totalExercices } = useGetExercices()
+  const { informationsActive, totalInformations } = useGetInformations()
   const { interactions, getTotalInteractions, newInteractionsPercentage, totalInteractionsDay } = useGetInteractions()
 
   const filterUsersActive = users.filter((u) => u.ut_active === true)
@@ -117,12 +119,10 @@ export default function AdminDashboard() {
     },
     {
       title: "Articles Publiés",
-      value: "89",
+      value: totalInformations,
       icon: FileText,
       color: "from-leather-400 to-leather-300",
-      trend: "-0.5%",
-      trendUp: false,
-      link: "/admin/users"
+      link: "/admin/content/informations"
     },
     {
       title: "Interactions Aujourd'hui",

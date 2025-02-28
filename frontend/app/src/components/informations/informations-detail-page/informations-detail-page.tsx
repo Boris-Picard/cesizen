@@ -146,7 +146,7 @@ export function InformationsDetailPageComponents({ information }: InfoDetailProp
                   transition={{ duration: 0.6, delay: 0.9 }}
                 >
                   <div className="text-base sm:text-lg text-leather-100 leading-relaxed text-ellipsis" dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(information?.info_description, { sanitize: true }),
+                    __html: DOMPurify.sanitize(information?.info_description ?? ""),
                   }}></div>
                 </motion.div>
               </div>
@@ -169,7 +169,7 @@ export function InformationsDetailPageComponents({ information }: InfoDetailProp
                 prose-ul:mt-4 prose-li:mt-2 prose-p:mt-4 first:prose-p:mt-0
                 prose-blockquote:my-8"
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(information?.info_contenu, { sanitize: true }),
+                  __html: DOMPurify.sanitize(information?.info_contenu ?? ""),
                 }}
               />
             </div>

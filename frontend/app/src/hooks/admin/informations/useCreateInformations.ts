@@ -21,11 +21,12 @@ interface CreateInformationInterface {
 
 export function useCreateInformations() {
     const [open, setOpen] = useState(false);
-    const { token } = useAuth();
+    const { token, user } = useAuth();
+
+    if (!user?.id) return
 
     const createInformation = async ({ validData, onInformationAdded, form }: CreateInformationInterface) => {
-        console.log(validData);
-
+        
         try {
             const { data } = await axios.post(
                 "http://cesizen-api.localhost/api/information",
@@ -35,6 +36,7 @@ export function useCreateInformations() {
                     info_contenu: validData.info_contenu,
                     info_active: validData.info_active,
                     typeInformation: validData.typeInformation,
+                    createdBy: `/api/utilisateurs/${user?.id}`,
                 },
                 {
                     headers: {
@@ -48,6 +50,7 @@ export function useCreateInformations() {
             setOpen(false);
         } catch (error) {
             if (axios.isAxiosError(error)) {
+                console.log(error);
                 toast({
                     variant: "destructive",
                     title: error.response?.data?.title ?? "Une erreur est survenue",
