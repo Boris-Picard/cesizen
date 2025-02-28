@@ -20,8 +20,6 @@ export function useGetInformations() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                console.log(data);
-                
                 const totalActiveInformations = data.filter((article: Information) => article.info_active)
                 setInformationsActive(totalActiveInformations)
                 setInformations(data);

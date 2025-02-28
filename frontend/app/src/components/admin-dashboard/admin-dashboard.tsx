@@ -30,6 +30,7 @@ export default function AdminDashboard() {
   const { users, newUsersPercentage, totalUsers } = useGetUsers()
   const { exercices, totalExercices } = useGetExercices()
   const { informationsActive, totalInformations } = useGetInformations()
+  
   const { interactions, getTotalInteractions, newInteractionsPercentage, totalInteractionsDay } = useGetInteractions()
 
   const filterUsersActive = users.filter((u) => u.ut_active === true)
@@ -83,11 +84,10 @@ export default function AdminDashboard() {
 
   );
 
-
-  const totalInteractions = useMemo(
-    () => pieChartData.reduce((acc: any, cur) => acc + cur.value, 0),
-    []
-  )
+  // const totalInteractions = useMemo(
+  //   () => pieChartData.reduce((acc: any, cur) => acc + cur.value, 0),
+  //   []
+  // )
 
   const chartConfig: ChartConfig = {
     utilisateurs: {
@@ -382,7 +382,7 @@ export default function AdminDashboard() {
                   </CardHeader>
                   <CardContent className="flex-grow p-0">
                     <div className="divide-y divide-leather-200">
-                      {recentArticles.map((article, index) => (
+                      {informationsActive?.map((article, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, y: 10 }}
@@ -391,16 +391,16 @@ export default function AdminDashboard() {
                           className="flex items-center justify-between p-4 hover:bg-leather-50 transition-colors"
                         >
                           <div>
-                            <p className="font-medium text-leather-900">{article.title}</p>
-                            <p className="text-sm text-leather-600">{article.date}</p>
+                            <p className="font-medium text-leather-900">{article.info_titre}</p>
+                            <p className="text-sm text-leather-600">{new Date(article.createdAt).toLocaleString()}</p>
                           </div>
-                          <Badge className="bg-leather-100 text-leather-800 hover:bg-primary/20">{article.type}</Badge>
+                          <Badge className="bg-leather-100 text-leather-800 hover:bg-primary/20">{article.typeInformation.type_info_nom}</Badge>
                         </motion.div>
                       ))}
                     </div>
                   </CardContent>
                   <CardFooter className="bg-leather-50 border-t border-leather-200 p-4 text-center">
-                    <Button variant="link" className="w-full text-leather-600 hover:text-leather-800">
+                    <Button onClick={() => navigate("/admin/content/informations")} variant="link" className="w-full text-leather-600 hover:text-leather-800">
                       Voir tous les articles
                     </Button>
                   </CardFooter>

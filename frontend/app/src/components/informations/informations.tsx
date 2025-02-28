@@ -147,13 +147,31 @@ export const InformationsComponents = ({ informationsData }: InformationsCompone
                     </div>
                     <CardContent className="p-6 flex-grow flex flex-col justify-between">
                       <div>
-                        <Badge className="mb-2 ">{article.typeInformation.type_info_nom}</Badge>
+                        <Badge className="mb-2">{article.typeInformation.type_info_nom}</Badge>
                         <h2 className="text-2xl font-bold mb-2 transition-transform group-hover:translate-y-[-4px]">
                           {article.info_titre}
                         </h2>
-                        <div className="mb-4 line-clamp-3 opacity-90" dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(article?.info_contenu),
-                        }}></div>
+                        {/* Ajout de la zone d'informations sur le créateur et la date */}
+                        <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
+                          <span>
+                            Par {article.createdBy ? `${article.createdBy.ut_prenom} ${article.createdBy.ut_nom}` : "Inconnu"}
+                          </span>
+                          <span>
+                            {new Date(article.createdAt).toLocaleString("fr-FR", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
+                        </div>
+                        <div
+                          className="mb-4 line-clamp-3 opacity-90"
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(article?.info_contenu),
+                          }}
+                        ></div>
                       </div>
                       <Button
                         variant="outline"

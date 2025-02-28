@@ -23,8 +23,6 @@ export function useCreateInformations() {
     const [open, setOpen] = useState(false);
     const { token, user } = useAuth();
 
-    if (!user?.id) return
-
     const createInformation = async ({ validData, onInformationAdded, form }: CreateInformationInterface) => {
         
         try {

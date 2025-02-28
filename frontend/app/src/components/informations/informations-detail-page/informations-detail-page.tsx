@@ -15,7 +15,6 @@ interface InfoDetailProps {
 
 export function InformationsDetailPageComponents({ information }: InfoDetailProps) {
   const [isBookmarked, setIsBookmarked] = useState(false)
-  console.log(information?.info_contenu);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -36,7 +35,7 @@ export function InformationsDetailPageComponents({ information }: InfoDetailProp
   }
 
   return (
-    <div className=" bg-leather-50">
+    <div className="bg-leather-50">
       {/* Header amélioré */}
       <div className="relative bg-gradient-to-b from-leather-800 to-leather-700">
         <motion.div
@@ -124,14 +123,14 @@ export function InformationsDetailPageComponents({ information }: InfoDetailProp
                 >
                   <Badge
                     variant="secondary"
-                    className="bg-leather-700/30 text-leather-100 border-leather-600/30 mb-4 px-4 py-1"
+                    className="bg-leather-100 text-leather-800 border-leather-600/30 mb-4 px-4 py-1"
                   >
                     {information?.typeInformation.type_info_nom}
                   </Badge>
                 </motion.div>
 
                 <motion.h1
-                  className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6"
+                  className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.7 }}
@@ -139,15 +138,40 @@ export function InformationsDetailPageComponents({ information }: InfoDetailProp
                   {information?.info_titre}
                 </motion.h1>
 
+                {/* Zone pour afficher le créateur et la date */}
+                <motion.div
+                  className="flex flex-col sm:flex-row justify-center items-center text-sm text-leather-200 mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                >
+                  <span className="mr-2">
+                    Par {information?.createdBy ? `${information.createdBy.ut_prenom} ${information.createdBy.ut_nom}` : "Inconnu"}
+                  </span>
+                  <span className="mx-2">•</span>
+                  <span>
+                    {new Date(information?.createdAt ?? "").toLocaleString("fr-FR", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </motion.div>
+
                 <motion.div
                   className="max-w-2xl"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.9 }}
                 >
-                  <div className="text-base sm:text-lg text-leather-100 leading-relaxed text-ellipsis" dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(information?.info_description ?? ""),
-                  }}></div>
+                  <div
+                    className="text-base sm:text-lg text-leather-100 leading-relaxed text-ellipsis"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(information?.info_description ?? ""),
+                    }}
+                  ></div>
                 </motion.div>
               </div>
             </Card>
@@ -203,4 +227,3 @@ export function InformationsDetailPageComponents({ information }: InfoDetailProp
     </div>
   )
 }
-
