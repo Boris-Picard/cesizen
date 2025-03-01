@@ -10,16 +10,19 @@ import informationsImg from "@/assets/informations.avif";
 import { Link, useNavigate } from "react-router-dom";
 import { Information } from "../admin-dashboard/informations/column";
 import DOMPurify from "isomorphic-dompurify"
+import { useCreateInteraction } from "@/hooks/api/useCreateInteractions";
+import { TypeInteraction } from "../admin-dashboard/type-interactions/columns";
+import { UserPayload } from "@/context/AuthContext";
 
 // Les catégories avec leur icône pour les Tabs
 const categories = [
   { label: "Tous", value: "all", icon: Book },
   { label: "Santé mentale", value: "Santé mentale", icon: Brain },
   { label: "Gestion du stress", value: "Gestion du stress", icon: Leaf },
-  { label: "Exercices de respiration", value: "Exercices de respiration", icon: Wind },
+  { label: "Exercices de relaxation", value: "Exercices de relaxation", icon: Wind },
 ];
 
-type TypeInfoKey = "Santé mentale" | "Gestion du stress" | "Exercices de respiration";
+type TypeInfoKey = "Santé mentale" | "Gestion du stress" | "Exercices de relaxation";
 
 const colorMapping: Record<TypeInfoKey, { color: string; textColor: string }> = {
   "Santé mentale": {
@@ -30,7 +33,7 @@ const colorMapping: Record<TypeInfoKey, { color: string; textColor: string }> = 
     color: "bg-leather-300",
     textColor: "text-leather-950",
   },
-  "Exercices de respiration": {
+  "Exercices de relaxation": {
     color: "bg-leather-400",
     textColor: "text-white",
   },
@@ -39,16 +42,19 @@ const colorMapping: Record<TypeInfoKey, { color: string; textColor: string }> = 
 const iconMapping: Record<TypeInfoKey, React.FC<React.SVGProps<SVGSVGElement>>> = {
   "Santé mentale": Brain,
   "Gestion du stress": Leaf,
-  "Exercices de respiration": Wind,
+  "Exercices de relaxation": Wind,
 };
 
 interface InformationsComponentsInterface {
   informationsData: Information[];
+  interaction: TypeInteraction | undefined
+  user: UserPayload | null
 }
 
-export const InformationsComponents = ({ informationsData }: InformationsComponentsInterface) => {
+export const InformationsComponents = ({ informationsData, interaction, user }: InformationsComponentsInterface) => {
   const [filter, setFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const { createInteraction } = useCreateInteraction()
   const navigate = useNavigate();
 
   const addedData = informationsData.map((article) => {
@@ -140,7 +146,14 @@ export const InformationsComponents = ({ informationsData }: InformationsCompone
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
               >
-                <Link to={`/informations/${article.id}`}>
+                <Link to={`/informations/${article.id}`}
+                  onClick={() => createInteraction({
+                    inter_date_de_debut: new Date().toISOString(),
+                    inter_date_de_fin: new Date().toISOString(),
+                    utilisateur: `/api/utilisateurs/${user?.id}`,
+                    information: `/api/information/${article.id}`,
+                    typeInteraction: `/api/type_interactions/${interaction?.id}`,
+                  })}>
                   <Card className={`${article.color.color} flex flex-col h-full cursor-pointer rounded-3xl shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden group`}>
                     <div className="h-48 relative overflow-hidden">
                       <article.Icon className={article.iconClasses} />
@@ -153,10 +166,10 @@ export const InformationsComponents = ({ informationsData }: InformationsCompone
                         </h2>
                         {/* Ajout de la zone d'informations sur le créateur et la date */}
                         <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
-                          <span>
+                          <span className={`${article.color.textColor}`}>
                             Par {article.createdBy ? `${article.createdBy.ut_prenom} ${article.createdBy.ut_nom}` : "Inconnu"}
                           </span>
-                          <span>
+                          <span className={`${article.color.textColor}`}>
                             {new Date(article.createdAt).toLocaleString("fr-FR", {
                               day: "numeric",
                               month: "long",
@@ -175,7 +188,7 @@ export const InformationsComponents = ({ informationsData }: InformationsCompone
                       </div>
                       <Button
                         variant="outline"
-                        className={`w-full py-2 border-current ${article.color.textColor} transition-colors`}
+                        className={`w-full py-2 border-current bg-inherit hover:bg-leather-800 transition-colors`}
                       >
                         Lire la suite
                       </Button>
@@ -203,7 +216,7 @@ export const InformationsComponents = ({ informationsData }: InformationsCompone
                 className="bg-white text-leather-800 hover:bg-leather-100 py-3 px-6 text-lg transition-colors duration-300 ease-out"
                 onClick={() => navigate("/exercices")}
               >
-                Découvrez nos exercices de respiration
+                Découvrez nos Exercices de relaxation
               </Button>
             </div>
             <div className="flex-1 flex justify-center">

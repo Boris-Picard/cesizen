@@ -55,12 +55,12 @@ export default function AddTypeInformationModal({ onTypeInformationAdded }: AddT
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="type_info_nom" className="text-sm font-medium text-leather-700">
-                            Nom du type. (Santé mentale, Gestion du stress, Exercices de respiration)
+                            Nom du type. (Santé mentale, Gestion du stress, Exercices de relaxation)
                         </Label>
                         <Input
                             id="type_info_nom"
                             {...form.register("type_info_nom")}
-                            placeholder="Santé mentale, Gestion du stress, Exercices de respiration"
+                            placeholder="Santé mentale, Gestion du stress, Exercices de relaxation"
                             className="py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
                         />
                         {form.formState.errors.type_info_nom && (
