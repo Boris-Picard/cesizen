@@ -24,7 +24,7 @@ class Information
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "info_id", type: "integer")]
-    #[Groups(['information:read', 'utilisateur:read'])]
+    #[Groups(['information:read', 'utilisateur:read', 'interaction:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -54,7 +54,7 @@ class Information
 
     #[ORM\ManyToOne(targetEntity: TypeInformation::class, inversedBy: "informations")]
     #[ORM\JoinColumn(name: "type_info_id", referencedColumnName: "type_info_id", nullable: false)]
-    #[Groups(['information:read', 'information:write'])]
+    #[Groups(['information:read', 'information:write', 'utilisateur:read'])]
     #[MaxDepth(1)]
     private ?TypeInformation $typeInformation = null;
 

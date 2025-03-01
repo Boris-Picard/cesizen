@@ -50,11 +50,11 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $ut_mail = null;
 
-    #[Groups(['utilisateur:read'])]
+    #[Groups(['utilisateur:write'])]
     #[ORM\Column(name: "ut_password", length: 255)]
     private ?string $ut_password = null;
 
-    #[Groups(['utilisateur:read'])]
+    #[Groups(['utilisateur:write'])]
     #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide", groups: ['registration'])]
     private ?string $plainPassword = null;
 

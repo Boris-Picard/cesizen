@@ -13,17 +13,102 @@ import {
   Smile,
   Timer,
   Edit,
-  TrendingUp,
   Calendar,
-  Moon,
+  Star,
+  Flame,
+  NutIcon,
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import { useAuth } from "@/context/AuthContext"
+import { UserPayload } from "@/context/AuthContext"
 
-const ProfilePage = () => {
+interface ProfilePageProps {
+  user: UserPayload | null;
+  totalInteractions: number | undefined;
+  exercices?: {
+    id: number;
+    ex_nom: string;
+    ex_duration: number,
+    inter_date_de_debut: Date | undefined,
+    inter_date_de_fin?: Date | undefined
+  }[];
+  informations?: {
+    id: number;
+    info_titre: string,
+    type_info_nom: string;
+    inter_date_de_debut: Date | undefined,
+    inter_date_de_fin?: Date | undefined
+  }[];
+}
+
+
+const ProfilePage = ({ user, informations, exercices, totalInteractions }: ProfilePageProps) => {
   const [currentEmotion, setCurrentEmotion] = useState<number | null>(null);
   const navigate = useNavigate()
-  const { user } = useAuth()
+
+  console.log(user);
+
+
+  const exercicesDone = exercices?.filter((inter) => inter.inter_date_de_fin !== undefined)
+  const exercicesDoneTotal = exercicesDone?.length
+  const exercicesDoneLevel = exercicesDoneTotal ?? 0 >= 1 ? "Débutant" : exercicesDoneTotal ?? 0 >= 40 ? "Intémédiaire" : exercicesDoneTotal ?? 0 >= 80 ? "Expert" : "Pas de niveau"
+  const exercicesTotalDuration = exercices?.reduce((acc, cur) => acc + cur.ex_duration, 0) || 0
+
+  const hours = Math.floor(exercicesTotalDuration / 60);
+  const minutes = exercicesTotalDuration % 60;
+
+  const formattedDuration =
+    hours > 0
+      ? `${hours} heure${hours > 1 ? "s" : ""} ${minutes} minute${minutes !== 1 ? "s" : ""}`
+      : `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+
+  const daysOfWeek = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+  const consecutiveDays = exercices?.reduce((acc: Record<string, number>, exercice) => {
+    if (exercice.inter_date_de_fin) {
+      const dayIndex = new Date(exercice.inter_date_de_fin).getDay();
+      const dayName = daysOfWeek[dayIndex];
+      acc[dayName] = (acc[dayName] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  const exerciseIcons = [Lungs, Timer, Flame];
+  const infoIcons = [Heart, Star, Smile, NutIcon];
+
+  const color = ["bg-pink-50", "bg-green-50", "bg-yellow-50", "bg-red-50", "bg-blue-50", "bg-purple-50"]
+
+  const randomColor = (color: string[]) => color[Math.floor(Math.random() * color.length)]
+  const randomIcon = (icons: any[]) => icons[Math.floor(Math.random() * icons.length)];
+
+  const activities = [
+    ...exercicesDone!.map((ex) => ({
+      id: ex.id,
+      activity: ex.ex_nom,
+      type: "",
+      duration: `${ex.ex_duration} min`,
+      dateDebut: ex.inter_date_de_debut,
+      dateFin: ex.inter_date_de_fin,
+      icon: randomIcon(exerciseIcons),
+      color: randomColor(color),
+    })),
+    ...informations!.map((info) => ({
+      id: info.id,
+      activity: info.info_titre,
+      type: info.type_info_nom,
+      duration: "",
+      dateDebut: info.inter_date_de_debut,
+      dateFin: info.inter_date_de_fin,
+      icon: randomIcon(infoIcons),
+      color: randomColor(color),
+    })),
+  ].slice(0, 4)
+
+  activities.sort((a, b) => {
+    const dateA = a.dateFin ? a.dateFin.getTime() : a.dateDebut ? a.dateDebut.getTime() : 0;
+    const dateB = b.dateFin ? b.dateFin.getTime() : b.dateDebut ? b.dateDebut.getTime() : 0;
+    return dateB - dateA;
+  });
+
+
 
   const emotions = [
     { name: "Joie", color: "#FDE68A", icon: "😊" },
@@ -61,22 +146,29 @@ const ProfilePage = () => {
                 </Button>
                 <div className="w-full mb-6">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-leather-700">Niveau de bien-être</span>
-                    <Badge className="bg-leather-200 text-leather-800 text-xs px-2 py-1">Intermédiaire</Badge>
+                    <span className="text-sm font-medium text-leather-700">Niveau</span>
+                    <Badge className="bg-leather-200 text-leather-800 hover:bg-leather-800 hover:text-white text-xs px-2 py-1">{exercicesDoneLevel}</Badge>
                   </div>
-                  <Progress value={66} className="h-2 bg-leather-200" />
+                  <Progress value={exercicesDoneTotal} className="h-2 bg-leather-200" />
                 </div>
                 <div className="w-full space-y-3">
-                  {[
-                    { label: "Sessions complétées", value: "28" },
-                    { label: "Temps total de pratique", value: "5h 30min" },
-                    { label: "Jours consécutifs", value: "7" },
-                  ].map((item, index) => (
-                    <div key={index} className="flex justify-between items-center bg-leather-50 p-2 rounded-3xl">
-                      <span className="text-sm font-medium text-leather-700">{item.label}</span>
-                      <span className="text-base font-semibold text-leather-800">{item.value}</span>
-                    </div>
-                  ))}
+                  <div className="flex justify-between items-center bg-leather-50 p-2 rounded-3xl">
+                    <span className="text-sm font-medium text-leather-700">Sessions complétées</span>
+                    <span className="text-base font-semibold text-leather-800">{exercicesDoneTotal}</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-leather-50 p-2 rounded-3xl">
+                    <span className="text-sm font-medium text-leather-700">Temps total de pratique</span>
+                    <span className="text-base font-semibold text-leather-800">{formattedDuration}</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-leather-50 p-2 rounded-3xl">
+                    <span className="text-sm font-medium text-leather-700">Nombre d'exercices du jour</span>
+                    {Object.entries(consecutiveDays || {}).map(([day, count]) => (
+                      <span className="text-sm font-medium text-leather-700" key={day}>
+                        {day} : {count} exercice{count > 1 ? "s" : ""}
+                      </span>
+                    ))}
+                  </div>
+                  {/* ))} */}
                 </div>
               </CardContent>
             </Card>
@@ -91,36 +183,56 @@ const ProfilePage = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="grid grid-cols-1 sm:grid-cols-3 gap-4"
             >
-              {[
-                { title: "Niveau de stress", value: "35%", icon: BarChart, trend: "down", color: "bg-green-50" },
-                { title: "Qualité du sommeil", value: "Bonne", icon: Moon, trend: "up", color: "bg-blue-50" },
-                { title: "Humeur moyenne", value: "Positive", icon: Smile, trend: "stable", color: "bg-yellow-50" },
-              ].map((stat, index) => (
-                <Card
-                  key={index}
-                  className={`rounded-3xl shadow-md transition transform hover:shadow-lg hover:-translate-y-1 ${stat.color}`}
-                >
-                  <CardContent className="p-6 flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-white rounded-full">
-                        <stat.icon className="h-8 w-8 text-leather-600" />
-                      </div>
-                      <div>
-                        <p className="text-base font-medium text-leather-700">{stat.title}</p>
-                        <p className="text-xl font-bold text-leather-900">{stat.value}</p>
-                      </div>
+              {/* Total d'interactions */}
+              <Card className="rounded-3xl shadow-md transition transform hover:shadow-lg hover:-translate-y-1 bg-indigo-50">
+                <CardContent className="p-6 flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-white rounded-full">
+                      <BarChart className="h-8 w-8 text-leather-600" />
                     </div>
-                    <TrendingUp
-                      className={`h-6 w-6 ${stat.trend === "up"
-                        ? "text-green-500"
-                        : stat.trend === "down"
-                          ? "text-red-500"
-                          : "text-yellow-500"
-                        }`}
-                    />
-                  </CardContent>
-                </Card>
-              ))}
+                    <div>
+                      <p className="text-base font-medium text-leather-700">Total d'interactions</p>
+                      <p className="text-xl font-bold text-leather-900">
+                        {totalInteractions ?? 0}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Informations consultées */}
+              <Card className="rounded-3xl shadow-md transition transform hover:shadow-lg hover:-translate-y-1 bg-pink-50">
+                <CardContent className="p-6 flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-white rounded-full">
+                      <Heart className="h-8 w-8 text-leather-600" />
+                    </div>
+                    <div>
+                      <p className="text-base font-medium text-leather-700">Informations consultées</p>
+                      <p className="text-xl font-bold text-leather-900">
+                        {informations?.length ?? 0}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Exercices réalisés */}
+              <Card className="rounded-3xl shadow-md transition transform hover:shadow-lg hover:-translate-y-1 bg-blue-50">
+                <CardContent className="p-6 flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-white rounded-full">
+                      <Timer className="h-8 w-8 text-leather-600" />
+                    </div>
+                    <div>
+                      <p className="text-base font-medium text-leather-700">Exercices réalisés</p>
+                      <p className="text-xl font-bold text-leather-900">
+                        {exercicesDoneTotal ?? 0}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
 
             {/* Emotion Tracker */}
@@ -204,23 +316,16 @@ const ProfilePage = () => {
                   </CardHeader>
                   <CardContent className="p-6">
                     <ul className="space-y-4">
-                      {[
-                        { activity: "Méditation guidée", duration: "15 min", icon: Heart, color: "bg-pink-50" },
-                        { activity: "Exercice de respiration", duration: "10 min", icon: Lungs, color: "bg-blue-50" },
-                        {
-                          activity: "Marche en pleine conscience",
-                          duration: "20 min",
-                          icon: Timer,
-                          color: "bg-green-50",
-                        },
-                      ].map((item, index) => (
-                        <li key={index} className={`flex items-center text-leather-700 p-3 rounded-full ${item.color}`}>
+                      {activities.map((item, index) => (
+                        <li
+                          onClick={() => navigate(`${item.type ? `/informations/${item.id}` : `/exercices/${item.id}`}`)} key={index}
+                          className={`flex items-center text-leather-700 p-3 rounded-full cursor-pointer ${item.color} group-hover:shadow-md transition-all hover:scale-105`}>
                           <div className="p-2 bg-white rounded-full mr-3">
                             <item.icon className="h-6 w-6 text-leather-600" />
                           </div>
-                          <span className="flex-1 text-base">{item.activity}</span>
+                          <span className="flex-1 text-base line-clamp-2">{item.activity}</span>
                           <Badge variant="secondary" className="bg-white text-leather-700 text-sm">
-                            {item.duration}
+                            {item.duration ? item.duration : item.type}
                           </Badge>
                         </li>
                       ))}

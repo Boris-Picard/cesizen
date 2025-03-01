@@ -32,7 +32,7 @@ class Exercice
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "ex_id", type: "integer")]
-    #[Groups(['exercice:read', 'utilisateur:read'])]
+    #[Groups(['exercice:read', 'utilisateur:read', 'interaction:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
@@ -48,7 +48,7 @@ class Exercice
     private ?string $ex_difficulty = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['exercice:read', 'exercice:write'])]
+    #[Groups(['exercice:read', 'exercice:write', 'interaction:read', 'utilisateur:read'])]
     private ?int $ex_duration = null;
 
     #[ORM\Column(type: "json", nullable: true)]
