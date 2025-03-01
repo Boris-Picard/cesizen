@@ -23,22 +23,22 @@ class Interaction
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['interaction:read', 'interaction:write'])]
+    #[Groups(['interaction:read', 'interaction:write', 'utilisateur:read'])]
     private ?\DateTimeInterface $inter_date_de_debut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['interaction:read', 'interaction:write' ])]
+    #[Groups(['interaction:read', 'interaction:write', 'utilisateur:read'])]
     private ?\DateTimeInterface $inter_date_de_fin = null;
 
     #[ORM\ManyToOne(targetEntity: Information::class, inversedBy: "interactions")]
     #[ORM\JoinColumn(name: "info_id", referencedColumnName: "info_id", nullable: true)]
-    #[Groups(['interaction:read', 'interaction:write'])]
+    #[Groups(['interaction:read', 'interaction:write', 'utilisateur:read'])]
     #[MaxDepth(1)]
     private ?Information $information = null;
 
     #[ORM\ManyToOne(targetEntity: Exercice::class, inversedBy: "interactions")]
     #[ORM\JoinColumn(name: "ex_id", referencedColumnName: "ex_id", nullable: true)]
-    #[Groups(['interaction:read', 'interaction:write'])]
+    #[Groups(['interaction:read', 'interaction:write', 'utilisateur:read'])]
     #[MaxDepth(1)]
     private ?Exercice $exercice = null;
 

@@ -23,7 +23,7 @@ class TypeInformation
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['typeinformation:read', 'typeinformation:write', 'information:read'])]
+    #[Groups(['typeinformation:read', 'typeinformation:write', 'information:read', 'utilisateur:read'])]
     private ?string $type_info_nom = null;
 
     /**
