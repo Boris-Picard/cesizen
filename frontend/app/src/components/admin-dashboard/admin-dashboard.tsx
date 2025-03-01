@@ -6,7 +6,6 @@ import {
   Users,
   FileText,
   Activity,
-  TrendingUp,
   ChevronRight,
   Zap,
 } from "lucide-react"
@@ -16,7 +15,6 @@ import { CartesianGrid, XAxis, Pie, PieChart, Cell, Label, Bar, BarChart, Respon
 import { Button } from "@/components/ui/button"
 import AdminHeader from "./header/header"
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart"
-import { useMemo } from "react"
 import { useAuth } from "@/context/AuthContext"
 import { useGetUsers } from "@/hooks/admin/users/useGetUsers"
 import { useNavigate } from "react-router-dom"
@@ -30,7 +28,7 @@ export default function AdminDashboard() {
   const { users, newUsersPercentage, totalUsers } = useGetUsers()
   const { exercices, totalExercices } = useGetExercices()
   const { informationsActive, totalInformations } = useGetInformations()
-  
+
   const { interactions, getTotalInteractions, newInteractionsPercentage, totalInteractionsDay } = useGetInteractions()
 
   const filterUsersActive = users.filter((u) => u.ut_active === true)
@@ -79,15 +77,10 @@ export default function AdminDashboard() {
   }));
 
   const pieChartData = uniqueTypeInteractions.map(({ libelle, count }) => {
-    return { name: libelle, value: count, color: "#8d5f52" }
+    const color = libelle == 'Exercice' ? "#bda38c" : "#8d5f52"
+    return { name: libelle, value: count, color: color }
   }
-
   );
-
-  // const totalInteractions = useMemo(
-  //   () => pieChartData.reduce((acc: any, cur) => acc + cur.value, 0),
-  //   []
-  // )
 
   const chartConfig: ChartConfig = {
     utilisateurs: {
@@ -138,12 +131,6 @@ export default function AdminDashboard() {
   const recentUsers = slicedUsers.map(({ ut_nom, ut_prenom, ut_mail, createdAt }) => {
     return { name: `${ut_prenom}  ${ut_nom}`, email: ut_mail, joinDate: new Date(createdAt).toLocaleString() }
   })
-
-  const recentArticles = [
-    { title: "Comprendre la Santé Mentale", type: "Santé", date: "2023-05-15" },
-    { title: "Techniques de Gestion du Stress", type: "Stress", date: "2023-05-14" },
-    { title: "Bienfaits de la Respiration Profonde", type: "Respiration", date: "2023-05-13" },
-  ]
 
   return (
     <div className="min-h-screen bg-leather-200">

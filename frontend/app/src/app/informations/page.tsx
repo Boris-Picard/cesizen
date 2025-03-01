@@ -1,7 +1,10 @@
 import { InformationsComponents } from "@/components/informations/informations";
 import { Navbar } from "@/components/navigation-menu/navigation-menu";
+import { useAuth } from "@/context/AuthContext";
+import { useGetTypeInteractions } from "@/hooks/admin/type-interactions/useGetTypeInteractions";
 import { useGetInformationsFront } from "@/hooks/informations/useGetInformationsFront";
 import { motion } from "framer-motion"
+import { useNavigate } from "react-router-dom";
 
 const Loader = () => (
     <motion.div
@@ -17,12 +20,21 @@ const Loader = () => (
 
 export default function InformationsPage() {
     const { informations, loading } = useGetInformationsFront()
-console.log(informations);
+    const { typeInteractions } = useGetTypeInteractions()
+    const navigate = useNavigate()
+    const { user } = useAuth()
+
+    const interaction = typeInteractions.find((inter) => inter.type_inter_libelle === 'Information')
+
+    if (!loading && !informations) {
+        navigate(-1)
+        return null;
+    }
 
     return (
         <div className="min-h-screen ">
             <Navbar />
-            {loading ? <Loader /> : <InformationsComponents informationsData={informations} />}
+            {loading ? <Loader /> : <InformationsComponents user={user} interaction={interaction} informationsData={informations} />}
         </div>
     )
 }

@@ -6,8 +6,8 @@ import { toast } from "@/hooks/useToast";
 import { TypeInformation } from "@/components/admin-dashboard/type-informations/column";
 
 export const typeInformationCreateSchema = z.object({
-  type_info_nom: z.enum(["Santé mentale", "Gestion du stress", "Exercices de respiration"], {
-    errorMap: () => ({ message: "Le type d'information doit être 'Santé mentale', 'Gestion du stress' ou 'Exercices de respiration'" }),
+  type_info_nom: z.enum(["Santé mentale", "Gestion du stress", "Exercices de relaxation"], {
+    errorMap: () => ({ message: "Le type d'information doit être 'Santé mentale', 'Gestion du stress' ou 'Exercices de relaxation'" }),
   }),
 });
 

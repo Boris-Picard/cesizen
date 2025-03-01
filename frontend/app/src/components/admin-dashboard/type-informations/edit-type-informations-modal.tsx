@@ -59,14 +59,14 @@ export default function EditTypeInformationModal({ typeInformation, open, onClos
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="type_info_nom" className="text-sm font-medium text-leather-700">
-                            Nom du type. (Santé mentale, Gestion du stress, Exercices de respiration)
+                            Nom du type. (Santé mentale, Gestion du stress, Exercices de relaxation)
                         </Label>
                         <div className="relative">
                             <Icons.edit className="absolute left-3 top-1/2 transform -translate-y-1/2 text-leather-400" />
                             <Input
                                 id="type_info_nom"
                                 {...form.register("type_info_nom")}
-                                placeholder="Santé mentale, Gestion du stress, Exercices de respiration"
+                                placeholder="Santé mentale, Gestion du stress, Exercices de relaxation"
                                 className="pl-10 py-3 border-leather-300 focus:border-leather-500 focus:ring-leather-500 rounded-full text-sm bg-leather-50 text-leather-900"
                             />
                         </div>
