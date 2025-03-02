@@ -45,9 +45,6 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
   const [currentEmotion, setCurrentEmotion] = useState<number | null>(null);
   const navigate = useNavigate()
 
-  console.log(user);
-
-
   const exercicesDone = exercices?.filter((inter) => inter.inter_date_de_fin !== undefined)
   const exercicesDoneTotal = exercicesDone?.length
   const exercicesDoneLevel = exercicesDoneTotal ?? 0 >= 1 ? "Débutant" : exercicesDoneTotal ?? 0 >= 40 ? "Intémédiaire" : exercicesDoneTotal ?? 0 >= 80 ? "Expert" : "Pas de niveau"
@@ -101,6 +98,7 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
       color: randomColor(color),
     })),
   ].slice(0, 4)
+console.log(user);
 
   activities.sort((a, b) => {
     const dateA = a.dateFin ? a.dateFin.getTime() : a.dateDebut ? a.dateDebut.getTime() : 0;
@@ -137,7 +135,7 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
                   <AvatarFallback>{user?.firstname[0]}{user?.lastname[0]}</AvatarFallback>
                 </Avatar>
                 <h2 className="text-3xl font-semibold text-leather-800 mb-1">{user?.firstname} {user?.lastname}</h2>
-                <p className="text-sm text-leather-600 mb-4">{user?.username}</p>
+                <p className="text-sm text-leather-600 mb-4">{user?.ut_mail_anonymized ? user?.ut_mail_anonymized : user?.username}</p>
                 <Button
                   className="w-full mb-6 bg-leather-600 hover:bg-leather-700 text-white text-sm py-2 px-4 rounded-md transition-all duration-300"
                   onClick={() => navigate("/profile/edit")}

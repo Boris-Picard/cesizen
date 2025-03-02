@@ -50,6 +50,10 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $ut_mail = null;
 
+    #[Groups(['utilisateur:read', 'utilisateur:write'])]
+    #[ORM\Column(name: "ut_mail_anonymized", length: 255)]
+    private ?string $ut_mail_anonymized = null;
+
     #[Groups(['utilisateur:write'])]
     #[ORM\Column(name: "ut_password", length: 255)]
     private ?string $ut_password = null;
@@ -173,6 +177,17 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUtMail(string $ut_mail): static
     {
         $this->ut_mail = $ut_mail;
+        return $this;
+    }
+
+    public function getUtMailAnonymized(): ?string
+    {
+        return $this->ut_mail_anonymized;
+    }
+
+    public function setUtMailAnonymized(string $ut_mail_anonymized): static
+    {
+        $this->ut_mail_anonymized = $ut_mail_anonymized;
         return $this;
     }
 

@@ -27,9 +27,10 @@ class JWTCreatedListener
             return;
         }
 
+        $payload['id'] = $user->getId();
         $payload['firstname'] = $user->getUtPrenom();
         $payload['lastname'] = $user->getUtNom();
-        $payload['id'] = $user->getId();
+        $payload['ut_mail_anonymized'] = $user->getUtMailAnonymized();
 
         $event->setData($payload);
     }
