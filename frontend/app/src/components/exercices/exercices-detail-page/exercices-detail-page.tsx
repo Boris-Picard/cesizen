@@ -1,5 +1,4 @@
 import type React from "react"
-
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ArrowLeft, Clock, Award, Heart, Play, Pause, RotateCcw, CheckCircle2, Info } from "lucide-react"
@@ -10,7 +9,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import WelcomeState from "./welcome-state"
 import type { ExerciceType } from "@/components/admin-dashboard/exercices/column"
 import { useCreateInteraction } from "@/hooks/api/useCreateInteractions"
-import { useParams } from "react-router-dom"
 import { TypeInteraction } from "@/components/admin-dashboard/type-interactions/columns"
 import { UserPayload } from "@/context/AuthContext"
 import { usePatchInteractions } from "@/hooks/admin/interactions/usePatchInteractions"
@@ -321,7 +319,7 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
 
           {/* Deuxième couche - Effet de pulsation */}
           <motion.div
-            className="absolute inset-0 rounded-full bg-gradient-radial from-leather-200/30 to-transparent"
+            className="absolute inset-0 bg-gradient-to-br from-leather-200 to-leather-300 rounded-full opacity-50"
             animate={{
               scale: [1, 1.15, 1],
               opacity: [0.3, 0.5, 0.3],
@@ -345,100 +343,131 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
               ease: "linear",
             }}
           />
-        </div>
 
-        {/* Cercle principal avec animation de phase */}
-        <motion.div
-          className="absolute inset-0"
-          animate={{
-            scale: currentPhase === "inspiration" ? [1, 1.2] : currentPhase === "apnee" ? 1.2 : [1.2, 0.95],
-            rotate: currentPhase === "inspiration" ? [0, 180] : currentPhase === "expiration" ? [180, 360] : 180,
-          }}
-          transition={{
-            duration: phaseConfig.duration,
-            ease: "easeInOut",
-          }}
-        >
-          <svg className="w-full h-full -rotate-90">
-            <defs>
-              {/* Gradient principal */}
-              <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor={phaseConfig.color} stopOpacity="0.8" />
-                <stop offset="100%" stopColor={phaseConfig.color} stopOpacity="1" />
-              </linearGradient>
+          {/* Cercle principal avec animation de phase */}
+          <motion.div
+            className="absolute inset-0"
+            animate={{
+              scale: currentPhase === "inspiration" ? [1, 1.2] : currentPhase === "apnee" ? 1.2 : [1.2, 0.95],
+              rotate: currentPhase === "inspiration" ? [0, 180] : currentPhase === "expiration" ? [180, 360] : 180,
+            }}
+            transition={{
+              duration: phaseConfig.duration,
+              ease: "easeInOut",
+            }}
+          >
+            <svg className="w-full h-full -rotate-90">
+              <defs>
+                {/* Gradient principal */}
+                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor={phaseConfig.color} stopOpacity="0.8" />
+                  <stop offset="100%" stopColor={phaseConfig.color} stopOpacity="1" />
+                </linearGradient>
 
-              {/* Effet de lueur */}
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                <feMerge>
-                  <feMergeNode in="coloredBlur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
+                {/* Effet de lueur */}
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
 
-              {/* Gradient pour les repères */}
-              <linearGradient id="markerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor={phaseConfig.color} stopOpacity="0.3" />
-                <stop offset="100%" stopColor={phaseConfig.color} stopOpacity="0.6" />
-              </linearGradient>
-            </defs>
+                {/* Gradient pour les repères */}
+                <linearGradient id="markerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor={phaseConfig.color} stopOpacity="0.3" />
+                  <stop offset="100%" stopColor={phaseConfig.color} stopOpacity="0.6" />
+                </linearGradient>
+              </defs>
 
-            {/* Cercle de fond avec effet de pulse */}
-            <motion.circle
-              cx="50%"
-              cy="50%"
-              r="47%"
-              className="fill-none stroke-leather-100/20"
-              strokeWidth="1%"
-              animate={{
-                scale: [1, 1.02, 1],
-                opacity: [0.3, 0.5, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            />
+              {/* Cercle de fond avec effet de pulse */}
+              <motion.circle
+                cx="50%"
+                cy="50%"
+                r="47%"
+                className="fill-none stroke-leather-100/20"
+                strokeWidth="1%"
+                animate={{
+                  scale: [1, 1.02, 1],
+                  opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
+              />
 
-            {/* Arc de progression principal */}
-            <circle
-              cx="50%"
-              cy="50%"
-              r="45%"
-              fill="none"
-              stroke="url(#progressGradient)"
-              strokeWidth="4%"
-              strokeLinecap="round"
-              strokeDasharray={`${progress * 2.83} 283`}
-              className="filter transition-all duration-300 ease-in-out"
-              style={{ filter: "url(#glow)" }}
-            />
-          </svg>
-        </motion.div>
+              {/* Arc de progression principal */}
+              <circle
+                cx="50%"
+                cy="50%"
+                r="45%"
+                fill="none"
+                stroke="url(#progressGradient)"
+                strokeWidth="4%"
+                strokeLinecap="round"
+                strokeDasharray={`${progress * 2.83} 283`}
+                className="filter transition-all duration-300 ease-in-out"
+                style={{ filter: "url(#glow)" }}
+              />
+            </svg>
+          </motion.div>
 
-        {/* Message central avec animation de phase */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <AnimatePresence mode="wait">
+          {/* Message central avec animation de phase */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentPhase}
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className={`
+        text-center p-6 rounded-full
+        bg-white/90 backdrop-blur-sm
+        border-2 ${phaseConfig.borderColor}
+        ${phaseConfig.shadowColor} shadow-lg
+        transform transition-all duration-300
+      `}
+              >
+                <motion.div
+                  className={`text-2xl font-bold ${phaseConfig.textColor} mb-2`}
+                  animate={{
+                    opacity: isActive && !isPaused ? [1, 0.7, 1] : 1,
+                    scale: isActive && !isPaused && currentPhase === "inspiration" ? [1, 1.05, 1] : 1,
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: "easeInOut",
+                  }}
+                >
+                  {phaseConfig.message}
+                </motion.div>
+                <div className={`text-4xl font-bold ${phaseConfig.textColor}`}>
+                  {(((phaseConfig.duration ?? 0) * 1000 - phaseTime) / 1000).toFixed(0)}s
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Indicateur de phase */}
+          <div className="absolute -bottom-4 left-0 right-0 flex justify-center">
             <motion.div
-              key={currentPhase}
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: -10 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
               className={`
-              text-center p-6 rounded-full
-              bg-white/90 backdrop-blur-sm
-              border-2 ${phaseConfig.borderColor}
-              ${phaseConfig.shadowColor} shadow-lg
-              transform transition-all duration-300
-            `}
+      px-4 py-2 rounded-full
+      bg-white/90 backdrop-blur-sm
+      border ${phaseConfig.borderColor}
+      ${phaseConfig.shadowColor} shadow-md
+    `}
             >
               <motion.div
-                className={`text-2xl font-bold ${phaseConfig.textColor} mb-2`}
+                className={`text-sm font-medium ${phaseConfig.textColor}`}
                 animate={{
-                  opacity: isActive && !isPaused ? [1, 0.7, 1] : 1,
-                  scale: isActive && !isPaused && currentPhase === "inspiration" ? [1, 1.05, 1] : 1,
+                  opacity: isActive && !isPaused ? [0.7, 1, 0.7] : 1,
                 }}
                 transition={{
                   duration: 2,
@@ -446,42 +475,11 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
                   ease: "easeInOut",
                 }}
               >
-                {phaseConfig.message}
+                Phase {cycleCount * 3 + (currentPhase === "inspiration" ? 1 : currentPhase === "apnee" ? 2 : 3)}
+                <span className="text-leather-400"> / {totalCycles * 3}</span>
               </motion.div>
-              <div className={`text-4xl font-bold ${phaseConfig.textColor}`}>
-                {(((phaseConfig.duration ?? 0) * 1000 - phaseTime) / 1000).toFixed(0)}s
-              </div>
             </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Indicateur de phase */}
-        <div className="absolute -bottom-4 left-0 right-0 flex justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`
-            px-4 py-2 rounded-full
-            bg-white/90 backdrop-blur-sm
-            border ${phaseConfig.borderColor}
-            ${phaseConfig.shadowColor} shadow-md
-          `}
-          >
-            <motion.div
-              className={`text-sm font-medium ${phaseConfig.textColor}`}
-              animate={{
-                opacity: isActive && !isPaused ? [0.7, 1, 0.7] : 1,
-              }}
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
-              Phase {cycleCount * 3 + (currentPhase === "inspiration" ? 1 : currentPhase === "apnee" ? 2 : 3)}
-              <span className="text-leather-400"> / {totalCycles * 3}</span>
-            </motion.div>
-          </motion.div>
+          </div>
         </div>
       </div>
     )

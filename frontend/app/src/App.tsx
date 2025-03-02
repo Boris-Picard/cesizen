@@ -54,7 +54,7 @@ function App() {
         <Route path="/reset-password/reset/:token" element={<ResetPasswordPage />} />
         <Route path="/account-confirmation/:token" element={<ConfirmAccountPage />} />
         <Route element={<RequireAuth />}>
-          <Route path='/exercice-libre' element={<ExerciceLibrePage />} />
+          {/* <Route path='/exercice-libre' element={<ExerciceLibrePage />} /> */}
           <Route path="/exercices" element={<ExercicesFrontPage />} />
           <Route path="/exercices/:id" element={<ExercicesDetailPage />} />
           <Route path="/" element={<HomePage />} />

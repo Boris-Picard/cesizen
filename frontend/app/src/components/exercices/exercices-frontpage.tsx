@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Wind, Search, Play, Heart, Brain, Moon, ArrowLeft } from "lucide-react"
+import { Wind, Search, Play, Heart, Brain, Moon, ArrowLeft, Clock } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { ExerciceType } from "../admin-dashboard/exercices/column"
 import { useCreateInteraction } from "@/hooks/api/useCreateInteractions"
@@ -159,7 +159,10 @@ export default function ExercisesPage({ exercices, interaction, user }: Exercice
                           <Badge className={`${difficultyColors[exercise.ex_difficulty.toLowerCase() as Difficulty]} px-3 py-1 rounded-full`}>
                             {exercise.ex_difficulty}
                           </Badge>
-                          {/* Si vous n'avez pas de stats dans l'API, supprimez cette partie */}
+                          <div className="flex items-center text-leather-600 text-sm">
+                            <Clock className="w-4 h-4 mr-1" />
+                            {exercise.ex_duration} min
+                          </div>
                         </div>
                         <h2 className="text-2xl font-bold text-leather-900 mb-2">{exercise.ex_nom}</h2>
                         <p className="text-leather-600 mb-4">{exercise.ex_description}</p>
