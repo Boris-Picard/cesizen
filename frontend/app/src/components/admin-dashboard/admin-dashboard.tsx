@@ -28,8 +28,13 @@ export default function AdminDashboard() {
   const { users, newUsersPercentage, totalUsers } = useGetUsers()
   const { exercices, totalExercices } = useGetExercices()
   const { informationsActive, totalInformations } = useGetInformations()
-
   const { interactions, getTotalInteractions, newInteractionsPercentage, totalInteractionsDay } = useGetInteractions()
+
+  const sortedInformations = [...informationsActive!].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  })
+  
+  const slicedActiveInformations = sortedInformations?.slice(0, 3)
 
   const filterUsersActive = users.filter((u) => u.ut_active === true)
   const filterExercicesActive = exercices.filter((ex) => ex.ex_active === true)
@@ -51,6 +56,7 @@ export default function AdminDashboard() {
     acc[dayName] = (acc[dayName] || 0) + 1;
     return acc;
   }, {});
+
   const usersByDay = users.reduce((acc: any, user) => {
     const dayIndex = new Date(user.createdAt).getDay();
     const dayName = daysOfWeek[dayIndex];
@@ -369,7 +375,7 @@ export default function AdminDashboard() {
                   </CardHeader>
                   <CardContent className="flex-grow p-0">
                     <div className="divide-y divide-leather-200">
-                      {informationsActive?.map((article, index) => (
+                      {slicedActiveInformations?.map((article, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, y: 10 }}
