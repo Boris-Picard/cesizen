@@ -169,7 +169,11 @@ export const Navbar = () => {
                   exit={{ width: 0, opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Input type="search" placeholder="Rechercher..." className="w-full rounded-full border border-leather-300" />
+                  <Input
+                    type="search"
+                    placeholder="Rechercher..."
+                    className="w-full rounded-full border border-leather-300"
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -181,14 +185,12 @@ export const Navbar = () => {
             >
               <Icons.search className="h-5 w-5" />
             </Button>
-            {isAuthenticated && (
+            {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative rounded-full h-8 w-8 overflow-hidden hover:bg-inherit">
                     <Avatar>
-                      <AvatarFallback>
-                        {user?.firstname[0]}{user?.lastname[0]}
-                      </AvatarFallback>
+                      <AvatarFallback>{user?.firstname[0]}{user?.lastname[0]}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -247,6 +249,13 @@ export const Navbar = () => {
                   </motion.div>
                 </DropdownMenuContent>
               </DropdownMenu>
+            ) : (
+              <Link
+                to="/login"
+                className="px-4 bg-leather-100 backdrop-blur py-2 rounded-full text-sm font-medium text-leather-600 hover:bg-leather-300 hover:text-white transition-colors"
+              >
+                Connexion
+              </Link>
             )}
           </div>
 
