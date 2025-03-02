@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS utilisateur (
   ut_nom VARCHAR(255) NOT NULL,
   ut_prenom VARCHAR(200) NOT NULL,
   ut_mail VARCHAR(255) UNIQUE NOT NULL,
+  ut_mail_anonymized VARCHAR(255) UNIQUE,
   ut_password VARCHAR(255) NOT NULL,
   ut_active BOOLEAN DEFAULT FALSE NOT NULL,
   role_id INT NOT NULL,
@@ -184,3 +185,45 @@ CREATE TRIGGER trg_log_interaction
 AFTER INSERT ON interaction
 FOR EACH ROW
 EXECUTE FUNCTION log_interaction_trigger();
+
+CREATE OR REPLACE FUNCTION anonymize_utilisateur(p_ut_id INT)
+RETURNS VOID AS $$
+DECLARE
+  original_email TEXT;
+  local_part TEXT;
+  domain TEXT;
+  anonymized_local TEXT;
+BEGIN
+  -- Récupère l'email actuel de l'utilisateur depuis la colonne ut_mail
+  SELECT ut_mail INTO original_email
+  FROM utilisateur
+  WHERE ut_id = p_ut_id;
+
+  IF original_email IS NULL THEN
+    RAISE EXCEPTION 'Aucune adresse email trouvée pour l''utilisateur %', p_ut_id;
+  END IF;
+
+  -- Sépare la partie locale et le domaine de l'email
+  local_part := split_part(original_email, '@', 1);
+  domain := split_part(original_email, '@', 2);
+
+  -- Si la partie locale comporte plus de 2 caractères,
+  -- on conserve la première et la dernière lettre et on masque le reste
+  IF char_length(local_part) > 2 THEN
+    anonymized_local := substring(local_part from 1 for 1)
+      || repeat('*', char_length(local_part) - 2)
+      || substring(local_part from char_length(local_part) for 1);
+  ELSE
+    -- Si elle est trop courte, on masque tout sauf le premier caractère
+    anonymized_local := substring(local_part from 1 for 1) || repeat('*', char_length(local_part) - 1);
+  END IF;
+
+  -- Met à jour la colonne d'email anonymisé et les champs nominatif
+  UPDATE utilisateur
+  SET 
+    ut_nom = 'Anonymisé',
+    ut_prenom = 'Anonymisé',
+    ut_mail_anonymized = anonymized_local || '@' || domain
+  WHERE ut_id = p_ut_id;
+END;
+$$ LANGUAGE plpgsql;

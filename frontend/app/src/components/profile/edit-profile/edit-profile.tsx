@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom"
 import { UserPayload } from "@/context/AuthContext"
 import { useUpdateProfile } from "@/hooks/profile/edit-profile/usePatchUserProfile"
 import { Icons } from "@/components/ui/icons"
+import { useAnonymizeUser } from "@/hooks/profile/edit-profile/useAnonymizeUser"
 
 const updateProfileSchema = z.object({
   firstName: z
@@ -57,14 +58,28 @@ const EditProfileComponent = ({ user, token }: EditProfileInterface) => {
   const [showAnonymizeDialog, setShowAnonymizeDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const navigate = useNavigate()
-  const { updateResponse, loading, updateProfile } = useUpdateProfile(token)
-  console.log(updateResponse);
+  const { loading, updateProfile } = useUpdateProfile(token)
+  const { anonymizeUser, loadingAnonymize } = useAnonymizeUser(token)
+
+  useEffect(() => {
+    if (user) {
+      resetForm({
+        firstName: user.firstname,
+        lastName: user.lastname,
+        email: user.username,
+        newPassword: "",
+        consent: true,
+        newsletter: false,
+      });
+    }
+  }, [user]);
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
+    reset: resetForm
   } = useForm<UpdateProfileFormValues>({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
@@ -87,8 +102,8 @@ const EditProfileComponent = ({ user, token }: EditProfileInterface) => {
     });
   }
 
-  const handleAnonymize = () => {
-    console.log("Compte anonymisé")
+  async function handleAnonymize() {
+    await anonymizeUser()
     setShowAnonymizeDialog(false)
   }
 
@@ -284,10 +299,18 @@ const EditProfileComponent = ({ user, token }: EditProfileInterface) => {
                           Annuler
                         </Button>
                         <Button
-                          onClick={handleAnonymize}
+                          disabled={loadingAnonymize}
+                          onClick={() => handleAnonymize()}
                           className="flex-1 bg-leather-600 text-white hover:bg-leather-700 transition-colors duration-300"
                         >
-                          Confirmer
+                          {loadingAnonymize ? (
+                            <>
+                              <Icons.loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" aria-hidden="true" />
+                              Modification en cours...
+                            </>
+                          ) : (
+                            "Confirmer"
+                          )}
                         </Button>
                       </DialogFooter>
                     </DialogContent>

@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function EditProfilePage() {
     const { user, token } = useAuth()
+
     return (
         <div className="min-h-screen ">
             <Navbar />

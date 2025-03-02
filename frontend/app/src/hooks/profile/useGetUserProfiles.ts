@@ -12,6 +12,7 @@ interface userProfileInterface {
     ut_nom: string;
     ut_prenom: string;
     ut_mail: string;
+    ut_mail_anonymized: string;
     ut_active: boolean;
     createdAt: string;
     role: Role;

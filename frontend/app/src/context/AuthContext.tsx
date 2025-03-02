@@ -13,6 +13,7 @@ import { jwtDecode } from "jwt-decode";
 export interface UserPayload {
     id: number;
     username: string;
+    ut_mail_anonymized: string;
     firstname: string;
     lastname: string;
     exp: number;
@@ -27,6 +28,7 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     isAuthenticated: boolean;
+    refreshToken: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -224,7 +226,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const isAuthenticated = Boolean(token);
 
     return (
-        <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated, isAdmin }}>
+        <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated, isAdmin, refreshToken }}>
             {children}
         </AuthContext.Provider>
     );
