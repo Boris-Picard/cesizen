@@ -98,7 +98,6 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
       color: randomColor(color),
     })),
   ].slice(0, 4)
-console.log(user);
 
   activities.sort((a, b) => {
     const dateA = a.dateFin ? a.dateFin.getTime() : a.dateDebut ? a.dateDebut.getTime() : 0;

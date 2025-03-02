@@ -83,7 +83,7 @@ CREATE TABLE
       type_info_id INT NOT NULL,
       ut_id INT NOT NULL, 
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id),
+      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id) ON DELETE CASCADE,
       FOREIGN KEY (type_info_id) REFERENCES type_information (type_info_id)
    );
 
@@ -107,11 +107,11 @@ CREATE TABLE
       info_id INT,
       type_inter_id INT NOT NULL,
       ex_id INT,
-      ut_id INT,
+      ut_id INT,  
       FOREIGN KEY (info_id) REFERENCES information (info_id),
       FOREIGN KEY (type_inter_id) REFERENCES type_interaction (type_inter_id),
       FOREIGN KEY (ex_id) REFERENCES exercice (ex_id),
-      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id)
+      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id) ON DELETE CASCADE
    );
 
 CREATE TABLE
@@ -121,7 +121,7 @@ CREATE TABLE
       date_expiration_token TIMESTAMP NOT NULL,
       type_validation VARCHAR(100) NOT NULL,
       ut_id INT UNIQUE NOT NULL,
-      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id)
+      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id) ON DELETE CASCADE
    );
 
 CREATE TABLE
@@ -129,7 +129,7 @@ CREATE TABLE
       ut_id INT NOT NULL,
       ex_id INT NOT NULL,
       PRIMARY KEY (ut_id, ex_id),
-      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id),
+      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id) ON DELETE CASCADE,
       FOREIGN KEY (ex_id) REFERENCES exercice (ex_id)
    );
 
@@ -138,7 +138,6 @@ CREATE TABLE
       ut_id INT NOT NULL,
       info_id INT NOT NULL,
       PRIMARY KEY (ut_id, info_id),
-      FOREIGN KEY (ut_id) REFERENCES utilisateur (ut_id),
       FOREIGN KEY (info_id) REFERENCES information (info_id)
    );
 
