@@ -48,7 +48,7 @@ export default function AdminDashboard() {
   });
   const slicedUsers = sortedUsers.slice(0, 3)
 
-  const daysOfWeek = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+  const daysOfWeek = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
   const interactionsByDay = interactions.reduce((acc: any, interaction) => {
     const dayIndex = new Date(interaction.inter_date_de_debut).getDay();
     const dayName = daysOfWeek[dayIndex];

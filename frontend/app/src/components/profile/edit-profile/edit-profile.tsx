@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -23,6 +23,7 @@ import { UserPayload } from "@/context/AuthContext"
 import { useUpdateProfile } from "@/hooks/profile/edit-profile/usePatchUserProfile"
 import { Icons } from "@/components/ui/icons"
 import { useAnonymizeUser } from "@/hooks/profile/edit-profile/useAnonymizeUser"
+import { useDeleteUser } from "@/hooks/profile/edit-profile/useDeleteUser"
 
 const updateProfileSchema = z.object({
   firstName: z
@@ -60,26 +61,13 @@ const EditProfileComponent = ({ user, token }: EditProfileInterface) => {
   const navigate = useNavigate()
   const { loading, updateProfile } = useUpdateProfile(token)
   const { anonymizeUser, loadingAnonymize } = useAnonymizeUser(token)
-
-  useEffect(() => {
-    if (user) {
-      resetForm({
-        firstName: user.firstname,
-        lastName: user.lastname,
-        email: user.username,
-        newPassword: "",
-        consent: true,
-        newsletter: false,
-      });
-    }
-  }, [user]);
+  const { deleteAccount, loadingDeleteUser } = useDeleteUser(token)
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-    reset: resetForm
   } = useForm<UpdateProfileFormValues>({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: {
@@ -107,8 +95,8 @@ const EditProfileComponent = ({ user, token }: EditProfileInterface) => {
     setShowAnonymizeDialog(false)
   }
 
-  const handleDelete = () => {
-    console.log("Compte supprimé")
+  async function handleDelete() {
+    await deleteAccount()
     setShowDeleteDialog(false)
   }
 
@@ -362,9 +350,17 @@ const EditProfileComponent = ({ user, token }: EditProfileInterface) => {
                         </Button>
                         <Button
                           onClick={handleDelete}
+                          disabled={loadingDeleteUser}
                           className="flex-1 bg-red-600 text-white hover:bg-red-700 transition-colors duration-300"
                         >
-                          Supprimer définitivement
+                          {loadingDeleteUser ? (
+                            <>
+                              <Icons.loader className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" aria-hidden="true" />
+                              Suppression en cours...
+                            </>
+                          ) : (
+                            "Supprimer définitivement"
+                          )}
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -374,6 +370,7 @@ const EditProfileComponent = ({ user, token }: EditProfileInterface) => {
 
               <div className="flex flex-col sm:flex-row justify-end gap-4 mt-8">
                 <Button
+                  type="button"
                   variant="outline"
                   onClick={() => navigate("/profile")}
                   className="w-full sm:w-auto border-leather-400 text-leather-700 hover:bg-leather-100 hover:text-leather-800 py-3 px-6 text-lg rounded-full transition-all duration-300 hover:shadow-md"
