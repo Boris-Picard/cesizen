@@ -23,7 +23,7 @@ const footerLinks = {
     ],
     legal: [
         { name: "Confidentialité", href: "/privacy" },
-        { name: "CGU", href: "/terms" },
+        { name: "CGU", href: "/conditions" },
         { name: "Mentions légales", href: "/legal" },
         { name: "Cookies", href: "/cookies" },
     ],
@@ -49,9 +49,6 @@ export function FooterComponents() {
 
     return (
         <footer className="bg-leather-900 text-white relative overflow-hidden">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10" />
-
             {/* Main Footer Content */}
             <div className="relative container mx-auto px-4 sm:px-6 max-w-7xl lg:px-8 py-4">
                 {/* Top Section */}

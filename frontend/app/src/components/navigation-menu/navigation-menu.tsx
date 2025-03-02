@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -10,8 +8,6 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Icons } from "@/components/ui/icons"
-import { Link, useLocation } from "react-router-dom"
 import { Input } from "@/components/ui/input"
 import {
   DropdownMenu,
@@ -20,10 +16,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Link, useLocation } from "react-router-dom"
+import { Icons } from "../ui/icons"
 import { useAuth } from "@/context/AuthContext"
-import { Avatar, AvatarFallback } from "../ui/avatar"
 
-
+// Composant pour les éléments de navigation desktop
 const LeftDesktopNavigationItems = () => {
   const location = useLocation()
 
@@ -69,9 +67,9 @@ const LeftDesktopNavigationItems = () => {
   )
 }
 
+// Composant pour la navigation mobile
 const MobileNavigationItems = () => {
   const { logout, isAdmin, isAuthenticated } = useAuth()
-  const location = useLocation()
 
   const baseClasses =
     "flex items-center gap-2 rounded-full px-4 py-3 text-sm font-medium text-left w-full transition-colors"
@@ -118,34 +116,53 @@ const MobileNavigationItems = () => {
         </>
       )}
       {isAdmin && (
-        <Link
-          to="/admin"
-          className={`${baseClasses} ${location.pathname === "/admin" ? activeClasses : inactiveClasses}`}
-        >
+        <Link to="/admin" className={`${baseClasses} ${location.pathname === "/admin" ? activeClasses : inactiveClasses}`}>
           <Icons.userCog className="h-4 w-4" /> Admin
         </Link>
       )}
-      <div className="border-t border-leather-200 pt-4">
-        <Button
-          variant="destructive"
-          onClick={logout}
-          className={`${baseClasses} justify-start bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-700`}
-        >
-          <Icons.logOut className="h-4 w-4" /> Déconnexion
-        </Button>
-      </div>
+      {isAuthenticated && (
+        <div className="border-t border-leather-200 pt-4">
+          <Button
+            variant="destructive"
+            onClick={logout}
+            className={`${baseClasses} justify-start bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-700`}
+          >
+            <Icons.logOut className="h-4 w-4" /> Déconnexion
+          </Button>
+        </div>
+      )}
+      {!isAuthenticated && (
+        <div className="border-t border-leather-200 pt-4 space-y-2">
+          <div className="flex-col flex space-y-2">
+            <Link to="/login" className="w-full">
+              <Button variant="outline" className="w-full rounded-full justify-start">
+                <Icons.login className="mr-2 h-4 w-4" />
+                Connexion
+              </Button>
+            </Link>
+            <Link to="/register" className="w-full">
+              <Button className="w-full rounded-full justify-start bg-leather-600 text-white hover:bg-leather-700">
+                <Icons.userplus className="mr-2 h-4 w-4" />
+                Inscription
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
     </motion.nav>
   )
 }
 
+// Composant principal Navbar
 export const Navbar = () => {
-  const { logout, isAdmin, isAuthenticated, user } = useAuth()
+  const { isAuthenticated, user, logout, isAdmin } = useAuth()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-leather-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 relative max-w-7xl">
         <div className="flex items-center justify-between">
+          {/* Logo et navigation desktop */}
           <div className="flex items-center gap-4">
             <Link to="/" className="flex items-center space-x-2">
               <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.5 }}>
@@ -160,6 +177,7 @@ export const Navbar = () => {
             </NavigationMenu>
           </div>
 
+          {/* Actions desktop */}
           <div className="hidden md:flex items-center space-x-4">
             <AnimatePresence>
               {isSearchOpen && (
@@ -185,12 +203,17 @@ export const Navbar = () => {
             >
               <Icons.search className="h-5 w-5" />
             </Button>
+
+            {/* Boutons d'authentification desktop */}
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative rounded-full h-8 w-8 overflow-hidden hover:bg-inherit">
                     <Avatar>
-                      <AvatarFallback>{user?.firstname[0]}{user?.lastname[0]}</AvatarFallback>
+                      <AvatarFallback>
+                        {user?.firstname?.[0]}
+                        {user?.lastname?.[0]}
+                      </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -202,10 +225,15 @@ export const Navbar = () => {
                   >
                     <div className="flex items-center space-x-2 p-2 mb-2 border-b border-leather-200">
                       <Avatar>
-                        <AvatarFallback>{user?.firstname[0]}{user?.lastname[0]}</AvatarFallback>
+                        <AvatarFallback>
+                          {user?.firstname?.[0]}
+                          {user?.lastname?.[0]}
+                        </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium text-leather-800">{user?.firstname} {user?.lastname}</p>
+                        <p className="font-medium text-leather-800">
+                          {user?.firstname} {user?.lastname}
+                        </p>
                         <p className="text-sm text-leather-500">{user?.username}</p>
                       </div>
                     </div>
@@ -250,15 +278,27 @@ export const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link
-                to="/login"
-                className="px-4 bg-leather-100 backdrop-blur py-2 rounded-full text-sm font-medium text-leather-600 hover:bg-leather-300 hover:text-white transition-colors"
-              >
-                Connexion
-              </Link>
+              <div className="hidden md:flex items-center gap-3">
+                <Link to="/login">
+                  <Button
+                    variant="ghost"
+                    className="rounded-full text-leather-600 hover:text-leather-700 hover:bg-leather-50 transition-all duration-300"
+                  >
+                    <Icons.login className="mr-2 h-4 w-4" />
+                    Connexion
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button className="rounded-full bg-leather-600 text-white hover:bg-leather-700 transition-all duration-300 shadow-sm hover:shadow-md">
+                    <Icons.userplus className="mr-2 h-4 w-4" />
+                    Inscription
+                  </Button>
+                </Link>
+              </div>
             )}
           </div>
 
+          {/* Menu mobile */}
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="md:hidden">

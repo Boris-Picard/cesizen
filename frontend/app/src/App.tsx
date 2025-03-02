@@ -26,6 +26,8 @@ import { TypeHistoriquesComponents } from './components/admin-dashboard/type-his
 import ExercicesDetailPage from './app/exercices/exercices-detail-page/page';
 import { InteractionsPage } from './app/admin-dashboard/interactions/page';
 import { InformationsDetailPage } from './app/informations/informations-detail-page/informations-detail-page';
+import { ConditionsPage } from './app/conditions/page';
+import { PrivacyPage } from './app/privacy/page';
 
 function App() {
   return (
@@ -45,19 +47,23 @@ function App() {
             <Route path="/admin/interactions" element={<InteractionsPage />} />
           </Route>
         </Route>
+
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/reset-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password/reset/:token" element={<ResetPasswordPage />} />
+          <Route path="/account-confirmation/:token" element={<ConfirmAccountPage />} />
         </Route>
 
-        <Route path="/reset-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password/reset/:token" element={<ResetPasswordPage />} />
-        <Route path="/account-confirmation/:token" element={<ConfirmAccountPage />} />
+        <Route path="/conditions" element={<ConditionsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/" element={<HomePage />} />
+        
         <Route element={<RequireAuth />}>
           {/* <Route path='/exercice-libre' element={<ExerciceLibrePage />} /> */}
           <Route path="/exercices" element={<ExercicesFrontPage />} />
           <Route path="/exercices/:id" element={<ExercicesDetailPage />} />
-          <Route path="/" element={<HomePage />} />
           <Route path="/informations" element={<InformationsPage />} />
           <Route path="/informations/:id" element={<InformationsDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
