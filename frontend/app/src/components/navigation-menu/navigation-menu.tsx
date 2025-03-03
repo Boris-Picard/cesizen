@@ -24,6 +24,7 @@ import { useAuth } from "@/context/AuthContext"
 // Composant pour les éléments de navigation desktop
 const LeftDesktopNavigationItems = () => {
   const location = useLocation()
+  const { isAuthenticated } = useAuth()
 
   const baseClasses = "group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors relative"
   const activeClasses = "text-leather-800"
@@ -47,22 +48,26 @@ const LeftDesktopNavigationItems = () => {
           </Link>
         </NavigationMenuLink>
       </NavigationMenuItem>
-      <NavigationMenuItem>
-        <NavigationMenuLink asChild>
-          <Link
-            to="/exercices"
-            className={`${baseClasses} ${location.pathname === "/exercices" ? activeClasses : inactiveClasses}`}
-          >
-            <Icons.activity className="h-4 w-4" /> Exercices
-            {location.pathname === "/exercices" && (
-              <motion.div
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-leather-500"
-                layoutId="navbar-indicator"
-              />
-            )}
-          </Link>
-        </NavigationMenuLink>
-      </NavigationMenuItem>
+      {
+        isAuthenticated
+        &&
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild>
+            <Link
+              to="/exercices"
+              className={`${baseClasses} ${location.pathname === "/exercices" ? activeClasses : inactiveClasses}`}
+            >
+              <Icons.activity className="h-4 w-4" /> Exercices
+              {location.pathname === "/exercices" && (
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-leather-500"
+                  layoutId="navbar-indicator"
+                />
+              )}
+            </Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+      }
     </>
   )
 }
@@ -92,12 +97,16 @@ const MobileNavigationItems = () => {
       >
         <Icons.info className="h-4 w-4" /> Informations
       </Link>
-      <Link
-        to="/exercices"
-        className={`${baseClasses} ${location.pathname === "/exercices" ? activeClasses : inactiveClasses}`}
-      >
-        <Icons.activity className="h-4 w-4" /> Exercices
-      </Link>
+      {
+        isAuthenticated
+        &&
+        <Link
+          to="/exercices"
+          className={`${baseClasses} ${location.pathname === "/exercices" ? activeClasses : inactiveClasses}`}
+        >
+          <Icons.activity className="h-4 w-4" /> Exercices
+        </Link>
+      }
       {isAuthenticated && (
         <>
           <Link
@@ -179,30 +188,36 @@ export const Navbar = () => {
 
           {/* Actions desktop */}
           <div className="hidden md:flex items-center space-x-4">
-            <AnimatePresence>
-              {isSearchOpen && (
-                <motion.div
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: "200px", opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+            {
+              isAuthenticated
+              &&
+              <>
+                <AnimatePresence>
+                  {isSearchOpen && (
+                    <motion.div
+                      initial={{ width: 0, opacity: 0 }}
+                      animate={{ width: "200px", opacity: 1 }}
+                      exit={{ width: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Input
+                        type="search"
+                        placeholder="Rechercher..."
+                        className="w-full rounded-full border border-leather-300"
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className="text-leather-600 hover:bg-leather-50 hover:text-leather-700 rounded-full"
                 >
-                  <Input
-                    type="search"
-                    placeholder="Rechercher..."
-                    className="w-full rounded-full border border-leather-300"
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="text-leather-600 hover:bg-leather-50 hover:text-leather-700 rounded-full"
-            >
-              <Icons.search className="h-5 w-5" />
-            </Button>
+                  <Icons.search className="h-5 w-5" />
+                </Button>
+              </>
+            }
 
             {/* Boutons d'authentification desktop */}
             {isAuthenticated ? (

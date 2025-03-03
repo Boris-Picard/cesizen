@@ -5,6 +5,7 @@ import { useGetTypeInteractions } from "@/hooks/admin/type-interactions/useGetTy
 import { useGetExercicesFront } from "@/hooks/exercices/useGetExercicesFront";
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom";
+import { FooterPage } from "../footer/page";
 
 const Loader = () => (
     <motion.div
@@ -34,6 +35,7 @@ export default function ExercicesFrontPage() {
         <div className="min-h-screen">
             <Navbar />
             {loading ? <Loader /> : <BreathingExercises exercices={exercices} interaction={interaction} user={user} />}
+            <FooterPage />
         </div>
     )
 }

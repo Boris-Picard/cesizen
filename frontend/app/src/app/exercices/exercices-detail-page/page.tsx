@@ -5,6 +5,7 @@ import { Navbar } from "@/components/navigation-menu/navigation-menu";
 import { motion } from "framer-motion"
 import { useGetTypeInteractions } from "@/hooks/admin/type-interactions/useGetTypeInteractions";
 import { useAuth } from "@/context/AuthContext";
+import { FooterPage } from "@/app/footer/page";
 
 const Loader = () => (
     <motion.div
@@ -36,6 +37,7 @@ export default function ExercicesDetailPage() {
         <div className="min-h-screen">
             <Navbar />
             {loading ? <Loader /> : <ExerciceDetail exercice={exercice} user={user} typeInteraction={interaction} />}
+            <FooterPage />
         </div>
     );
 }

@@ -33,7 +33,7 @@ export default function AdminDashboard() {
   const sortedInformations = [...informationsActive!].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   })
-  
+
   const slicedActiveInformations = sortedInformations?.slice(0, 3)
 
   const filterUsersActive = users.filter((u) => u.ut_active === true)
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
       value: totalUsers,
       icon: Users,
       color: "from-leather-600 to-leather-500",
-      trend: `${newUsersPercentage} %`,
+      trend: `${Math.floor(newUsersPercentage)} %`,
       trendUp: trendUpOrDownUsers,
       link: "/admin/users"
     },
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
       value: totalInteractionsDay,
       icon: Zap,
       color: "from-leather-300 to-leather-200",
-      trend: `${newInteractionsPercentage} %`,
+      trend: `${Math.floor(newInteractionsPercentage)} %`,
       trendUp: trendUpOrDownInteractions,
       link: "/admin/interactions"
     },

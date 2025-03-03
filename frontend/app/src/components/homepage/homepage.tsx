@@ -22,6 +22,8 @@ import {
   Shield,
   Trophy,
 } from "lucide-react"
+import { useAuth } from "@/context/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 const testimonials = [
   {
@@ -62,7 +64,6 @@ const faqItems = [
   },
 ]
 
-// Added statistics data
 const statistics = [
   { label: "Utilisateurs actifs", value: "10K+", icon: Users },
   { label: "Exercices disponibles", value: "50+", icon: Activity },
@@ -70,7 +71,6 @@ const statistics = [
   { label: "Minutes de pratique", value: "1M+", icon: Clock },
 ]
 
-// Added why choose us data
 const whyChooseUs = [
   {
     icon: Shield,
@@ -96,8 +96,9 @@ const whyChooseUs = [
 
 export default function Home() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
 
-  // Fonction pour le scroll smooth vers la section suivante
   const scrollToNextSection = (sectionId: string) => {
     const section = document.getElementById(sectionId)
     if (section) {
@@ -162,13 +163,18 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto"
               >
-                <Button
-                  size={"lg"}
-                  className="bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300 shadow-lg shadow-leather-900/20 w-full sm:w-auto"
-                >
-                  Commencer gratuitement
-                  <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Button>
+                {
+                  !isAuthenticated
+                  &&
+                  <Button
+                    onClick={() => navigate("/register")}
+                    size={"lg"}
+                    className="bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300 shadow-lg shadow-leather-900/20 w-full sm:w-auto"
+                  >
+                    Commencer gratuitement
+                    <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Button>
+                }
                 <Button
                   size={"lg"}
                   variant="outline"
@@ -468,14 +474,30 @@ export default function Home() {
                     </motion.div>
                   ))}
                 </div>
-
-                <Button
-                  size={"lg"}
-                  className="bg-leather-600 hover:bg-leather-700 text-white group transition-all duration-300 w-full sm:w-auto"
-                >
-                  Découvrir tous les exercices
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Button>
+                {
+                  !isAuthenticated
+                  &&
+                  <Button
+                    onClick={() => navigate("/register")}
+                    size={"lg"}
+                    className="bg-leather-600 hover:bg-leather-700 text-white group transition-all duration-300 w-full sm:w-auto"
+                  >
+                    S'inscrire
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                }
+                {
+                  isAuthenticated
+                  &&
+                  <Button
+                    onClick={() => navigate("/exercices")}
+                    size={"lg"}
+                    className="bg-leather-600 hover:bg-leather-700 text-white group transition-all duration-300 w-full sm:w-auto"
+                  >
+                    Découvrir tous les exercices
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                }
               </motion.div>
 
               {/* Enhanced breathing animation */}
@@ -537,7 +559,6 @@ export default function Home() {
           id="emotions"
           className="min-h-screen flex items-center bg-leather-900 text-white relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10" />
           <div className="container mx-auto px-4 md:px-6 max-w-7xl sm:px-6 lg:px-8relative py-24">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -665,11 +686,22 @@ export default function Home() {
                       </motion.div>
                     ))}
                   </div>
-
-                  <Button size="lg" className="bg-white hover:bg-leather-50 text-leather-900 group w-full">
-                    Commencer le suivi
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
+                  {
+                    !isAuthenticated
+                    &&
+                    <Button onClick={() => navigate("/register")} size="lg" className="bg-white hover:bg-leather-50 text-leather-900 group w-full">
+                      S'inscrire
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  }
+                  {
+                    isAuthenticated
+                    &&
+                    <Button onClick={() => navigate("/profile")} size="lg" className="bg-white hover:bg-leather-50 text-leather-900 group w-full">
+                      Commencer le suivi
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Button>
+                  }
                 </div>
               </motion.div>
             </div>
@@ -810,13 +842,30 @@ export default function Home() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  size={"lg"}
-                  className="bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300"
-                >
-                  S'inscrire gratuitement
-                  <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Button>
+                {
+                  !isAuthenticated
+                  &&
+                  <Button
+                    onClick={() => navigate("/register")}
+                    size={"lg"}
+                    className="bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300"
+                  >
+                    S'inscrire gratuitement
+                    <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Button>
+                }
+                {
+                  isAuthenticated
+                  &&
+                  <Button
+                    onClick={() => navigate("/exercices")}
+                    size={"lg"}
+                    className="bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300"
+                  >
+                    Commencer
+                    <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Button>
+                }
                 <Button
                   size={"lg"}
                   variant="outline"

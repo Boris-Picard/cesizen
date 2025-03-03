@@ -5,6 +5,7 @@ import { useGetTypeInteractions } from "@/hooks/admin/type-interactions/useGetTy
 import { useGetInformationsFront } from "@/hooks/informations/useGetInformationsFront";
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom";
+import { FooterPage } from "../footer/page";
 
 const Loader = () => (
     <motion.div
@@ -35,6 +36,7 @@ export default function InformationsPage() {
         <div className="min-h-screen ">
             <Navbar />
             {loading ? <Loader /> : <InformationsComponents user={user} interaction={interaction} informationsData={informations} />}
+            <FooterPage />
         </div>
     )
 }

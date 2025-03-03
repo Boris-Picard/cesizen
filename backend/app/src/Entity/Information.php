@@ -25,13 +25,10 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         new Get(),
         new GetCollection(),
         new Post(
-            security: "is_granted('ROLE_ADMIN')"
         ),
         new Delete(
-            security: "is_granted('ROLE_ADMIN')"
         ),
         new Patch(
-            security: "is_granted('ROLE_ADMIN')"
         ),
     ]
 )]

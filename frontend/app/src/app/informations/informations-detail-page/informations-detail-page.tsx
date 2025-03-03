@@ -1,3 +1,4 @@
+import { FooterPage } from "@/app/footer/page";
 import { InformationsDetailPageComponents } from "@/components/informations/informations-detail-page/informations-detail-page";
 import { Navbar } from "@/components/navigation-menu/navigation-menu";
 import { useGetInformationsId } from "@/hooks/informations/useGetInformationsId";
@@ -17,6 +18,7 @@ export function InformationsDetailPage() {
         <div className="min-h-scren">
             <Navbar />
             <InformationsDetailPageComponents information={information} />
+            <FooterPage />
         </div>
     )
 }
