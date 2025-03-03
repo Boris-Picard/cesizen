@@ -13,13 +13,16 @@ interface InteractionInterface {
 }
 
 export function useCreateInteraction() {
-  const { token } = useAuth();
+  const { token, isAuthenticated } = useAuth();
   const [lastInteractionId, setLastInteractionId] = useState<number | null>(() => {
     const stored = localStorage.getItem("lastInteractionId");
     return stored ? JSON.parse(stored) : null;
   });
 
   const createInteraction = async (interactionData: InteractionInterface) => {
+    if (!isAuthenticated) {
+      return setLastInteractionId(null)
+    }
     try {
       const { data } = await axios.post(
         "http://cesizen-api.localhost/api/interactions",

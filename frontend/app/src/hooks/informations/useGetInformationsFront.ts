@@ -24,8 +24,6 @@ export function useGetInformationsFront() {
                 setInformations(data);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
-                    console.log(error);
-                    
                     toast({
                         variant: "destructive",
                         title: error.response?.data?.title ?? "Une erreur est survenue",

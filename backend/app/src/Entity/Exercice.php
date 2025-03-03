@@ -5,8 +5,10 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\ExerciceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,12 +20,19 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ApiResource(
     normalizationContext: ['groups' => ['exercice:read']],
     denormalizationContext: ['groups' => ['exercice:write']],
-    // operations: [
-    //     new Get(
-    //         security: "object.isExActive() == true",
-    //         securityMessage: "Cet exercice est inactif."
-    //     ),
-    // ]
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+        new Patch(
+            security: "is_granted('ROLE_ADMIN')"
+        ),
+    ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['ex_active' => 'exact'])]
 #[ORM\Entity(repositoryClass: ExerciceRepository::class)]
