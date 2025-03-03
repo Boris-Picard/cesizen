@@ -30,6 +30,10 @@ security:
         check_path: /api/login_check
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
+    api_public:
+      pattern: ^/api/(information|type_interactions)
+      stateless: true
+      provider: app_user_provider
     api:
       pattern: ^/api
       stateless: true
@@ -52,14 +56,21 @@ security:
   access_control:
     - { path: ^/api/docs, roles: PUBLIC_ACCESS }
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/api/exercices, roles: [ROLE_USER, ROLE_ADMIN] }
-    - { path: ^/api/information, roles: [ROLE_USER, ROLE_ADMIN] }
-    - { path: ^/api/interactions, roles: [ROLE_USER, ROLE_ADMIN] }
-    - { path: ^/api/utilisateurs, roles: [ROLE_USER, ROLE_ADMIN] }
-    - { path: ^/api/type_interactions, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
+    - { path: ^/api/information, roles: PUBLIC_ACCESS }
+    - { path: ^/api/type_interactions, roles: PUBLIC_ACCESS }
+    - { path: ^/api/type_informations, roles: PUBLIC_ACCESS }
+
+    - {
+        path: ^/api/(exercices|interactions|utilisateurs),
+        roles: [ROLE_USER, ROLE_ADMIN],
+      }
     - { path: ^/profile, roles: [ROLE_USER, ROLE_ADMIN] }
+
+    - { path: ^/admin, roles: ROLE_ADMIN }
+    - { attributes: { "_route": "admin" }, roles: ROLE_ADMIN }
+
     - { path: ^/api, roles: ROLE_ADMIN }
-    - { path: ^/admin/*, roles: ROLE_ADMIN }
 
 when@test:
   security:

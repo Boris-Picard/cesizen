@@ -59,13 +59,13 @@ function App() {
         <Route path="/conditions" element={<ConditionsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/" element={<HomePage />} />
-        
+        <Route path="/informations" element={<InformationsPage />} />
+        <Route path="/informations/:id" element={<InformationsDetailPage />} />
+
         <Route element={<RequireAuth />}>
           {/* <Route path='/exercice-libre' element={<ExerciceLibrePage />} /> */}
           <Route path="/exercices" element={<ExercicesFrontPage />} />
           <Route path="/exercices/:id" element={<ExercicesDetailPage />} />
-          <Route path="/informations" element={<InformationsPage />} />
-          <Route path="/informations/:id" element={<InformationsDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/edit" element={<EditProfilePage />} />
         </Route>
