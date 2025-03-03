@@ -20,15 +20,11 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(
-            security: "is_granted('ROLE_ADMIN')"
-        ),
+        new Post(),
         new Delete(
             security: "is_granted('ROLE_ADMIN')"
         ),
-        new Patch(
-            security: "is_granted('ROLE_ADMIN')"
-        ),
+        new Patch(),
     ]
 )]
 #[ORM\Entity(repositoryClass: InteractionRepository::class)]

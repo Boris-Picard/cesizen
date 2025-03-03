@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { act, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -104,8 +104,6 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
     const dateB = b.dateFin ? b.dateFin.getTime() : b.dateDebut ? b.dateDebut.getTime() : 0;
     return dateB - dateA;
   });
-
-
 
   const emotions = [
     { name: "Joie", color: "#FDE68A", icon: "😊" },

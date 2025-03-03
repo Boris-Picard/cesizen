@@ -3,6 +3,7 @@ import UserDashboard from "@/components/profile/profile";
 import { useAuth } from "@/context/AuthContext";
 import { useGetUserProfile } from "@/hooks/profile/useGetUserProfiles";
 import { motion } from "framer-motion"
+import { FooterPage } from "../footer/page";
 
 const Loader = () => (
     <motion.div
@@ -53,6 +54,7 @@ export default function ProfilePage() {
         <div className="min-h-screen ">
             <Navbar />
             {loading ? <Loader /> : <UserDashboard user={user} exercices={exercicesData} informations={informationsData} totalInteractions={totalInteractions} />}
+            <FooterPage />
         </div>
     )
 }
