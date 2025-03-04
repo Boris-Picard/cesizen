@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ApiResource(
+    paginationItemsPerPage: 100,
     normalizationContext: ['groups' => ['information:read']],
     denormalizationContext: ['groups' => ['information:write']],
     operations: [

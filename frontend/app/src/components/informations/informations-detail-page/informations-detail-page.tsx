@@ -8,13 +8,22 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import DOMPurify from "isomorphic-dompurify"
 import { Information } from "@/components/admin-dashboard/informations/column"
 import { toast } from "@/hooks/useToast"
+import { useNavigate } from "react-router-dom"
+import { useCreateInteraction } from "@/hooks/api/useCreateInteractions"
+import { TypeInteraction } from "@/components/admin-dashboard/type-interactions/columns"
+import { UserPayload } from "@/context/AuthContext"
 
 interface InfoDetailProps {
-  information: Information | null
+  information: Information | null;
+  articles: Information[];
+  interaction: TypeInteraction | undefined
+  user: UserPayload | null
 }
 
-export function InformationsDetailPageComponents({ information }: InfoDetailProps) {
+export function InformationsDetailPageComponents({ information, articles, interaction, user }: InfoDetailProps) {
   const [isBookmarked, setIsBookmarked] = useState(false)
+  const { createInteraction } = useCreateInteraction()
+  const navigate = useNavigate();
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -33,6 +42,14 @@ export function InformationsDetailPageComponents({ information }: InfoDetailProp
       }
     }
   }
+
+  const currentIndex = articles.findIndex((article) => article.id === information?.id);
+  const previousArticle = currentIndex > 0 ? articles[currentIndex - 1] : null;
+  const nextArticle = currentIndex < articles.length - 1 ? articles[currentIndex + 1] : null;
+
+  const goToArticle = (articleId: number) => {
+    navigate(`/informations/${articleId}`);
+  };
 
   return (
     <div className="bg-leather-50">
@@ -201,26 +218,54 @@ export function InformationsDetailPageComponents({ information }: InfoDetailProp
 
           {/* Navigation entre articles */}
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Button
-              variant="outline"
-              className="rounded-2xl p-4 h-auto text-left flex items-center justify-start border-leather-200 hover:bg-leather-50 group"
-            >
-              <ChevronLeft className="h-5 w-5 mr-2 flex-shrink-0 group-hover:-translate-x-1 transition-transform" />
-              <div>
-                <div className="text-sm text-leather-500">Article précédent</div>
-                <div className="font-medium text-leather-800">La méditation guidée</div>
-              </div>
-            </Button>
-            <Button
-              variant="outline"
-              className="rounded-2xl p-4 h-auto text-right flex items-center justify-end border-leather-200 hover:bg-leather-50 group"
-            >
-              <div>
-                <div className="text-sm text-leather-500">Article suivant</div>
-                <div className="font-medium text-leather-800">Le yoga respiratoire</div>
-              </div>
-              <ChevronRight className="h-5 w-5 ml-2 flex-shrink-0 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            {previousArticle ? (
+              <Button
+                variant="outline"
+                className="rounded-2xl p-4 h-auto text-left flex items-center justify-start border-leather-200 hover:bg-leather-50 group"
+                onClick={() => {
+                  goToArticle(previousArticle.id),
+                    createInteraction({
+                      inter_date_de_debut: new Date().toISOString(),
+                      inter_date_de_fin: new Date().toISOString(),
+                      utilisateur: `/api/utilisateurs/${user?.id}`,
+                      information: `/api/information/${previousArticle.id}`,
+                      typeInteraction: `/api/type_interactions/${interaction?.id}`,
+                    })
+                }}
+              >
+                <ChevronLeft className="h-5 w-5 mr-2 flex-shrink-0 group-hover:-translate-x-1 transition-transform" />
+                <div>
+                  <div className="text-sm text-leather-500">Article précédent</div>
+                  <div className="font-medium text-leather-800">{previousArticle.info_titre}</div>
+                </div>
+              </Button>
+            ) : (
+              <div />
+            )}
+            {nextArticle ? (
+              <Button
+                variant="outline"
+                className="rounded-2xl p-4 h-auto text-right flex items-center justify-end border-leather-200 hover:bg-leather-50 group"
+                onClick={() => {
+                  goToArticle(nextArticle.id),
+                    createInteraction({
+                      inter_date_de_debut: new Date().toISOString(),
+                      inter_date_de_fin: new Date().toISOString(),
+                      utilisateur: `/api/utilisateurs/${user?.id}`,
+                      information: `/api/information/${nextArticle.id}`,
+                      typeInteraction: `/api/type_interactions/${interaction?.id}`,
+                    })
+                }}
+              >
+                <div>
+                  <div className="text-sm text-leather-500">Article suivant</div>
+                  <div className="font-medium text-leather-800">{nextArticle.info_titre}</div>
+                </div>
+                <ChevronRight className="h-5 w-5 ml-2 flex-shrink-0 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            ) : (
+              <div />
+            )}
           </div>
         </motion.div>
       </div>

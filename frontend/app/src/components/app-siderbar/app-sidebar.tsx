@@ -67,7 +67,7 @@ const menuItems = [
   { title: "Interactions", url: "/admin/interactions", icon: Activity },
   { title: "Historique", url: "/admin/historiques", icon: Clock },
   { title: "Validation", url: "/admin/validation", icon: CheckSquare },
-  { title: "Statistiques", url: "/admin/stats", icon: BarChart2 },
+  // { title: "Statistiques", url: "/admin/stats", icon: BarChart2 },
 ];
 
 

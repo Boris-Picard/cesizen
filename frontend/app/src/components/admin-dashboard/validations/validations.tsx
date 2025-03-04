@@ -8,7 +8,6 @@ import { validationColumns } from "./column";
 
 export function ValidationsComponents() {
     const { validations, loading } = useGetValidations();
-console.log(validations);
 
     return (
         <div className="bg-leather-200 min-h-screen">

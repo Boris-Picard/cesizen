@@ -18,8 +18,6 @@ export function useGetValidations() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                console.log(data);
-                
                 setValidations(data);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
