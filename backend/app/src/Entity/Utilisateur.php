@@ -50,12 +50,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['utilisateur:read'])]
     private ?int $id = null;
 
-    #[Groups(['utilisateur:read', 'utilisateur:write', 'interaction:read', 'information:read'])]
+    #[Groups(['utilisateur:read', 'utilisateur:write', 'interaction:read', 'information:read', 'validation:read'])]
     #[Assert\NotBlank(message: "Le nom ne peut pas être vide", groups: ['registration'])]
     #[ORM\Column(name: "ut_nom", length: 255)]
     private ?string $ut_nom = null;
 
-    #[Groups(['utilisateur:read', 'utilisateur:write', 'interaction:read', 'information:read'])]
+    #[Groups(['utilisateur:read', 'utilisateur:write', 'interaction:read', 'information:read', 'validation:read'])]
     #[Assert\NotBlank(message: "Le prénom ne peut pas être vide", groups: ['registration'])]
     #[ORM\Column(name: "ut_prenom", length: 200)]
     private ?string $ut_prenom = null;
