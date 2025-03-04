@@ -14,7 +14,6 @@ import { useCreateInteraction } from "@/hooks/api/useCreateInteractions";
 import { TypeInteraction } from "../admin-dashboard/type-interactions/columns";
 import { UserPayload } from "@/context/AuthContext";
 
-// Les catégories avec leur icône pour les Tabs
 const categories = [
   { label: "Tous", value: "all", icon: Book },
   { label: "Santé mentale", value: "Santé mentale", icon: Brain },

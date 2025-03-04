@@ -21,7 +21,11 @@ export function useGetInformationsFront() {
                         },
                     }
                 );
-                setInformations(data);
+                const sortedData = data.sort(
+                    (a: Information, b: Information) =>
+                        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                );
+                setInformations(sortedData);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
                     toast({
@@ -42,5 +46,5 @@ export function useGetInformationsFront() {
         getInformations();
     }, [token]);
 
-    return { informations, loading, setInformations };
+    return { informations, loading };
 }

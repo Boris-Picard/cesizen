@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    paginationItemsPerPage: 100,
     normalizationContext: ['groups' => ['utilisateur:read']],
     denormalizationContext: ['groups' => ['utilisateur:write']],
     operations: [
