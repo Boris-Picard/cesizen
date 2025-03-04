@@ -29,6 +29,7 @@ import { InformationsDetailPage } from './app/informations/informations-detail-p
 import { ConditionsPage } from './app/conditions/page';
 import { PrivacyPage } from './app/privacy/page';
 import { HistoriquesAdminPage } from './app/admin-dashboard/historiques/page';
+import ValidationPage from './app/admin-dashboard/validations/page';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path="/admin/types/historiques" element={<TypeHistoriquesComponents />} />
             <Route path="/admin/interactions" element={<InteractionsPage />} />
             <Route path="/admin/historiques" element={<HistoriquesAdminPage />} />
+            <Route path="/admin/validation" element={<ValidationPage />} />
           </Route>
         </Route>
 
