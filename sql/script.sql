@@ -160,6 +160,10 @@ BEGIN
          LIMIT 1;
     END IF;
 
+    IF dynamic_type_histo_id IS NULL THEN
+       RAISE EXCEPTION 'Aucun type_historique trouvé pour l''interaction';
+    END IF;
+
     INSERT INTO historique (
        histo_id_obj,
        histo_nom_table,
@@ -180,8 +184,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trg_log_interaction ON interaction;
+
 CREATE TRIGGER trg_log_interaction
-AFTER INSERT ON interaction
+AFTER INSERT OR UPDATE ON interaction
 FOR EACH ROW
 EXECUTE FUNCTION log_interaction_trigger();
 

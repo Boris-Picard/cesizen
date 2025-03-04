@@ -1,6 +1,8 @@
 import { motion } from "framer-motion"
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, ArrowUpRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
+import { Icons } from "../ui/icons"
 
 const footerLinks = {
     product: [
@@ -36,11 +38,6 @@ const socialLinks = [
     { name: "LinkedIn", icon: Linkedin, href: "https://linkedin.com" },
 ]
 
-const contactInfo = [
-    { icon: Mail, text: "contact@cesizen.com" },
-    { icon: Phone, text: "+33 1 23 45 67 89" },
-    { icon: MapPin, text: "Paris, France" },
-]
 
 export function FooterComponents() {
     const scrollToTop = () => {
@@ -100,12 +97,31 @@ export function FooterComponents() {
                         <div className="space-y-6">
                             <h4 className="text-lg font-semibold">Contact</h4>
                             <div className="space-y-4">
-                                {contactInfo.map((info, index) => (
+                                {/* {contactInfo.map((info, index) => (
                                     <div key={index} className="flex items-center gap-3 text-leather-200">
                                         <info.icon className="w-5 h-5" />
-                                        <span>{info.text}</span>
+                                        <Link to={"mailto:" + info.text}>{info.text}</Link>
                                     </div>
-                                ))}
+                                ))} */}
+                                <div className="flex items-center gap-3 text-leather-200">
+                                    <Icons.mail className="h-5 w-5" />
+                                    <a href="mailto:contact@cesizen.com">contact@cesizen.com</a>
+                                </div>
+                                <div className="flex items-center gap-3 text-leather-200">
+                                    <Icons.phone className="h-5 w-5" />
+                                    <a href="tel:+33 1 23 45 67 89">+33 1 23 45 67 89</a>
+                                </div>
+                                <div className="flex items-center gap-3 text-leather-200">
+                                    <Icons.mapPin className="h-5 w-5" />
+                                    <a
+                                        href="https://www.google.com/maps/place/Paris,+France"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Paris, France
+                                    </a>
+                                </div>
+
                             </div>
                         </div>
                     </div>

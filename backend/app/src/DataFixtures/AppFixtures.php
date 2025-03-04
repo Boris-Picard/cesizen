@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Exercice;
 use App\Entity\Role;
+use App\Entity\TypeHistorique;
 use App\Entity\TypeInformation;
 use App\Entity\TypeInteraction;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -204,6 +205,16 @@ class AppFixtures extends Fixture
         $tinfo3 = new TypeInformation();
         $tinfo3->setTypeInfoNom('Exercices de relaxation');
         $manager->persist($tinfo3);
+
+        
+        $thisto1 = new TypeHistorique();
+        $thisto1->setTypeHistoLibelle('Interaction Créée');
+        $manager->persist($thisto1);
+
+        
+        $thisto2 = new TypeHistorique();
+        $thisto2->setTypeHistoLibelle('Interaction Terminée');
+        $manager->persist($thisto2);
 
         $manager->flush();
     }
