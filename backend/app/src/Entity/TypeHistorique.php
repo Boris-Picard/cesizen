@@ -41,7 +41,7 @@ class TypeHistorique
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['typehistorique:read', 'typehistorique:write', 'historique:read'])]
+    #[Groups(['typehistorique:read', 'typehistorique:write', 'historique:read', 'typehistorique:read'])]
     private ?string $type_histo_libelle = null;
 
     /**

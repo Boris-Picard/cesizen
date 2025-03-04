@@ -31,8 +31,6 @@ export function useCreateExercices() {
     const { token } = useAuth();
 
     const createExercice = async ({ validData, onExerciceAdded, form }: Exercice) => {
-        console.log(validData);
-
         try {
             const response = await axios.post(
                 "http://cesizen-api.localhost/api/exercices",
@@ -58,8 +56,6 @@ export function useCreateExercices() {
             form.reset();
             setOpen(false);
         } catch (error) {
-            console.log(error);
-
             if (axios.isAxiosError(error)) {
                 toast({
                     variant: "destructive",

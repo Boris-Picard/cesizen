@@ -28,6 +28,7 @@ import { InteractionsPage } from './app/admin-dashboard/interactions/page';
 import { InformationsDetailPage } from './app/informations/informations-detail-page/informations-detail-page';
 import { ConditionsPage } from './app/conditions/page';
 import { PrivacyPage } from './app/privacy/page';
+import { HistoriquesAdminPage } from './app/admin-dashboard/historiques/page';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
             <Route path="/admin/types/interactions" element={<TypeInteractionsPage />} />
             <Route path="/admin/types/historiques" element={<TypeHistoriquesComponents />} />
             <Route path="/admin/interactions" element={<InteractionsPage />} />
+            <Route path="/admin/historiques" element={<HistoriquesAdminPage />} />
           </Route>
         </Route>
 
