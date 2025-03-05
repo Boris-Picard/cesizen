@@ -12,7 +12,6 @@ import {
   Activity,
   Clock,
   CheckSquare,
-  BarChart2,
   ChevronDown,
   LogOut,
 } from "lucide-react"
@@ -68,8 +67,7 @@ const menuItems = [
   { title: "Historique", url: "/admin/historiques", icon: Clock },
   { title: "Validation", url: "/admin/validation", icon: CheckSquare },
   // { title: "Statistiques", url: "/admin/stats", icon: BarChart2 },
-];
-
+]
 
 export function AppSidebar() {
   const location = useLocation()
@@ -82,16 +80,28 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar collapsible="icon" className="bg-leather-50 border-r border-leather-200 font-sans text-leather-800">
+    <Sidebar
+      collapsible="icon"
+      className="bg-gradient-to-b from-leather-50 to-leather-100 border-r border-leather-200/70 font-sans text-leather-800 shadow-sm"
+    >
       <SidebarHeader className="px-4 py-6">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link to="/" className="flex items-center gap-3">
-                <img src="/logo.png" alt="CESIZen" className="h-10 w-10 rounded-xl" />
+              <Link to="/" className="flex items-center gap-3 group">
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-br from-leather-300 to-leather-500 rounded-xl opacity-70 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
+                  <div className="relative bg-white p-1.5 rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                    <img src="/logo.png" alt="CESIZen" className="h-8 w-8 rounded-lg" />
+                  </div>
+                </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-bold text-leather-800 text-xl">CESIZen</span>
-                  <span className="text-xs text-leather-500">Administration</span>
+                  <span className="font-bold text-leather-800 text-xl group-hover:text-leather-900 transition-colors">
+                    CESIZen
+                  </span>
+                  <span className="text-xs text-leather-500 group-hover:text-leather-600 transition-colors">
+                    Administration
+                  </span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -101,23 +111,42 @@ export function AppSidebar() {
 
       <ScrollArea className="flex-grow">
         <SidebarContent className="py-6">
-          {menuItems.map((item) => (
-            <SidebarGroup key={item.title}>
+          {menuItems.map((item, index) => (
+            <SidebarGroup key={item.title} className="mb-1">
               <SidebarGroupLabel
                 onClick={() => item.submenu && toggleGroup(item.title)}
                 className={cn(
-                  "text-leather-600 font-medium text-sm mb-2 cursor-pointer transition-colors hover:text-leather-800",
+                  "text-leather-600 font-medium text-sm mb-2 cursor-pointer transition-all hover:text-leather-800",
                   item.submenu && "flex items-center justify-between",
+                  expandedGroup === item.title && "text-leather-800 font-semibold",
                 )}
               >
-                {item.title}
+                <span className="flex items-center gap-2">
+                  {item.submenu ? (
+                    <motion.div
+                      initial={{ opacity: 0.7 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="h-1.5 w-1.5 rounded-full bg-leather-400"
+                    />
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0.7 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="h-1 w-1 rounded-full bg-leather-400"
+                    />
+                  )}
+                  {item.title}
+                </span>
                 {item.submenu && (
-                  <ChevronDown
-                    className={cn(
-                      "w-4 h-4 transition-transform",
-                      expandedGroup === item.title && "transform rotate-180",
-                    )}
-                  />
+                  <motion.div
+                    animate={{ rotate: expandedGroup === item.title ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-leather-100 rounded-full p-1"
+                  >
+                    <ChevronDown className="w-3 h-3 text-leather-600" />
+                  </motion.div>
                 )}
               </SidebarGroupLabel>
               <AnimatePresence initial={false}>
@@ -140,13 +169,20 @@ export function AppSidebar() {
                               <Link
                                 to={subItem.url}
                                 className={cn(
-                                  "flex items-center gap-3 text-leather-700 p-2 rounded-lg transition-all",
-                                  "hover:bg-leather-100 hover:text-leather-900",
+                                  "flex items-center gap-3 text-leather-700 p-2.5 rounded-xl transition-all",
+                                  "hover:bg-gradient-to-r hover:from-leather-200/70 hover:to-leather-100/70 hover:text-leather-900",
                                   location.pathname === subItem.url &&
-                                  "bg-leather-200 text-leather-900 font-medium hover:bg-leather-300",
+                                    "bg-gradient-to-r from-leather-300/70 to-leather-200/70 text-leather-900 font-medium shadow-sm",
                                 )}
                               >
-                                <subItem.icon className="w-5 h-5" />
+                                <div
+                                  className={cn(
+                                    "p-1.5 rounded-lg bg-white/80 shadow-sm",
+                                    location.pathname === subItem.url && "bg-white shadow-md",
+                                  )}
+                                >
+                                  <subItem.icon className="w-4 h-4" />
+                                </div>
                                 <span>{subItem.title}</span>
                               </Link>
                             </SidebarMenuButton>
@@ -158,13 +194,20 @@ export function AppSidebar() {
                             <Link
                               to={item.url}
                               className={cn(
-                                "flex items-center gap-3 text-leather-700 p-2 rounded-lg transition-all",
-                                "hover:bg-leather-100 hover:text-leather-900",
+                                "flex items-center gap-3 text-leather-700 p-2.5 rounded-xl transition-all",
+                                "hover:bg-gradient-to-r hover:from-leather-200/70 hover:to-leather-100/70 hover:text-leather-900",
                                 location.pathname === item.url &&
-                                "bg-leather-200 text-leather-900 font-medium hover:bg-leather-300",
+                                  "bg-gradient-to-r from-leather-300/70 to-leather-200/70 text-leather-900 font-medium shadow-sm",
                               )}
                             >
-                              <item.icon className="w-5 h-5" />
+                              <div
+                                className={cn(
+                                  "p-1.5 rounded-lg bg-white/80 shadow-sm",
+                                  location.pathname === item.url && "bg-white shadow-md",
+                                )}
+                              >
+                                <item.icon className="w-4 h-4" />
+                              </div>
                               <span>{item.title}</span>
                             </Link>
                           </SidebarMenuButton>
@@ -179,32 +222,39 @@ export function AppSidebar() {
         </SidebarContent>
       </ScrollArea>
 
-      <SidebarFooter className="border-t border-leather-200 pt-4 pb-6">
+      <SidebarFooter className="border-t border-leather-200/70 pt-4 pb-6 bg-gradient-to-b from-leather-100/50 to-leather-200/50">
         <div className="px-4">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="py-6 w-full justify-start text-leather-700 hover:text-leather-900 hover:bg-leather-100"
+                  className="py-6 w-full justify-start text-leather-700 hover:text-leather-900 hover:bg-leather-100/80 rounded-xl transition-all duration-300"
                 >
-                  <Avatar className="w-8 h-8 mr-3 bg-leather-200 text-leather-800">
-                    <AvatarFallback>
-                      {user?.firstname[0]}
-                      {user?.lastname[0]}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="relative">
+                    <div className="absolute -inset-1 bg-gradient-to-br from-leather-300 to-leather-500 rounded-full opacity-70 blur-sm"></div>
+                    <Avatar className="w-9 h-9 border-2 border-white bg-leather-200 text-leather-800 shadow-md relative">
+                      <AvatarFallback className="font-semibold">
+                        {user?.firstname[0]}
+                        {user?.lastname[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
                   {state !== "collapsed" || isMobile ? (
-                    <div className="flex flex-col items-start">
-                      <span className="font-medium">{user?.firstname}</span>
-                      <span className="text-xs text-leather-500">{user?.roles}</span>
+                    <div className="flex flex-col items-start ml-3">
+                      <span className="font-medium text-leather-800">
+                        {user?.firstname} {user?.lastname}
+                      </span>
+                      <span className="text-xs text-leather-500 bg-leather-200/50 px-2 py-0.5 rounded-full mt-1">
+                        {user?.roles}
+                      </span>
                     </div>
                   ) : null}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="right">
+              <TooltipContent side="right" className="bg-leather-800 text-white border-leather-700">
                 <p>
-                  {user?.firstname} - {user?.roles}
+                  {user?.firstname} {user?.lastname} - {user?.roles}
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -213,7 +263,7 @@ export function AppSidebar() {
         <div className="mt-4 px-4">
           <Button
             variant="outline"
-            className="w-full justify-start text-leather-700 hover:text-leather-900 hover:bg-leather-100"
+            className="w-full justify-start text-leather-700 hover:text-red-600 hover:bg-red-50 border-leather-300/50 rounded-xl transition-all duration-300 shadow-sm"
             onClick={logout}
           >
             <LogOut className="mr-2 h-4 w-4" />
@@ -221,7 +271,7 @@ export function AppSidebar() {
           </Button>
         </div>
       </SidebarFooter>
-      <SidebarRail />
+      <SidebarRail className="bg-leather-200/20 hover:bg-leather-200/40 transition-colors duration-300" />
     </Sidebar>
   )
 }
