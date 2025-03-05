@@ -12,96 +12,9 @@ import { useCreateInteraction } from "@/hooks/api/useCreateInteractions"
 import { TypeInteraction } from "@/components/admin-dashboard/type-interactions/columns"
 import { UserPayload } from "@/context/AuthContext"
 import { usePatchInteractions } from "@/hooks/admin/interactions/usePatchInteractions"
+import ParameterCard from "./parameter-card"
+import BenefitsCard from "./benefits-card"
 
-interface ParameterCardProps {
-  phases: {
-    label: string
-    value: number
-    color: string
-    gradient: string
-    icon: React.ReactNode
-  }[]
-  cycleDuration: number
-  isActive: boolean
-}
-
-const ParameterCard: React.FC<ParameterCardProps> = ({ phases, cycleDuration, isActive }) => {
-  return (
-    <Card className="bg-white p-6 border-leather-100 rounded-3xl shadow-lg transform transition-all duration-300 hover:shadow-xl">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-leather-900">Paramètres du cycle</h2>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-leather-600">
-                <Info className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Durée de chaque phase du cycle de respiration</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-      <div className="space-y-5">
-        {phases.map((phase, index) => (
-          <motion.div
-            key={phase.label}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="space-y-2"
-          >
-            <div className="flex justify-between items-center">
-              <span className="text-leather-700 font-medium flex items-center gap-2">
-                {phase.icon}
-                {phase.label}
-              </span>
-              <Badge variant="outline" className="bg-leather-50">
-                {phase.value}s
-              </Badge>
-            </div>
-            <div className="h-2 bg-leather-100 rounded-full overflow-hidden">
-              <motion.div
-                className={`h-full bg-gradient-to-r ${phase.gradient} rounded-full`}
-                initial={{ width: 0 }}
-                animate={{ width: `${(phase.value / cycleDuration) * 100}%` }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-              />
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </Card>
-  )
-}
-
-interface BenefitsCardProps {
-  benefits: string[] | undefined
-  isActive: boolean
-}
-
-const BenefitsCard: React.FC<BenefitsCardProps> = ({ benefits, isActive }) => {
-  return (
-    <Card className="bg-white p-6 border-leather-100 rounded-3xl shadow-lg transform transition-all duration-300 hover:shadow-xl">
-      <h2 className="text-xl font-semibold text-leather-900 mb-6">Bénéfices</h2>
-      <div className="space-y-3">
-        {benefits?.map((benefit, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-            className="flex items-center p-3 rounded-3xl bg-leather-50/50 hover:bg-leather-50 transition-all duration-200"
-          >
-            <Heart className="h-5 w-5 text-leather-600 mr-3" />
-            <span className="text-leather-700">{benefit}</span>
-          </motion.div>
-        ))}
-      </div>
-    </Card>
-  )
-}
 
 interface ExerciceDetailProps {
   exercice: ExerciceType | null
@@ -515,16 +428,29 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
   return (
     <div className="bg-leather-200 min-h-screen">
       {/* Header avec animation améliorée */}
-      <div className="relative bg-gradient-to-b from-leather-800 to-leather-700 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20 animate-pulse-slow" />
-        <div className="relative container mx-auto px-4 sm:px-6 py-12 sm:py-12 max-w-7xl lg:px-8">
-          <div className="flex items-center justify-between mb-6 sm:mb-8">
+      <div className="relative isolate overflow-hidden bg-leather-900">
+        <div className="absolute inset-0 -z-10 h-full w-full bg-[url('/grid.svg')] bg-center opacity-20"></div>
+        <div
+          className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+          aria-hidden="true"
+        >
+          <div
+            className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-leather-500 to-leather-700 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+            style={{
+              clipPath:
+                "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+            }}
+          ></div>
+        </div>
+
+        <div className="relative container mx-auto px-4 sm:px-6 py-16 sm:py-24 max-w-7xl lg:px-8">
+          <div className="flex items-center justify-start mb-6">
             <Button
               variant="ghost"
-              className="text-white hover:text-leather-800 transition-all duration-300 hover:bg-leather-100 rounded-full"
+              className="text-white hover:text-leather-800 transition-all duration-300 hover:bg-leather-100 rounded-full group"
               onClick={() => window.history.back()}
             >
-              <ArrowLeft className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              <ArrowLeft className="mr-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:-translate-x-1 transition-transform" />
               <span className="hidden sm:inline">Retour aux exercices</span>
               <span className="sm:hidden">Retour</span>
             </Button>
@@ -536,13 +462,15 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">{exercice?.ex_nom}</h1>
-            <p className="text-base sm:text-lg md:text-xl text-leather-100 mb-6 px-4">{exercice?.ex_description}</p>
-            <div className="flex flex-wrap justify-center gap-3">
+            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl mb-6">
+              {exercice?.ex_nom}
+            </h1>
+            <p className="text-xl text-leather-200 max-w-2xl mx-auto mb-8">{exercice?.ex_description}</p>
+            <div className="flex flex-wrap justify-center gap-4">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Badge className="bg-leather-500/20 text-white border-leather-400/30 rounded-full">
+                    <Badge className="bg-leather-700/30 text-leather-100 border-leather-600/30 rounded-full px-4 py-1.5 text-sm">
                       <Clock className="mr-2 h-4 w-4" />
                       {exercice?.ex_duration} minutes
                     </Badge>
@@ -554,7 +482,7 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Badge className="bg-leather-500/20 text-white border-leather-400/30 rounded-full">
+                    <Badge className="bg-leather-700/30 text-leather-100 border-leather-600/30 rounded-full px-4 py-1.5 text-sm">
                       <Award className="mr-2 h-4 w-4" />
                       {exercice?.ex_difficulty}
                     </Badge>
@@ -573,15 +501,30 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
           <div className="lg:col-span-8 space-y-6">
             <AnimatePresence mode="wait">
-              {!hasStarted ? (
+            {!hasStarted ? (
                 <WelcomeState exercise={exercice} onStart={handleInitialStart} />
               ) : isCompleted ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="bg-white rounded-3xl p-6 sm:p-8 text-center shadow-xl border border-leather-100"
+                  className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 sm:p-12 text-center shadow-xl border border-leather-100 relative overflow-hidden"
                 >
+                  {/* Background decoration */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <motion.div
+                      className="absolute top-0 right-0 w-64 h-64 bg-gradient-radial from-green-100/30 to-transparent rounded-full"
+                      animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+                      transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                    />
+                    <motion.div
+                      className="absolute bottom-0 left-0 w-72 h-72 bg-gradient-radial from-leather-100/30 to-transparent rounded-full"
+                      animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
+                      transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                    />
+                  </div>
+
+                  {/* Success icon with animation */}
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -591,34 +534,57 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
                       stiffness: 200,
                       damping: 20,
                     }}
+                    className="relative mb-8"
                   >
-                    <CheckCircle2 className="w-16 sm:w-20 h-16 sm:h-20 text-green-500 mx-auto mb-6" />
+                    <div className="absolute inset-0 bg-green-100 rounded-full animate-pulse-ring" />
+                    <div className="relative bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-full shadow-lg mx-auto w-24 h-24 flex items-center justify-center">
+                      <CheckCircle2 className="w-12 h-12 animate-float" />
+                    </div>
                   </motion.div>
+
+                  {/* Congratulations text */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
+                    className="relative space-y-6"
                   >
-                    <h2 className="text-2xl sm:text-3xl font-bold text-leather-900 mb-2">Félicitations !</h2>
-                    <p className="text-leather-600 mb-8">
-                      Vous avez terminé votre séance de {exercice?.ex_duration} minutes avec succès.
-                      <br className="hidden sm:block" />
-                      Prenez un moment pour apprécier votre état de détente.
-                    </p>
+                    <div className="space-y-3">
+                      <h2 className="text-3xl sm:text-4xl font-bold text-leather-900">Félicitations !</h2>
+                      <p className="text-leather-600 max-w-lg mx-auto text-lg">
+                        Vous avez terminé votre séance de {exercice?.ex_duration} minutes avec succès.
+                        <br className="hidden sm:block" />
+                        Prenez un moment pour apprécier votre état de détente.
+                      </p>
+                    </div>
+
+                    {/* Stats summary */}
+                    <div className="grid grid-cols-2 gap-4 max-w-md mx-auto my-8">
+                      <div className="bg-leather-50 rounded-2xl p-4">
+                        <p className="text-leather-600 text-sm">Durée totale</p>
+                        <p className="text-leather-900 text-xl font-bold">{exercice?.ex_duration} min</p>
+                      </div>
+                      <div className="bg-leather-50 rounded-2xl p-4">
+                        <p className="text-leather-600 text-sm">Cycles complétés</p>
+                        <p className="text-leather-900 text-xl font-bold">{totalCycles}</p>
+                      </div>
+                    </div>
+
+                    {/* Restart button */}
                     <Button
                       size="lg"
                       onClick={() => {
-                        handleReset(),
-                          createInteraction({
-                            inter_date_de_debut: new Date().toISOString(),
-                            utilisateur: `/api/utilisateurs/${user?.id}`,
-                            exercice: `/api/exercices/${exercice?.id}`,
-                            typeInteraction: `/api/type_interactions/${typeInteraction?.id}`,
-                          })
+                        handleReset()
+                        createInteraction({
+                          inter_date_de_debut: new Date().toISOString(),
+                          utilisateur: `/api/utilisateurs/${user?.id}`,
+                          exercice: `/api/exercices/${exercice?.id}`,
+                          typeInteraction: `/api/type_interactions/${typeInteraction?.id}`,
+                        })
                       }}
-                      className="bg-leather-600 hover:bg-leather-700 text-white transition-all duration-300"
+                      className="bg-gradient-to-r from-leather-600 to-leather-700 rounded-full hover:from-leather-700 hover:to-leather-800 text-white shadow-lg transition-all duration-300 hover:shadow-xl group px-8"
                     >
-                      <RotateCcw className="mr-2 h-5 w-5" />
+                      <RotateCcw className="mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-180" />
                       Recommencer
                     </Button>
                   </motion.div>

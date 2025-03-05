@@ -1,50 +1,24 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button" // Added ButtonSize import
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Badge } from "@/components/ui/badge"
 import {
-  ArrowRight,
-  Brain,
   Smile,
   Activity,
-  ChevronLeft,
-  ChevronRight,
   Check,
   ArrowUpRight,
-  ChevronDown,
   Users,
   Star,
   Clock,
-  Heart,
   Zap,
   Shield,
-  Trophy,
+  Cloud,
+  Lock,
+  RefreshCw,
+  Database,
+  ArrowRight,
 } from "lucide-react"
-import { useAuth } from "@/context/AuthContext"
-import { useNavigate } from "react-router-dom"
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Marie L.",
-    role: "Professionnelle en entreprise",
-    text: "Cesizen a complètement changé ma façon de gérer le stress. Je me sens tellement plus sereine maintenant !",
-  },
-  {
-    id: 2,
-    name: "Thomas D.",
-    role: "Entrepreneur",
-    text: "Les exercices de respiration sont incroyables. Je les utilise tous les jours et je vois une réelle différence.",
-  },
-  {
-    id: 3,
-    name: "Sophie M.",
-    role: "Enseignante",
-    text: "Le tracker d'émotions m'a aidé à mieux comprendre mes schémas émotionnels. C'est un outil puissant.",
-  },
-]
 
 const faqItems = [
   {
@@ -71,33 +45,46 @@ const statistics = [
   { label: "Minutes de pratique", value: "1M+", icon: Clock },
 ]
 
-const whyChooseUs = [
+const features = [
   {
-    icon: Shield,
-    title: "Approche scientifique",
-    description: "Méthodes basées sur des recherches scientifiques et validées par des experts",
+    icon: Cloud,
+    title: "Diagnostics Intelligents",
+    description: "Évaluez votre niveau de stress avec nos outils de diagnostic basés sur l'IA.",
+    features: ["Analyse personnalisée", "Recommandations sur mesure", "Suivi de progression"],
   },
   {
-    icon: Zap,
-    title: "Résultats rapides",
-    description: "Constatez les premiers effets positifs dès la première semaine d'utilisation",
+    icon: Activity,
+    title: "Exercices de Respiration",
+    description: "Des exercices guidés pour une meilleure gestion du stress.",
+    features: ["Cohérence cardiaque", "Respiration profonde", "Méditation guidée"],
   },
   {
-    icon: Heart,
-    title: "Suivi personnalisé",
-    description: "Recommandations adaptées à votre profil et à vos objectifs",
+    icon: Smile,
+    title: "Tracker d'Émotions",
+    description: "Suivez et analysez vos émotions au quotidien.",
+    features: ["Visualisation intuitive", "Analyses détaillées", "Insights personnalisés"],
   },
   {
-    icon: Trophy,
-    title: "Progression continue",
-    description: "Système de récompenses et objectifs pour maintenir votre motivation",
+    icon: Lock,
+    title: "Sécurité des Données",
+    description: "Vos données personnelles sont protégées avec les plus hauts standards de sécurité.",
+    features: ["Chiffrement de bout en bout", "Conformité RGPD", "Contrôle total de vos données"],
   },
 ]
 
 export default function Home() {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
-  const { isAuthenticated } = useAuth()
-  const navigate = useNavigate()
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight
+      const currentProgress = (window.pageYOffset / totalHeight) * 100
+      setProgress(currentProgress)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const scrollToNextSection = (sectionId: string) => {
     const section = document.getElementById(sectionId)
@@ -108,773 +95,686 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      {/* Progress bar - Ajusté pour mobile */}
+      {/* Progress bar */}
+      <div className="fixed top-0 left-0 w-full h-1 bg-leather-200 z-50">
+        <motion.div
+          className="h-full bg-gradient-to-r from-leather-600 to-leather-500"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
 
       <main className="overflow-hidden">
-        {/* Hero Section - Optimisé pour mobile */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4">
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-leather-900 via-leather-800 to-leather-700"
+        {/* Hero Section */}
+        <section className="relative isolate px-6 pt-14 lg:px-8 min-h-[100vh] flex items-center">
+          <div
+            className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+            aria-hidden="true"
           >
-            <motion.div
-              className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20 mix-blend-overlay"
-            />
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-t from-leather-900/50 to-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.5 }}
-            />
-          </motion.div>
+            <div
+              className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-leather-500 to-leather-700 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+              style={{
+                clipPath:
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+              }}
+            ></div>
+          </div>
 
-          <div className="relative container mx-auto px-4 sm:px-6 max-w-7xl lg:px-8 py-4">
-            <div className="flex flex-col items-center space-y-8 text-center">
+          <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+            <div className="hidden sm:mb-8 sm:flex sm:justify-center">
               <motion.div
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="space-y-6 md:space-y-4"
+                className="relative rounded-full px-3 py-1 text-sm leading-6 text-leather-600 ring-1 ring-leather-900/10 hover:ring-leather-900/20"
               >
-                <motion.div
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="inline-block"
-                >
-                  <Badge className="bg-white/10 text-white border-white/20 backdrop-blur-sm px-3 py-1 text-xs sm:px-4 sm:text-sm mb-4 sm:mb-6">
-                    Nouveau : Exercices de respiration guidés 🎉
-                  </Badge>
-                </motion.div>
-
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white leading-tight">
-                  Découvrez la Sérénité avec{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-leather-200 to-leather-100 block sm:inline">
-                    Cesizen
-                  </span>
-                </h1>
-                <p className="mx-auto max-w-[700px] text-leather-50 text-base sm:text-lg md:text-xl px-4 sm:px-0">
-                  Votre compagnon personnel pour une meilleure santé mentale et une gestion efficace du stress.
-                </p>
+                Nouveau : Exercices de respiration guidés{" "}
+                <a href="#exercises" className="font-semibold text-leather-600">
+                  <span className="absolute inset-0" aria-hidden="true"></span>
+                  En savoir plus <span aria-hidden="true">&rarr;</span>
+                </a>
               </motion.div>
+            </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto"
-              >
-                {
-                  !isAuthenticated
-                  &&
-                  <Button
-                    onClick={() => navigate("/register")}
-                    size={"lg"}
-                    className="bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300 shadow-lg shadow-leather-900/20 w-full sm:w-auto"
-                  >
-                    Commencer gratuitement
-                    <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </Button>
-                }
-                <Button
-                  size={"lg"}
-                  variant="outline"
-                  className="text-white border-white backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all duration-300 w-full sm:w-auto"
-                >
-                  En savoir plus
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center"
+            >
+              <h1 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
+                Découvrez la Sérénité avec <span className="text-leather-600">Cesizen</span>
+              </h1>
+              <p className="mt-6 text-lg leading-8 text-gray-600">
+                Votre compagnon personnel pour une meilleure santé mentale et une gestion efficace du stress.
+              </p>
+              <div className="mt-10 flex items-center justify-center gap-x-6">
+                <Button className="rounded-md bg-leather-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-leather-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leather-600">
+                  Commencer gratuitement
                 </Button>
-              </motion.div>
-
-              {/* Statistics - Responsive grid */}
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 w-full max-w-4xl mt-8 sm:mt-12"
-              >
-                {statistics.map((stat, index) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                    className="bg-white/10 backdrop-blur-sm rounded-3xl p-3 sm:p-4 text-center group hover:bg-white/20 transition-all duration-300"
-                  >
-                    <motion.div
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
-                      className="mb-2 inline-block text-white"
-                    >
-                      <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 mx-auto" />
-                    </motion.div>
-                    <div className="text-lg sm:text-2xl font-bold text-white mb-1">{stat.value}</div>
-                    <div className="text-xs sm:text-sm text-leather-200">{stat.label}</div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
+                <Button
+                  variant="ghost"
+                  className="text-sm font-semibold leading-6 text-gray-900"
+                  onClick={() => scrollToNextSection("features")}
+                >
+                  En savoir plus <span aria-hidden="true">→</span>
+                </Button>
+              </div>
+            </motion.div>
           </div>
 
-          {/* Enhanced scroll indicator - Hidden on touch devices */}
-          <motion.div
-            className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white cursor-pointer hidden md:block"
-            animate={{
-              y: [0, 10, 0],
-              opacity: [1, 0.5, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-            onClick={() => scrollToNextSection("why")}
+          <div
+            className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+            aria-hidden="true"
           >
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-sm font-medium text-leather-200">Découvrir</span>
-              <ChevronDown className="w-8 h-8" />
-            </div>
-          </motion.div>
-        </section>
-        {/* Why Choose Us Section - Responsive grid */}
-        <section id="why" className="w-full py-16 sm:py-24 bg-gradient-to-b from-leather-50 to-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5" />
-          <div className="container mx-auto px-4 sm:px-6 max-w-7xl lg:px-8 py-4 relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="text-center mb-12 sm:mb-16"
-            >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-leather-900 mb-4">
-                Pourquoi Choisir Cesizen ?
-              </h2>
-              <p className="text-leather-600 text-base sm:text-lg max-w-2xl mx-auto px-4 sm:px-0">
-                Une approche unique et scientifique pour votre bien-être mental.
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              {whyChooseUs.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
-                  className="bg-white rounded-3xl p-6 shadow-lg border border-leather-100 hover:shadow-xl transition-all duration-300"
-                >
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-leather-600 to-leather-500 flex items-center justify-center mb-4 shadow-lg shadow-leather-500/20">
-                    <item.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-leather-900 mb-2">{item.title}</h3>
-                  <p className="text-sm sm:text-base text-leather-600">{item.description}</p>
-                </motion.div>
-              ))}
-            </div>
+            <div
+              className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-leather-500 to-leather-700 opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+              style={{
+                clipPath:
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+              }}
+            ></div>
           </div>
         </section>
-        {/* Features Section - Responsive adjustments */}
-        <section id="features" className="w-full py-16 sm:py-24 bg-leather-50/50 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5" />
-          <div className="container mx-auto px-4 sm:px-6 max-w-7xl lg:px-8 py-4 relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="text-center mb-12 sm:mb-16"
-            >
-              <Badge className="bg-leather-200 text-leather-700 mb-4 px-3 py-1 hover:bg-leather-200 text-xs sm:px-4 sm:text-sm">
-                Fonctionnalités
-              </Badge>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-leather-900 mb-4">
-                Des Outils Puissants pour Votre Bien-être
-              </h2>
-              <p className="text-leather-600 text-base sm:text-lg max-w-2xl mx-auto px-4 sm:px-0">
-                Une suite complète d'outils conçus pour vous accompagner dans votre parcours vers l'équilibre.
+
+        {/* Features Section */}
+        <section id="features" className="bg-white py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl lg:text-center">
+              <h2 className="text-base font-semibold leading-7 text-leather-600">Améliorez votre bien-être</h2>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Tout ce dont vous avez besoin pour gérer votre stress
               </p>
-            </motion.div>
+              <p className="mt-6 text-lg leading-8 text-gray-600">
+                Une suite complète d'outils conçus pour vous accompagner dans votre parcours vers l'équilibre mental et
+                émotionnel.
+              </p>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {[
-                {
-                  icon: Brain,
-                  title: "Diagnostics Intelligents",
-                  description: "Évaluez votre niveau de stress avec nos outils de diagnostic basés sur l'IA.",
-                  features: ["Analyse personnalisée", "Recommandations sur mesure", "Suivi de progression"],
-                },
-                {
-                  icon: Activity,
-                  title: "Exercices de Respiration",
-                  description: "Des exercices guidés pour une meilleure gestion du stress.",
-                  features: ["Cohérence cardiaque", "Respiration profonde", "Méditation guidée"],
-                },
-                {
-                  icon: Smile,
-                  title: "Tracker d'Émotions",
-                  description: "Suivez et analysez vos émotions au quotidien.",
-                  features: ["Visualisation intuitive", "Analyses détaillées", "Insights personnalisés"],
-                },
-              ].map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
-                >
-                  <Card className="flex flex-col p-3 h-full rounded-3xl bg-white border border-leather-200 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden group">
-                    {/* En-tête */}
-                    <div className="p-4">
-                      <div className="flex flex-col items-center">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-leather-600 to-leather-500 flex items-center justify-center mb-4 shadow-lg shadow-leather-500/20 group-hover:scale-110 transition-transform duration-300">
-                          <feature.icon className="w-6 h-6 text-white" />
-                        </div>
-                        <h3 className="text-leather-900 text-lg font-semibold">{feature.title}</h3>
+            <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
+              <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
+                {features.map((feature) => (
+                  <motion.div
+                    key={feature.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="relative pl-16"
+                  >
+                    <dt className="text-base font-semibold leading-7 text-gray-900">
+                      <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-leather-600">
+                        <feature.icon className="h-6 w-6 text-white" aria-hidden="true" />
                       </div>
-                    </div>
-
-                    {/* Contenu principal */}
-                    <div className="flex flex-col flex-1 p-4">
-                      <p className="text-leather-600 mb-4">{feature.description}</p>
-                      <ul className="flex-1 space-y-2">
+                      {feature.title}
+                    </dt>
+                    <dd className="mt-2 text-base leading-7 text-gray-600">
+                      {feature.description}
+                      <ul className="mt-4 space-y-2">
                         {feature.features.map((item, i) => (
-                          <li key={i} className="flex items-center gap-2 text-leather-700">
+                          <li key={i} className="flex items-center gap-2 text-gray-600">
                             <Check className="w-4 h-4 text-leather-500" />
                             <span className="text-sm">{item}</span>
                           </li>
                         ))}
                       </ul>
-                      {/* Bouton en bas */}
-                      <div className="mt-auto pt-4">
-                        <Button
-                          size="sm"
-                          className="w-full bg-leather-600 text-leather-50 hover:bg-leather-800"
-                        >
-                          En savoir plus
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Button>
-                      </div>
-                    </div>
-                  </Card>
-
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-        {/* How it Works - Compact section */}
-        <section className="w-full py-24 bg-leather-50/50">
-          <div className="container mx-auto px-4 md:px-6 max-w-7xl sm:px-6 lg:px-8 py-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-leather-900 mb-4">
-                Comment ça marche
-              </h2>
-              <p className="text-leather-600 text-lg max-w-2xl mx-auto">
-                Trois étapes simples pour commencer votre voyage vers le bien-être.
-              </p>
-            </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              {[
-                {
-                  step: 1,
-                  title: "Inscrivez-vous",
-                  description: "Créez votre compte en quelques clics et personnalisez votre profil.",
-                },
-                {
-                  step: 2,
-                  title: "Explorez nos outils",
-                  description: "Découvrez nos diagnostics, exercices de respiration et notre tracker d'émotions.",
-                },
-                {
-                  step: 3,
-                  title: "Améliorez votre bien-être",
-                  description:
-                    "Suivez vos progrès et bénéficiez de conseils personnalisés pour une meilleure santé mentale.",
-                },
-              ].map((item, index) => (
-                <motion.div
-                  key={item.step}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="flex flex-col items-center text-center group"
-                >
-                  <motion.div
-                    className="w-16 h-16 bg-gradient-to-br from-leather-600 to-leather-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-6 shadow-lg shadow-leather-500/20 transition-transform duration-300 group-hover:scale-110"
-                  >
-                    {item.step}
+                    </dd>
                   </motion.div>
-                  <h3 className="text-xl font-semibold text-leather-900 mb-3">{item.title}</h3>
-                  <p className="text-leather-600">{item.description}</p>
-                </motion.div>
-              ))}
+                ))}
+              </dl>
             </div>
           </div>
         </section>
-        {/* Breathing Exercise Section - Full height with interactive elements */}
-        <section
-          id="exercises"
-          className="min-h-screen flex items-center relative overflow-hidden bg-gradient-to-br from-white to-leather-100/50"
-        >
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5" />
-          <div className="container mx-auto px-4 md:px-6 max-w-7xl sm:px-6 lg:px-8 relative py-24">
-            <div className="grid gap-12 lg:grid-cols-2 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="flex flex-col justify-center space-y-8"
-              >
-                <div>
-                  <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-leather-900 mb-6">
-                    Exercices de Respiration Interactifs
-                  </h2>
-                  <p className="text-leather-600 text-lg">
-                    Découvrez la puissance de la cohérence cardiaque et d'autres techniques de respiration pour réduire
-                    votre stress et améliorer votre bien-être.
-                  </p>
-                </div>
 
-                {/* Added exercise types */}
-                <div className="space-y-4">
-                  {[
-                    { name: "Cohérence cardiaque", duration: "5 min", level: "Débutant" },
-                    { name: "Respiration carrée", duration: "10 min", level: "Intermédiaire" },
-                    { name: "Respiration profonde", duration: "15 min", level: "Avancé" },
-                  ].map((exercise, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      viewport={{ once: true }}
-                      className="flex items-center gap-4 p-4 bg-white rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group"
-                    >
-                      <div className="w-12 h-12 rounded-full bg-leather-100 flex items-center justify-center group-hover:bg-leather-200 transition-colors">
-                        <Activity className="w-6 h-6 text-leather-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-medium text-leather-900">{exercise.name}</h3>
-                        <p className="text-sm text-leather-500">
-                          {exercise.duration} • {exercise.level}
-                        </p>
-                      </div>
-                      <ArrowRight className="w-5 h-5 text-leather-400 group-hover:text-leather-600 group-hover:translate-x-1 transition-all" />
-                    </motion.div>
-                  ))}
-                </div>
-                {
-                  !isAuthenticated
-                  &&
-                  <Button
-                    onClick={() => navigate("/register")}
-                    size={"lg"}
-                    className="bg-leather-600 hover:bg-leather-700 text-white group transition-all duration-300 w-full sm:w-auto"
-                  >
-                    S'inscrire
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                }
-                {
-                  isAuthenticated
-                  &&
-                  <Button
-                    onClick={() => navigate("/exercices")}
-                    size={"lg"}
-                    className="bg-leather-600 hover:bg-leather-700 text-white group transition-all duration-300 w-full sm:w-auto"
-                  >
-                    Découvrir tous les exercices
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                }
-              </motion.div>
-
-              {/* Enhanced breathing animation */}
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="flex items-center justify-center"
+        {/* CTA Section */}
+        <section className="bg-white">
+          <div className="mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8">
+            <div className="relative isolate overflow-hidden bg-leather-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
+              <svg
+                viewBox="0 0 1024 1024"
+                className="absolute top-1/2 left-1/2 -z-10 h-[64rem] w-[64rem] -translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:left-full sm:-ml-80 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2 lg:translate-y-0"
+                aria-hidden="true"
               >
-                <div className="relative w-[300px] h-[300px]">
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-leather-200 to-leather-300 rounded-full opacity-50"
-                    animate={{
-                      scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                  />
-                  <motion.div
-                    className="absolute inset-4 bg-gradient-to-br from-leather-500 to-leather-400 rounded-full shadow-xl backdrop-blur-sm"
-                    animate={{
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                      delay: 0.5,
-                    }}
-                  >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div
-                        className="text-center"
-                        animate={{
-                          opacity: [1, 0.7, 1],
-                        }}
-                        transition={{
-                          duration: 4,
-                          repeat: Number.POSITIVE_INFINITY,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        <span className="text-2xl font-bold text-white mb-2 block">Inspirez</span>
-                        <span className="text-white/80 text-sm">4 secondes</span>
-                      </motion.div>
-                    </div>
-                  </motion.div>
+                <circle cx="512" cy="512" r="512" fill="url(#759c1415-0410-454c-8f7c-9a820de03641)" fillOpacity="0.7" />
+                <defs>
+                  <radialGradient id="759c1415-0410-454c-8f7c-9a820de03641">
+                    <stop stopColor="#A47864" />
+                    <stop offset="1" stopColor="#8D5F52" />
+                  </radialGradient>
+                </defs>
+              </svg>
+
+              <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
+                <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                  Améliorez votre bien-être.
+                  <br />
+                  Commencez à utiliser Cesizen dès aujourd'hui.
+                </h2>
+                <p className="mt-6 text-lg leading-8 text-gray-300">
+                  Rejoignez des milliers d'utilisateurs qui ont transformé leur relation au stress et amélioré leur
+                  santé mentale grâce à nos outils.
+                </p>
+                <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
+                  <Button className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-leather-900 shadow-sm hover:bg-gray-100">
+                    Commencer gratuitement
+                  </Button>
+                  <Button variant="ghost" className="text-sm font-semibold leading-6 text-white">
+                    En savoir plus <span aria-hidden="true">→</span>
+                  </Button>
                 </div>
-              </motion.div>
+              </div>
+
+              <div className="relative mt-16 h-80 lg:mt-8">
+                <img
+                  className="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
+                  src="/breathing-app-screenshot.png"
+                  alt="Capture d'écran de l'application Cesizen"
+                  width="1824"
+                  height="1080"
+                />
+              </div>
             </div>
           </div>
         </section>
-        {/* Emotions Section - Full height with enhanced visualization */}
-        <section
-          id="emotions"
-          className="min-h-screen flex items-center bg-leather-900 text-white relative overflow-hidden"
-        >
-          <div className="container mx-auto px-4 md:px-6 max-w-7xl sm:px-6 lg:px-8relative py-24">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white mb-4">
-                Visualisez Vos Émotions
-              </h2>
-              <p className="text-leather-100 text-lg max-w-2xl mx-auto">
-                Suivez votre bien-être émotionnel et découvrez des tendances qui vous aideront à mieux vous comprendre.
+
+        {/* Bento Grid Section */}
+        <section className="bg-gray-50 py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl lg:text-center">
+              <h2 className="text-base font-semibold leading-7 text-leather-600">Fonctionnalités avancées</h2>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Tout ce dont vous avez besoin pour votre bien-être
               </p>
-            </motion.div>
+            </div>
 
-            <div className="grid gap-12 lg:grid-cols-2 items-center">
+            <div className="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
+              {/* Mobile friendly */}
               <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="order-2 lg:order-1 space-y-8"
+                transition={{ duration: 0.5 }}
+                className="relative lg:row-span-2 rounded-2xl bg-white p-6 shadow-sm"
               >
-                {/* Weekly emotions chart */}
-                <Card className="bg-white/10 rounded-3xl backdrop-blur-sm border-white/20">
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-semibold text-white mb-6">Votre semaine en émotions</h3>
-                    <div className="space-y-4">
-                      {["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"].map((day, index) => (
-                        <motion.div
-                          key={day}
-                          initial={{ opacity: 0, x: -20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                          viewport={{ once: true }}
-                          className="flex items-center gap-4"
-                        >
-                          <span className="w-20 text-sm text-leather-200">{day}</span>
-                          <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden">
-                            <motion.div
-                              className="h-full rounded-full bg-gradient-to-r from-leather-300 to-leather-200"
-                              initial={{ width: 0 }}
-                              whileInView={{ width: `${Math.random() * 100}%` }}
-                              transition={{ duration: 1, delay: index * 0.1 }}
-                              viewport={{ once: true }}
-                            />
-                          </div>
-                        </motion.div>
-                      ))}
+                <div className="flex flex-col h-full">
+                  <div className="mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className="h-10 w-10 rounded-full bg-leather-100 flex items-center justify-center">
+                        <Activity className="h-5 w-5 text-leather-600" />
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900">Exercices de respiration</h3>
                     </div>
-                  </CardContent>
-                </Card>
-
-                {/* Emotion categories */}
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { name: "Calme", value: 75, color: "from-green-400 to-green-300" },
-                    { name: "Stress", value: 25, color: "from-red-400 to-red-300" },
-                    { name: "Joie", value: 60, color: "from-yellow-400 to-yellow-300" },
-                    { name: "Fatigue", value: 40, color: "from-blue-400 to-blue-300" },
-                  ].map((emotion, index) => (
-                    <Card key={index} className="bg-white/5 border-white/10 rounded-3xl">
-                      <CardContent className="p-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-leather-100">{emotion.name}</span>
-                          <span className="text-leather-200">{emotion.value}%</span>
-                        </div>
-                        <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                          <motion.div
-                            className={`h-full rounded-full bg-gradient-to-r ${emotion.color}`}
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${emotion.value}%` }}
-                            transition={{ duration: 1 }}
-                            viewport={{ once: true }}
-                          />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-                className="order-1 lg:order-2"
-              >
-                <div className="space-y-8">
-                  <div className="space-y-6">
-                    <h3 className="text-2xl font-bold text-white">Tracker d'Émotions Avancé</h3>
-                    <p className="text-leather-100 text-lg">
-                      Suivez vos émotions au quotidien, identifiez les tendances et obtenez des insights précieux sur
-                      votre bien-être émotionnel.
+                    <p className="mt-4 text-sm text-gray-600">
+                      Des exercices guidés pour une meilleure gestion du stress, accessibles partout, même en
+                      déplacement.
                     </p>
                   </div>
 
-                  <div className="grid gap-6">
-                    {[
-                      {
-                        title: "Suivi personnalisé",
-                        description: "Enregistrez vos émotions et suivez leur évolution dans le temps",
-                      },
-                      {
-                        title: "Analyses détaillées",
-                        description: "Obtenez des insights sur vos schémas émotionnels",
-                      },
-                      {
-                        title: "Recommandations adaptées",
-                        description: "Recevez des conseils personnalisés basés sur vos données",
-                      },
-                    ].map((feature, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        viewport={{ once: true }}
-                        className="bg-white/5 backdrop-blur-sm rounded-3xl p-6 border border-white/10"
-                      >
-                        <h4 className="text-white font-medium mb-2">{feature.title}</h4>
-                        <p className="text-leather-200">{feature.description}</p>
-                      </motion.div>
-                    ))}
+                  <div className="relative flex-grow mt-4">
+                    <div className="relative mx-auto w-64 h-96 rounded-3xl border-8 border-gray-800 bg-gray-800 shadow-xl">
+                      <div className="absolute inset-0 rounded-2xl overflow-hidden">
+                        <img
+                          src="/breathing-mobile.png"
+                          alt="Application mobile Cesizen"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  {
-                    !isAuthenticated
-                    &&
-                    <Button onClick={() => navigate("/register")} size="lg" className="bg-white hover:bg-leather-50 text-leather-900 group w-full">
-                      S'inscrire
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Button>
-                  }
-                  {
-                    isAuthenticated
-                    &&
-                    <Button onClick={() => navigate("/profile")} size="lg" className="bg-white hover:bg-leather-50 text-leather-900 group w-full">
-                      Commencer le suivi
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Button>
-                  }
+                </div>
+              </motion.div>
+
+              {/* Performance */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="relative rounded-2xl bg-white p-6 shadow-sm"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="h-10 w-10 rounded-full bg-leather-100 flex items-center justify-center">
+                    <Zap className="h-5 w-5 text-leather-600" />
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900">Performance</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-6">
+                  Une application rapide et fluide pour une expérience utilisateur optimale, même avec une connexion
+                  limitée.
+                </p>
+                <div className="flex justify-center">
+                  <img src="/performance-chart.png" alt="Graphique de performance" className="max-w-full h-auto" />
+                </div>
+              </motion.div>
+
+              {/* Security */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="relative rounded-2xl bg-white p-6 shadow-sm"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="h-10 w-10 rounded-full bg-leather-100 flex items-center justify-center">
+                    <Shield className="h-5 w-5 text-leather-600" />
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900">Sécurité</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-6">
+                  Vos données sont protégées avec les plus hauts standards de sécurité et de confidentialité.
+                </p>
+                <div className="flex justify-center">
+                  <img src="/security-shield.png" alt="Bouclier de sécurité" className="h-24 w-auto" />
+                </div>
+              </motion.div>
+
+              {/* API */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="relative lg:row-span-2 rounded-2xl bg-white p-6 shadow-sm"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="h-10 w-10 rounded-full bg-leather-100 flex items-center justify-center">
+                    <Database className="h-5 w-5 text-leather-600" />
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900">Données personnalisées</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-6">
+                  Visualisez et analysez vos données pour mieux comprendre vos schémas émotionnels et votre progression.
+                </p>
+                <div className="relative mt-6 flex-grow">
+                  <div className="rounded-lg bg-gray-900 p-4 shadow-lg">
+                    <div className="flex bg-gray-800/40 border-b border-white/10">
+                      <div className="px-4 py-2 text-sm font-medium text-white border-b-2 border-leather-500">
+                        Statistiques.jsx
+                      </div>
+                      <div className="px-4 py-2 text-sm font-medium text-gray-400">Graphiques.jsx</div>
+                    </div>
+                    <div className="p-4 text-sm text-gray-300 font-mono">
+                      <div className="text-leather-400">// Visualisation des données émotionnelles</div>
+                      <div className="mt-2">
+                        <span className="text-blue-400">const</span>{" "}
+                        <span className="text-yellow-300">EmotionData</span> = () =&gt; {"{"}
+                      </div>
+                      <div className="ml-4">
+                        <span className="text-blue-400">const</span> [<span className="text-yellow-300">data</span>,{" "}
+                        <span className="text-yellow-300">setData</span>] ={" "}
+                        <span className="text-blue-400">useState</span>(emotionStats);
+                      </div>
+                      <div className="ml-4 mt-2">
+                        <span className="text-blue-400">return</span> (
+                      </div>
+                      <div className="ml-8">
+                        &lt;<span className="text-green-400">EmotionChart</span>{" "}
+                        <span className="text-leather-300">data</span>={"{"}
+                        <span className="text-yellow-300">data</span>
+                        {"}"} /&gt;
+                      </div>
+                      <div className="ml-4">);</div>
+                      <div>{"}"}</div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </div>
           </div>
         </section>
-        {/* Testimonials Section - Compact but elegant */}
-        <section className="w-full py-24 bg-gradient-to-br from-leather-50 to-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5" />
-          <div className="container mx-auto px-4 md:px-6 max-w-7xl sm:px-6 lg:px-8 py-4 relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-leather-900 mb-4">
+
+        {/* Testimonials Section */}
+        <section className="relative isolate overflow-hidden bg-leather-900 py-24 sm:py-32">
+          <img
+            src="/meditation-bg.jpg"
+            alt=""
+            className="absolute inset-0 -z-10 h-full w-full object-cover object-right md:object-center opacity-20"
+          />
+
+          <div
+            className="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl"
+            aria-hidden="true"
+          >
+            <div
+              className="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-leather-600 to-leather-500 opacity-20"
+              style={{
+                clipPath:
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+              }}
+            ></div>
+          </div>
+
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl lg:mx-0">
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 Ce que disent nos utilisateurs
               </h2>
-              <p className="text-leather-600 text-lg max-w-2xl mx-auto">
+              <p className="mt-6 text-lg leading-8 text-gray-300">
                 Découvrez comment Cesizen aide nos utilisateurs à améliorer leur bien-être au quotidien.
               </p>
-            </motion.div>
-            <div className="relative max-w-4xl mx-auto">
-              <div className="overflow-hidden">
-                <div className="relative min-h-[200px]">
-                  {testimonials.map((testimonial, index) => (
-                    <motion.div
-                      key={testimonial.id}
-                      className="absolute w-full"
-                      initial={{ opacity: 0 }}
-                      animate={{
-                        opacity: index === currentTestimonial ? 1 : 0,
-                        x: index === currentTestimonial ? 0 : index < currentTestimonial ? -100 : 100,
-                      }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <Card className="bg-white border-leather-200 shadow-lg rounded-3xl">
-                        <CardContent className="p-8 text-center">
-                          <p className="text-xl text-leather-700 mb-4 italic">"{testimonial.text}"</p>
-                          <div>
-                            <p className="text-leather-900 font-medium">{testimonial.name}</p>
-                            <p className="text-leather-500 text-sm">{testimonial.role}</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  ))}
+            </div>
+
+            <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
+              <div className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold leading-7 text-white sm:grid-cols-2 md:flex lg:gap-x-10">
+                <a href="#exercises">
+                  Exercices de respiration <span aria-hidden="true">&rarr;</span>
+                </a>
+                <a href="#emotions">
+                  Tracker d'émotions <span aria-hidden="true">&rarr;</span>
+                </a>
+                <a href="#features">
+                  Nos fonctionnalités <span aria-hidden="true">&rarr;</span>
+                </a>
+                <a href="#faq">
+                  Questions fréquentes <span aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
+
+              <dl className="mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
+                {statistics.map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="flex flex-col-reverse gap-y-1"
+                  >
+                    <dt className="text-base leading-7 text-gray-300">{stat.label}</dt>
+                    <dd className="text-4xl font-semibold tracking-tight text-white">{stat.value}</dd>
+                  </motion.div>
+                ))}
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        {/* Detailed Section */}
+        <section className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
+          <div className="absolute inset-0 -z-10 overflow-hidden">
+            <svg
+              className="absolute top-0 left-[max(50%,25rem)] h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
+              aria-hidden="true"
+            >
+              <defs>
+                <pattern
+                  id="e813992c-7d03-4cc4-a2bd-151760b470a0"
+                  width="200"
+                  height="200"
+                  x="50%"
+                  y="-1"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path d="M100 200V.5M.5 .5H200" fill="none" />
+                </pattern>
+              </defs>
+              <svg x="50%" y="-1" className="overflow-visible fill-gray-50">
+                <path
+                  d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
+                  strokeWidth="0"
+                />
+              </svg>
+              <rect width="100%" height="100%" strokeWidth="0" fill="url(#e813992c-7d03-4cc4-a2bd-151760b470a0)" />
+            </svg>
+          </div>
+
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
+            <div className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+              <div className="lg:pr-4">
+                <div className="lg:max-w-lg">
+                  <p className="text-base font-semibold leading-7 text-leather-600">Respirez mieux</p>
+                  <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                    Une meilleure approche du bien-être
+                  </h1>
+                  <p className="mt-6 text-xl leading-8 text-gray-700">
+                    Cesizen vous accompagne dans votre parcours vers l'équilibre émotionnel avec des outils
+                    scientifiquement prouvés et une approche personnalisée.
+                  </p>
                 </div>
               </div>
-              <div className="flex justify-center gap-4 mt-8">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentTestimonial((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))}
-                  className="rounded-full border-leather-200 hover:bg-leather-100 transition-all duration-300"
-                >
-                  <ChevronLeft className="h-5 w-5 text-leather-600" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentTestimonial((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))}
-                  className="rounded-full border-leather-200 hover:bg-leather-100 transition-all duration-300"
-                >
-                  <ChevronRight className="h-5 w-5 text-leather-600" />
-                </Button>
+            </div>
+
+            <div className="-mt-12 -ml-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
+              <img
+                className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
+                src="/app-screenshot.png"
+                alt="Capture d'écran de l'application Cesizen"
+              />
+            </div>
+
+            <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
+              <div className="lg:pr-4">
+                <div className="max-w-xl                  text-base leading-7 text-gray-700 lg:max-w-lg">
+                  <p>
+                    Cesizen combine les dernières avancées en neurosciences et en psychologie pour vous offrir des
+                    outils efficaces de gestion du stress et d'amélioration du bien-être mental.
+                  </p>
+                  <ul role="list" className="mt-8 space-y-8 text-gray-600">
+                    <li className="flex gap-x-3">
+                      <Cloud className="mt-1 h-5 w-5 flex-none text-leather-600" />
+                      <span>
+                        <strong className="font-semibold text-gray-900">Exercices de respiration guidés.</strong> Des
+                        techniques de respiration scientifiquement prouvées pour réduire votre niveau de stress et
+                        améliorer votre concentration.
+                      </span>
+                    </li>
+                    <li className="flex gap-x-3">
+                      <Smile className="mt-1 h-5 w-5 flex-none text-leather-600" />
+                      <span>
+                        <strong className="font-semibold text-gray-900">Tracker d'émotions intelligent.</strong> Suivez
+                        vos émotions au quotidien et identifiez les tendances pour mieux comprendre votre bien-être
+                        émotionnel.
+                      </span>
+                    </li>
+                    <li className="flex gap-x-3">
+                      <RefreshCw className="mt-1 h-5 w-5 flex-none text-leather-600" />
+                      <span>
+                        <strong className="font-semibold text-gray-900">Suivi de progression.</strong> Visualisez votre
+                        progression et recevez des recommandations personnalisées pour améliorer votre bien-être.
+                      </span>
+                    </li>
+                  </ul>
+                  <p className="mt-8">
+                    Notre approche holistique du bien-être mental vous permet de développer des compétences durables
+                    pour gérer le stress et l'anxiété au quotidien, améliorant ainsi votre qualité de vie.
+                  </p>
+                  <h2 className="mt-16 text-2xl font-bold tracking-tight text-gray-900">
+                    Accessible partout, à tout moment
+                  </h2>
+                  <p className="mt-6">
+                    Que vous soyez chez vous, au bureau ou en déplacement, Cesizen est disponible sur tous vos appareils
+                    pour vous accompagner dans votre pratique quotidienne. Quelques minutes par jour suffisent pour
+                    constater des améliorations significatives.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </section>
-        {/* FAQ Section - Compact and focused */}
-        <section className="w-full py-24 bg-leather-50/50">
-          <div className="container mx-auto px-4 md:px-6 max-w-7xl sm:px-6 lg:px-8 py-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
+
+        {/* FAQ Section */}
+        <section id="faq" className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32">
+          <div className="absolute inset-0 -z-10 overflow-hidden">
+            <svg
+              className="absolute top-0 left-[max(50%,25rem)] h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
+              aria-hidden="true"
             >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-leather-900 mb-4">
-                Foire Aux Questions
-              </h2>
-              <p className="text-leather-600 text-lg max-w-2xl mx-auto">
-                Trouvez les réponses à vos questions les plus fréquentes sur Cesizen.
+              <defs>
+                <pattern id="faq-pattern" width="200" height="200" x="50%" y="-1" patternUnits="userSpaceOnUse">
+                  <path d="M100 200V.5M.5 .5H200" fill="none" />
+                </pattern>
+              </defs>
+              <svg x="50%" y="-1" className="overflow-visible fill-gray-50">
+                <path
+                  d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
+                  strokeWidth="0"
+                />
+              </svg>
+              <rect width="100%" height="100%" strokeWidth="0" fill="url(#faq-pattern)" />
+            </svg>
+          </div>
+
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl lg:text-center">
+              <h2 className="text-base font-semibold leading-7 text-leather-600">Questions fréquentes</h2>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                Tout ce que vous devez savoir sur Cesizen
               </p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="max-w-3xl mx-auto"
-            >
-              <Accordion type="single" collapsible className="w-full space-y-2">
-                {faqItems.map((item, index) => (
-                  <Card className="border-leather-200 rounded-3xl">
-                    <CardContent className="p-6">
-                      <AccordionItem key={index} value={`item-${index}`} className="border-none">
-                        <AccordionTrigger className="text-leather-900 hover:text-leather-700 transition-colors text-bold text-md">
+              <p className="mt-6 text-lg leading-8 text-gray-600">
+                Trouvez les réponses à vos questions les plus fréquentes sur notre plateforme de bien-être mental.
+              </p>
+            </div>
+
+            <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
+              {faqItems.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="group relative overflow-hidden rounded-3xl bg-white p-6 shadow-md hover:shadow-xl transition-all duration-300 mb-6"
+                >
+                  <div className="absolute inset-0 -z-10 bg-leather-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-3xl"></div>
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value={`item-${index}`} className="border-none">
+                      <AccordionTrigger className="text-xl font-semibold text-gray-900 hover:text-leather-700 transition-colors py-2 flex items-center">
+                        <div className="flex items-center">
+                          <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-leather-100 group-hover:bg-leather-200 transition-colors">
+                            <span className="text-leather-600 font-bold">{index + 1}</span>
+                          </div>
                           {item.question}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-leather-600">{item.answer}</AccordionContent>
-                      </AccordionItem>
-                    </CardContent>
-                  </Card>
-                ))}
-              </Accordion>
-            </motion.div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-gray-600 pl-14 pr-4 text-lg">{item.answer}</AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-16 flex justify-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="flex items-center gap-2 text-leather-600 hover:text-leather-800 transition-colors"
+              >
+                <span className="text-base font-semibold">Vous avez d'autres questions ?</span>
+                <Button variant="ghost" className="font-semibold">
+                  Contactez-nous <ArrowRight className="ml-1 h-4 w-4" />
+                </Button>
+              </motion.div>
+            </div>
           </div>
         </section>
-        {/* CTA Section - Impactful closure */}
-        <section className="w-full py-24 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-leather-700 via-leather-600 to-leather-500">
-            <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10 mix-blend-overlay" />
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-t from-leather-900/50 to-transparent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.5 }}
-            />
+
+        {/* CTA Section - Final */}
+        <section className="relative isolate overflow-hidden bg-leather-900 py-24 sm:py-32">
+          <img
+            src="/meditation-bg.jpg"
+            alt=""
+            className="absolute inset-0 -z-10 h-full w-full object-cover object-center opacity-10"
+          />
+
+          <div
+            className="absolute -top-52 left-1/2 -z-10 -translate-x-1/2 transform-gpu blur-3xl sm:top-[-28rem] sm:ml-16 sm:translate-x-0 sm:transform-gpu"
+            aria-hidden="true"
+          >
+            <div
+              className="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-leather-600 to-leather-500 opacity-20"
+              style={{
+                clipPath:
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+              }}
+            ></div>
           </div>
-          <div className="relative container mx-auto px-4 md:px-6 max-w-7xl sm:px-6 lg:px-8 py-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="flex flex-col items-center space-y-8 text-center"
-            >
-              <div className="space-y-4">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-white">
-                  Prêt à améliorer votre bien-être ?
-                </h2>
-                <p className="mx-auto max-w-[700px] text-leather-100 text-lg">
-                  Rejoignez Cesizen aujourd'hui et commencez votre voyage vers une meilleure santé mentale.
-                </p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                {
-                  !isAuthenticated
-                  &&
+
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl lg:mx-0">
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="text-4xl font-bold tracking-tight text-white sm:text-6xl"
+              >
+                Prêt à améliorer votre bien-être ?
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="mt-6 text-lg font-medium text-gray-300 sm:text-xl/8"
+              >
+                Rejoignez Cesizen aujourd'hui et commencez votre voyage vers une meilleure santé mentale. Nos outils
+                scientifiquement prouvés vous aideront à gérer votre stress et à améliorer votre équilibre émotionnel.
+              </motion.p>
+            </div>
+
+            <div className="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="grid grid-cols-1 gap-x-8 gap-y-6 text-base font-semibold text-white sm:grid-cols-2 md:flex lg:gap-x-10"
+              >
+                <a href="#features" className="flex items-center group">
+                  <span>Découvrir nos fonctionnalités</span>
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+                <a href="#exercises" className="flex items-center group">
+                  <span>Explorer les exercices</span>
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+                <a href="#emotions" className="flex items-center group">
+                  <span>Tracker d'émotions</span>
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+                <a href="#faq" className="flex items-center group">
+                  <span>Questions fréquentes</span>
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+              </motion.div>
+
+              <div className="mt-16 flex flex-col sm:flex-row gap-6">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                  className="flex-1"
+                >
                   <Button
-                    onClick={() => navigate("/register")}
-                    size={"lg"}
-                    className="bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300"
+                    size="lg"
+                    className="w-full bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300 rounded-xl py-6 text-lg"
                   >
                     S'inscrire gratuitement
-                    <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </Button>
-                }
-                {
-                  isAuthenticated
-                  &&
-                  <Button
-                    onClick={() => navigate("/exercices")}
-                    size={"lg"}
-                    className="bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300"
-                  >
-                    Commencer
-                    <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </Button>
-                }
-                <Button
-                  size={"lg"}
-                  variant="outline"
-                  className="text-white border-white bg-white/10 backdrop-blur hover:bg-white/20 transition-all duration-300"
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                  className="flex-1"
                 >
-                  En savoir plus
-                </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full text-white border-white hover:bg-white/20 transition-all duration-300 rounded-xl py-6 text-lg"
+                  >
+                    En savoir plus
+                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </motion.div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
       </main>
