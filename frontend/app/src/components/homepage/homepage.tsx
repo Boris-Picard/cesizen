@@ -18,6 +18,8 @@ import {
   Database,
   ArrowRight,
 } from "lucide-react"
+import { useAuth } from "@/context/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 
 const faqItems = [
@@ -74,6 +76,8 @@ const features = [
 
 export default function Home() {
   const [progress, setProgress] = useState(0)
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -148,12 +152,18 @@ export default function Home() {
                 Votre compagnon personnel pour une meilleure santé mentale et une gestion efficace du stress.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
-                <Button className="rounded-md bg-leather-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-leather-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leather-600">
-                  Commencer gratuitement
-                </Button>
+                {
+                  !isAuthenticated
+                  &&
+                  <Button
+                    className="rounded-md bg-leather-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-leather-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leather-600"
+                    onClick={() => navigate("/register")}>
+                    Commencer gratuitement
+                  </Button>
+                }
                 <Button
                   variant="ghost"
-                  className="text-sm font-semibold leading-6 text-gray-900"
+                  className="text-sm font-semibold bg-white/20 border border-leather-600 leading-6 text-gray-900"
                   onClick={() => scrollToNextSection("features")}
                 >
                   En savoir plus <span aria-hidden="true">→</span>
@@ -254,10 +264,16 @@ export default function Home() {
                   santé mentale grâce à nos outils.
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                  <Button className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-leather-900 shadow-sm hover:bg-gray-100">
-                    Commencer gratuitement
-                  </Button>
-                  <Button variant="ghost" className="text-sm font-semibold leading-6 text-white">
+                  {
+                    !isAuthenticated
+                    &&
+                    <Button
+                      onClick={() => navigate("/register")}
+                      className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-leather-900 shadow-sm hover:bg-gray-100">
+                      Commencer gratuitement
+                    </Button>
+                  }
+                  <Button variant="ghost" className="text-sm bg-white/20 font-semibold leading-6 text-white">
                     En savoir plus <span aria-hidden="true">→</span>
                   </Button>
                 </div>
@@ -741,21 +757,27 @@ export default function Home() {
               </motion.div>
 
               <div className="mt-16 flex flex-col sm:flex-row gap-6">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                  className="flex-1"
-                >
-                  <Button
-                    size="lg"
-                    className="w-full bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300 rounded-xl py-6 text-lg"
+
+                {
+                  !isAuthenticated
+                  &&
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    className="flex-1"
                   >
-                    S'inscrire gratuitement
-                    <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </Button>
-                </motion.div>
+                    <Button
+                      onClick={() => navigate("/register")}
+                      size="lg"
+                      className="w-full bg-white hover:bg-leather-50 text-leather-900 group transition-all duration-300 rounded-xl py-6 text-lg"
+                    >
+                      S'inscrire gratuitement
+                      <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </Button>
+                  </motion.div>
+                }
 
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
@@ -767,7 +789,7 @@ export default function Home() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="w-full text-white border-white hover:bg-white/20 transition-all duration-300 rounded-xl py-6 text-lg"
+                    className="w-full text-white border-white hover:bg-white/20 bg-inherit transition-all duration-300 rounded-xl py-6 text-lg"
                   >
                     En savoir plus
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
