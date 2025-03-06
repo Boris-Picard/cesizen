@@ -160,7 +160,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               <Button
                 variant="outline"
                 size="sm"
-                className="border-leather-200 text-leather-700 hover:bg-leather-50 hover:text-leather-800 rounded-xl shadow-sm"
+                className="border-leather-200 text-leather-700  rounded-xl shadow-sm"
               >
                 <SlidersHorizontal className="h-4 w-4 mr-2" />
                 Colonnes
@@ -177,7 +177,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                     key={column.id}
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                    className="capitalize text-leather-600 hover:text-leather-900 hover:bg-leather-50"
+                    className="capitalize text-leather-600 hover:text-leather-900 "
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
@@ -209,7 +209,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     className={`
-                      border-leather-200 hover:bg-leather-50/70 transition-colors
+                      border-leather-200 /70 transition-colors
                       ${row.getIsSelected() ? "bg-leather-100/50" : index % 2 === 0 ? "bg-white" : "bg-leather-50/30"}
                     `}
                   >
@@ -278,7 +278,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                       <Button
                         variant="outline"
                         size="sm"
-                        className="rounded-xl border-leather-200 text-leather-700 hover:bg-leather-50"
+                        className="rounded-xl border-leather-200 text-leather-700 "
                       >
                         Annuler
                       </Button>
@@ -295,7 +295,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="rounded-xl border-leather-200 text-leather-700 hover:bg-leather-50 shadow-sm"
+                    className="rounded-xl border-leather-200 text-leather-700  shadow-sm"
                   >
                     <Download className="h-4 w-4 mr-1.5" />
                     Exporter
@@ -314,7 +314,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                       <Button
                         variant="outline"
                         size="sm"
-                        className="rounded-xl border-leather-200 text-leather-700 hover:bg-leather-50"
+                        className="rounded-xl border-leather-200 text-leather-700 "
                       >
                         Annuler
                       </Button>
@@ -340,7 +340,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-xl border-leather-200 text-leather-700 hover:bg-leather-50 shadow-sm"
+                className="rounded-xl border-leather-200 text-leather-700  shadow-sm"
               >
                 <MoreHorizontal className="h-4 w-4 mr-1.5" />
                 {pagination.pageSize} par page
@@ -351,7 +351,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                 <DropdownMenuItem
                   key={taille}
                   onClick={() => setPagination((prev) => ({ ...prev, pageSize: taille, pageIndex: 0 }))}
-                  className="cursor-pointer text-leather-600 hover:text-leather-900 hover:bg-leather-50"
+                  className="cursor-pointer text-leather-600 hover:text-leather-900 "
                 >
                   {taille} lignes
                 </DropdownMenuItem>
@@ -365,7 +365,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               size="icon"
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
-              className="h-8 w-8 rounded-xl border-leather-200 text-leather-700 hover:bg-leather-50 disabled:opacity-40 shadow-sm"
+              className="h-8 w-8 rounded-xl border-leather-200 text-leather-700  disabled:opacity-40 shadow-sm"
             >
               <ChevronsLeft className="h-4 w-4" />
             </Button>
@@ -374,7 +374,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               size="icon"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
-              className="h-8 w-8 rounded-xl border-leather-200 text-leather-700 hover:bg-leather-50 disabled:opacity-40 shadow-sm"
+              className="h-8 w-8 rounded-xl border-leather-200 text-leather-700  disabled:opacity-40 shadow-sm"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -393,7 +393,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               size="icon"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              className="h-8 w-8 rounded-xl border-leather-200 text-leather-700 hover:bg-leather-50 disabled:opacity-40 shadow-sm"
+              className="h-8 w-8 rounded-xl border-leather-200 text-leather-700  disabled:opacity-40 shadow-sm"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -402,7 +402,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
               size="icon"
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
-              className="h-8 w-8 rounded-xl border-leather-200 text-leather-700 hover:bg-leather-50 disabled:opacity-40 shadow-sm"
+              className="h-8 w-8 rounded-xl border-leather-200 text-leather-700  disabled:opacity-40 shadow-sm"
             >
               <ChevronsRight className="h-4 w-4" />
             </Button>

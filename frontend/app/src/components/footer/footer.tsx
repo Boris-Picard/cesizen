@@ -37,7 +37,7 @@ const footerLinks = {
     { name: "Centre d'aide", href: "/help" },
     { name: "Documentation", href: "/docs" },
     { name: "Guides", href: "/guides" },
-    { name: "API", href: "/api" },
+    { name: "API", href: "http://cesizen-api.localhost/api/docs" },
   ],
   legal: [
     { name: "Confidentialité", href: "/privacy" },

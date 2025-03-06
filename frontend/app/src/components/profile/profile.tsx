@@ -154,7 +154,6 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
 
         <div className="relative container mx-auto px-4 sm:px-6 py-16 sm:py-24 max-w-7xl lg:px-8">
           {" "}
-          {/* Update 1: Increased vertical padding */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -173,7 +172,6 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-6 relative z-10">
         {" "}
-        {/* Update 1: Changed negative top margin */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Info and Stats Card */}
           <motion.div
@@ -185,16 +183,12 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
             <Card className="rounded-3xl shadow-xl overflow-hidden sticky top-20 bg-white border-leather-100">
               <div className="h-24 bg-gradient-to-r from-leather-600 to-leather-500 relative">
                 {" "}
-                {/* Update 2: Adjusted avatar positioning */}
                 <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
                   {" "}
-                  {/* Update 2: Adjusted avatar positioning */}
                   <Avatar className="w-20 h-20 border-4 border-white shadow-md">
                     {" "}
-                    {/* Update 2: Adjusted avatar size */}
                     <AvatarFallback className="bg-leather-700 text-white text-xl">
                       {" "}
-                      {/* Update 2: Adjusted avatar text size */}
                       {user?.firstname[0]}
                       {user?.lastname[0]}
                     </AvatarFallback>
@@ -204,7 +198,6 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
 
               <CardContent className="pt-14 p-6 flex flex-col items-center text-center">
                 {" "}
-                {/* Update 2: Adjusted padding */}
                 <h2 className="text-2xl font-bold text-leather-900 mb-1">
                   {user?.firstname} {user?.lastname}
                 </h2>
@@ -568,7 +561,7 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-white text-white hover:bg-white/20 rounded-full transition-all duration-300 group"
+                  className="border-white text-white hover:bg-white/20 bg-inherit rounded-full transition-all duration-300 group"
                   onClick={() => navigate("/informations")}
                 >
                   <TrendingUp className="mr-2 h-5 w-5" />

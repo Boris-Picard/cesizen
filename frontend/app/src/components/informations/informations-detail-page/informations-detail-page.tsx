@@ -94,7 +94,7 @@ export function InformationsDetailPageComponents({ information, articles, intera
         </div>
 
         {/* Navigation et actions */}
-        <div className="relative container mx-auto px-4 sm:px-6 py-6 max-w-4xl lg:px-8">
+        <div className="relative container mx-auto px-4 sm:px-6 py-6 max-w-7xl lg:px-8">
           <div className="flex items-center justify-between">
             <Button
               variant="ghost"
