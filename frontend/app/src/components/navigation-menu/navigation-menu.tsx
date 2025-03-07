@@ -21,6 +21,7 @@ import { Link, useLocation } from "react-router-dom"
 import { Icons } from "../ui/icons"
 import { useAuth } from "@/context/AuthContext"
 import { Badge } from "@/components/ui/badge"
+import logo from "@/assets/cesizen-logo.png"
 
 // Composant pour les éléments de navigation desktop
 const LeftDesktopNavigationItems = () => {
@@ -219,26 +220,14 @@ export const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-leather-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      {/* Subtle gradient line at the top */}
       <div className="h-0.5 w-full bg-gradient-to-r from-leather-600 to-leather-400"></div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 relative max-w-7xl">
         <div className="flex items-center justify-between">
           {/* Logo et navigation desktop */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 h-10">
             <Link to="/" className="flex items-center space-x-2 group">
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-br from-leather-300 to-leather-500 rounded-xl opacity-70 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
-                <motion.div
-                  className="relative bg-white p-1.5 rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300"
-                  whileHover={{ rotate: 360, transition: { duration: 0.7, ease: "easeInOut" } }}
-                >
-                  <Icons.logo className="h-7 w-7 text-leather-600" />
-                </motion.div>
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-leather-800 to-leather-600 bg-clip-text text-transparent">
-                CESIZen
-              </span>
+              <img src={logo} alt="CESIZen" className="w-24 h-24" />
             </Link>
 
             <NavigationMenu className="hidden md:flex">

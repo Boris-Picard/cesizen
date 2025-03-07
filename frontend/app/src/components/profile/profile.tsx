@@ -117,13 +117,12 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
       icon: randomIcon(infoIcons),
       color: randomColor(color),
     })),
-  ].slice(0, 4)
-
-  activities.sort((a, b) => {
-    const dateA = a.dateFin ? a.dateFin.getTime() : a.dateDebut ? a.dateDebut.getTime() : 0
-    const dateB = b.dateFin ? b.dateFin.getTime() : b.dateDebut ? b.dateDebut.getTime() : 0
+  ].sort((a, b) => {
+    const dateA = a.dateFin ? new Date(a.dateFin).getTime() : a.dateDebut ? new Date(a.dateDebut).getTime() : 0
+    const dateB = b.dateFin ? new Date(b.dateFin).getTime() : b.dateDebut ? new Date(b.dateDebut).getTime() : 0
     return dateB - dateA
-  })
+  }).slice(0, 4)
+
 
   const emotions = [
     { name: "Joie", color: "#FDE68A", icon: "😊" },
@@ -216,13 +215,12 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
                       <Award className="h-4 w-4 mr-1 text-leather-600" /> Niveau
                     </span>
                     <Badge
-                      className={`${
-                        exercicesDoneLevel === "Débutant"
+                      className={`${exercicesDoneLevel === "Débutant"
                           ? "bg-leather-100 text-leather-800"
                           : exercicesDoneLevel === "Intermédiaire"
                             ? "bg-leather-200 text-leather-900"
                             : "bg-leather-300 text-leather-950"
-                      } border-none`}
+                        } border-none`}
                     >
                       {exercicesDoneLevel}
                     </Badge>
@@ -271,9 +269,8 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
                           <div key={day} className="flex flex-col items-center">
                             <span className="text-xs text-leather-600 mb-1">{day}</span>
                             <div
-                              className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                                count > 0 ? "bg-leather-600 text-white" : "bg-leather-100 text-leather-400"
-                              }`}
+                              className={`w-8 h-8 rounded-full flex items-center justify-center ${count > 0 ? "bg-leather-600 text-white" : "bg-leather-100 text-leather-400"
+                                }`}
                             >
                               {count}
                             </div>
@@ -363,9 +360,8 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
                     {emotions.map((emotion, index) => (
                       <motion.button
                         key={emotion.name}
-                        className={`p-4 rounded-xl flex flex-col items-center justify-center transition-all ${
-                          currentEmotion === index ? "ring-2 ring-leather-600 shadow-md" : "hover:shadow-md"
-                        }`}
+                        className={`p-4 rounded-xl flex flex-col items-center justify-center transition-all ${currentEmotion === index ? "ring-2 ring-leather-600 shadow-md" : "hover:shadow-md"
+                          }`}
                         style={{ backgroundColor: emotion.color }}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}

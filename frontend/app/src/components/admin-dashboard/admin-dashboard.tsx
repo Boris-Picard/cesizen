@@ -43,7 +43,26 @@ export default function AdminDashboard() {
   const { users, newUsersPercentage, totalUsers } = useGetUsers()
   const { exercices, totalExercices } = useGetExercices()
   const { informationsActive, totalInformations } = useGetInformations()
-  const { interactions, getTotalInteractions, newInteractionsPercentage, totalInteractionsDay } = useGetInteractions()
+  const { interactions, getTotalInteractions } = useGetInteractions()
+
+  const todayStr = new Date().toISOString().slice(0, 10)
+  const yesterdayDate = new Date()
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1)
+  const yesterdayStr = yesterdayDate.toISOString().slice(0, 10)
+
+  const interactionsToday = interactions.filter(interaction => {
+    return new Date(interaction.inter_date_de_debut).toISOString().slice(0, 10) === todayStr
+  })
+  const interactionsYesterday = interactions.filter(interaction => {
+    return new Date(interaction.inter_date_de_debut).toISOString().slice(0, 10) === yesterdayStr
+  })
+
+  const computedTotalInteractionsDay = interactionsToday.length
+  const computedTotalInteractionsYesterday = interactionsYesterday.length
+  const computedNewInteractionsPercentage =
+    computedTotalInteractionsYesterday > 0
+      ? ((computedTotalInteractionsDay - computedTotalInteractionsYesterday) / computedTotalInteractionsYesterday) * 100
+      : computedTotalInteractionsDay * 100
 
   const sortedInformations = [...informationsActive!].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -56,7 +75,7 @@ export default function AdminDashboard() {
   const slicedExercices = filterExercicesActive.slice(0, 4)
 
   const trendUpOrDownUsers = newUsersPercentage > 0 ? true : false
-  const trendUpOrDownInteractions = newInteractionsPercentage > 0 ? true : false
+  const trendUpOrDownInteractions = computedNewInteractionsPercentage > 0 ? true : false
 
   const sortedUsers = [...filterUsersActive].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -67,7 +86,6 @@ export default function AdminDashboard() {
   const interactionsByDay = interactions.reduce((acc: any, interaction) => {
     const dayIndex = new Date(interaction.inter_date_de_debut).getDay()
     const dayName = daysOfWeek[dayIndex]
-
     acc[dayName] = (acc[dayName] || 0) + 1
     return acc
   }, {})
@@ -75,7 +93,6 @@ export default function AdminDashboard() {
   const usersByDay = users.reduce((acc: any, user) => {
     const dayIndex = new Date(user.createdAt).getDay()
     const dayName = daysOfWeek[dayIndex]
-
     acc[dayName] = (acc[dayName] || 0) + 1
     return acc
   }, {})
@@ -139,10 +156,10 @@ export default function AdminDashboard() {
     },
     {
       title: "Interactions Aujourd'hui",
-      value: totalInteractionsDay,
+      value: computedTotalInteractionsDay, // utilisation du calcul local
       icon: Zap,
       color: "from-leather-300 to-leather-200",
-      trend: `${Math.floor(newInteractionsPercentage)} %`,
+      trend: `${Math.floor(computedNewInteractionsPercentage)} %`, // calcul local
       trendUp: trendUpOrDownInteractions,
       link: "/admin/interactions",
     },
@@ -169,8 +186,7 @@ export default function AdminDashboard() {
                 Vue d'ensemble
               </h2>
               <p className="text-leather-600">
-                Bienvenue <span className="font-bold text-leather-700">{user?.firstname}</span> sur votre tableau de
-                bord administrateur
+                Bienvenue <span className="font-bold text-leather-700">{user?.firstname}</span> sur votre tableau de bord administrateur
               </p>
             </motion.div>
 
@@ -202,7 +218,10 @@ export default function AdminDashboard() {
                         {stat.trend && (
                           <Badge
                             variant={stat.trendUp ? "default" : "destructive"}
-                            className={`text-xs font-semibold ${stat.trendUp ? "bg-green-100 text-green-800 hover:bg-green-200" : "bg-red-100 text-red-800 hover:bg-red-200"} shadow-sm`}
+                            className={`text-xs font-semibold ${stat.trendUp
+                                ? "bg-green-100 text-green-800 hover:bg-green-200"
+                                : "bg-red-100 text-red-800 hover:bg-red-200"
+                              } shadow-sm`}
                           >
                             {stat.trendUp ? (
                               <TrendingUp className="mr-1 h-3 w-3" />
@@ -491,4 +510,3 @@ export default function AdminDashboard() {
     </div>
   )
 }
-

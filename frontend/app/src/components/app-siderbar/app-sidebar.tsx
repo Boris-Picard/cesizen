@@ -35,6 +35,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAuth } from "@/context/AuthContext"
 import { cn } from "@/lib/utils"
+import logo from "@/assets/cesizen-logo.png"
 
 const menuItems = [
   { title: "Dashboard", url: "/admin", icon: Home },
@@ -88,20 +89,9 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link to="/" className="flex items-center gap-3 group">
-                <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-br from-leather-300 to-leather-500 rounded-xl opacity-70 group-hover:opacity-100 blur-sm transition-opacity duration-300"></div>
-                  <div className="relative bg-white p-1.5 rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300">
-                    <img src="/logo.png" alt="CESIZen" className="h-8 w-8 rounded-lg" />
-                  </div>
-                </div>
+              <Link to="/" className="flex items-center justify-center gap-3 group">
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-bold text-leather-800 text-xl group-hover:text-leather-900 transition-colors">
-                    CESIZen
-                  </span>
-                  <span className="text-xs text-leather-500 group-hover:text-leather-600 transition-colors">
-                    Administration
-                  </span>
+                  <img src={logo} alt="" className="w-28 h-28" />
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -172,7 +162,7 @@ export function AppSidebar() {
                                   "flex items-center gap-3 text-leather-700 p-2.5 rounded-xl transition-all",
                                   "hover:bg-gradient-to-r hover:from-leather-200/70 hover:to-leather-100/70 hover:text-leather-900",
                                   location.pathname === subItem.url &&
-                                    "bg-gradient-to-r from-leather-300/70 to-leather-200/70 text-leather-900 font-medium shadow-sm",
+                                  "bg-gradient-to-r from-leather-300/70 to-leather-200/70 text-leather-900 font-medium shadow-sm",
                                 )}
                               >
                                 <div
@@ -197,7 +187,7 @@ export function AppSidebar() {
                                 "flex items-center gap-3 text-leather-700 p-2.5 rounded-xl transition-all",
                                 "hover:bg-gradient-to-r hover:from-leather-200/70 hover:to-leather-100/70 hover:text-leather-900",
                                 location.pathname === item.url &&
-                                  "bg-gradient-to-r from-leather-300/70 to-leather-200/70 text-leather-900 font-medium shadow-sm",
+                                "bg-gradient-to-r from-leather-300/70 to-leather-200/70 text-leather-900 font-medium shadow-sm",
                               )}
                             >
                               <div
