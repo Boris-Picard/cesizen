@@ -226,7 +226,7 @@ export function InformationsDetailPageComponents({ information, articles, intera
                 }}
               >
                 <ChevronLeft className="h-5 w-5 mr-2 flex-shrink-0 group-hover:-translate-x-1 transition-transform" />
-                <div>
+                <div className="line-clamp-3">
                   <div className="text-sm text-leather-500">Article précédent</div>
                   <div className="font-medium text-leather-800 line-clamp-1">{previousArticle.info_titre}</div>
                 </div>
@@ -249,9 +249,9 @@ export function InformationsDetailPageComponents({ information, articles, intera
                   })
                 }}
               >
-                <div>
+                <div className="line-clamp-3">
                   <div className="text-sm text-leather-500">Article suivant</div>
-                  <div className="font-medium text-leather-800 line-clamp-1">{nextArticle.info_titre}</div>
+                  <div className="font-medium text-leather-800">{nextArticle.info_titre}</div>
                 </div>
                 <ChevronRight className="h-5 w-5 ml-2 flex-shrink-0 group-hover:translate-x-1 transition-transform" />
               </Button>

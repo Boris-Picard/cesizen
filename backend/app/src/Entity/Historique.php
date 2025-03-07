@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    paginationItemsPerPage: 100,
+    paginationItemsPerPage: 9999,
     normalizationContext: ['groups' => ['historique:read']],
     denormalizationContext: ['groups' => ['historique:write']],
     operations: [

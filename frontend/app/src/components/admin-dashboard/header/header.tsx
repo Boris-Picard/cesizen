@@ -23,16 +23,12 @@ export default function AdminHeader({ h1 }: { h1: string }) {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-leather-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      {/* Gradient line at the top */}
       <div className="h-0.5 w-full bg-gradient-to-r from-leather-600 to-leather-400"></div>
 
-      {/* Toggle for desktop: hidden on mobile, visible on desktop */}
       <SidebarTrigger className="hidden md:flex md:absolute md:left-6 md:top-1/2 md:transform md:-translate-y-1/2 p-2.5 rounded-full bg-leather-50 text-leather-600 hover:bg-leather-100 hover:text-leather-700 transition-all duration-300 shadow-sm hover:shadow-md" />
 
-      {/* Centered content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
         <div className="flex items-center justify-between">
-          {/* On mobile, show the toggle inline */}
           <div className="flex items-center gap-3">
             <SidebarTrigger className="md:hidden flex p-2.5 rounded-full bg-leather-50 text-leather-600 hover:bg-leather-100 hover:text-leather-700 transition-all duration-300 shadow-sm hover:shadow-md">
               <Menu className="h-5 w-5" />
@@ -57,7 +53,6 @@ export default function AdminHeader({ h1 }: { h1: string }) {
             </div>
           </div>
 
-          {/* Right side: Search, notifications, and profile */}
           <div className="flex items-center space-x-3">
             <div className="relative hidden sm:block">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-leather-400 h-4 w-4" />

@@ -19,7 +19,7 @@ import {
   ArrowRight,
 } from "lucide-react"
 import { useAuth } from "@/context/AuthContext"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 
 const faqItems = [
@@ -132,10 +132,10 @@ export default function Home() {
                 className="relative rounded-full px-3 py-1 text-sm leading-6 text-leather-600 ring-1 ring-leather-900/10 hover:ring-leather-900/20"
               >
                 Nouveau : Exercices de respiration guidés{" "}
-                <a href="#exercises" className="font-semibold text-leather-600">
+                <Link to={`${isAuthenticated ? "/exercices" : "/register"}`} className="font-semibold text-leather-600">
                   <span className="absolute inset-0" aria-hidden="true"></span>
                   En savoir plus <span aria-hidden="true">&rarr;</span>
-                </a>
+                </Link>
               </motion.div>
             </div>
 

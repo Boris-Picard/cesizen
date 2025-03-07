@@ -11,6 +11,7 @@ import { Icons } from "@/components/ui/icons"
 import { Link } from "react-router-dom"
 import useLoginUser from "@/hooks/api/useLoginUser"
 import { motion } from "framer-motion"
+import logo from "@/assets/cesizen-logo.png"
 
 const loginSchema = z.object({
   email: z.string().email("Veuillez entrer une adresse e-mail valide."),
@@ -53,22 +54,9 @@ export function LoginForm() {
         <Card className="bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl overflow-hidden border border-leather-200/70">
           <CardContent className="p-8">
             <div className="mb-8 text-center">
-              <motion.div
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 260,
-                  damping: 20,
-                  delay: 0.1,
-                }}
-                className="relative mx-auto w-16 h-16 mb-4"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-leather-300 to-leather-500 rounded-2xl opacity-70 blur-sm"></div>
-                <div className="relative bg-white p-3 rounded-2xl shadow-md">
-                  <Icons.logo className="h-10 w-10 text-leather-600" />
-                </div>
-              </motion.div>
+            <Link to="/" className="flex justify-center items-center space-x-2 group h-24">
+              <img src={logo} alt="CESIZen" className="w-36 h-36" />
+            </Link>
 
               <motion.h2
                 initial={{ opacity: 0, y: 10 }}

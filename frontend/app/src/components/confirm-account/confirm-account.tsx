@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 
 import { useEffect, useState } from "react"
@@ -7,8 +5,9 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Icons } from "@/components/ui/icons"
 import axios from "axios"
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { motion } from "framer-motion"
+import logo from "@/assets/cesizen-logo.png"
 
 export function ConfirmAccount({ className, ...props }: React.ComponentProps<"div">) {
   const { token } = useParams<{ token: string }>()
@@ -60,22 +59,9 @@ export function ConfirmAccount({ className, ...props }: React.ComponentProps<"di
           <CardContent className="p-8">
             <div className="space-y-8">
               <div className="text-center">
-                <motion.div
-                  initial={{ scale: 0.8 }}
-                  animate={{ scale: 1 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 260,
-                    damping: 20,
-                    delay: 0.1,
-                  }}
-                  className="relative mx-auto w-16 h-16 mb-6"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-leather-300 to-leather-500 rounded-2xl opacity-70 blur-sm"></div>
-                  <div className="relative bg-white p-3 rounded-2xl shadow-md">
-                    <Icons.logo className="h-10 w-10 text-leather-600" />
-                  </div>
-                </motion.div>
+                <Link to="/" className="flex justify-center items-center space-x-2 group h-20">
+                  <img src={logo} alt="CESIZen" className="w-36 h-36" />
+                </Link>
 
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
