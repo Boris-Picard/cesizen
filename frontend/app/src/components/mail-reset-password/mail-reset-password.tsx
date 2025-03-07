@@ -44,7 +44,7 @@ export function MailResetPassword() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md relative z-10"
       >
-        <Card className="bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl overflow-hidden border border-leather-200/70">
+        <Card className="bg-white/95 shadow-xl rounded-3xl overflow-hidden border border-leather-200/70">
           <CardContent className="p-8">
             <div className="space-y-8">
               <div className="text-center">
@@ -73,7 +73,7 @@ export function MailResetPassword() {
                 className="relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-leather-100/50 to-leather-200/50 rounded-2xl blur-md transform -rotate-1 scale-105 opacity-70"></div>
-                <div className="relative bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-leather-200/70 shadow-sm">
+                <div className="relative bg-white/80 p-6 rounded-2xl border border-leather-200/70 shadow-sm">
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-2">
                       <Label htmlFor="email" className="text-sm font-medium text-leather-700">

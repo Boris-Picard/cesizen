@@ -69,6 +69,6 @@ export const Icons = {
   shield: Shield,
   alertTriangle: AlertTriangle,
   refreshCw: RefreshCw,
-  checkCircle: CheckCircle
+  checkCircle: CheckCircle,
 }
 

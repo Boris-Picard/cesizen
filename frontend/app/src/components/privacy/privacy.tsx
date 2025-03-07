@@ -29,7 +29,7 @@ const sections = [
         content: `
       Nous collectons les données personnelles suivantes :
       - Nom et prénom
-      - Adresse e-mail
+      - Adresse email
       - Données de connexion et d'utilisation
       - Données relatives à votre utilisation des exercices
       - Informations sur votre état émotionnel (via le tracker d'émotions)

@@ -26,6 +26,7 @@ import perf from "@/assets/perf.png"
 import secure from "@/assets/secure.webp"
 import data from "@/assets/data.png"
 import profile from "@/assets/profile.png"
+import meditation from "@/assets/informations.avif"
 
 
 const faqItems = [
@@ -421,7 +422,7 @@ export default function Home() {
         {/* Testimonials Section */}
         <section className="relative isolate overflow-hidden bg-leather-900 py-24 sm:py-32" >
           <img
-            src="/meditation-bg.jpg"
+            src={meditation}
             alt=""
             className="absolute inset-0 -z-10 h-full w-full object-cover object-right md:object-center opacity-20"
           />
@@ -668,7 +669,7 @@ export default function Home() {
         {/* CTA Section - Final */}
         <section className="relative isolate overflow-hidden bg-leather-900 py-24 sm:py-32" >
           <img
-            src="/meditation-bg.jpg"
+            src={cta2}
             alt=""
             className="absolute inset-0 -z-10 h-full w-full object-cover object-center opacity-10"
           />
