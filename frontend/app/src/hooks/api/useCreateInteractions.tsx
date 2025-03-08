@@ -1,7 +1,7 @@
+import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
-import { useState } from "react";
 
 interface InteractionInterface {
   inter_date_de_debut: string;
@@ -18,11 +18,13 @@ export function useCreateInteraction() {
     const stored = localStorage.getItem("lastInteractionId");
     return stored ? JSON.parse(stored) : null;
   });
+  const [isCreating, setIsCreating] = useState<boolean>(false);
 
   const createInteraction = async (interactionData: InteractionInterface) => {
-    if (!isAuthenticated) {
-      return setLastInteractionId(null)
+    if (!isAuthenticated || isCreating) {
+      return;
     }
+    setIsCreating(true);
     try {
       const { data } = await axios.post(
         "http://cesizen-api.localhost/api/interactions",
@@ -49,6 +51,8 @@ export function useCreateInteraction() {
           title: "Une erreur est survenue",
         });
       }
+    } finally {
+      setIsCreating(false);
     }
   };
 

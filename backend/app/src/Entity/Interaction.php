@@ -25,7 +25,9 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
         new Delete(
             security: "is_granted('ROLE_ADMIN')"
         ),
-        new Patch(),
+        new Patch(
+            denormalizationContext: ['groups' => ['interaction:patch']]
+        ),
     ]
 )]
 #[ORM\Entity(repositoryClass: InteractionRepository::class)]
@@ -37,12 +39,12 @@ class Interaction
     #[Groups(['interaction:read', 'utilisateur:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups(['interaction:read', 'interaction:write', 'utilisateur:read'])]
     private ?\DateTimeInterface $inter_date_de_debut = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['interaction:read', 'interaction:write', 'utilisateur:read'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['interaction:read', 'interaction:write', 'utilisateur:read', 'interaction:patch'])]
     private ?\DateTimeInterface $inter_date_de_fin = null;
 
     #[ORM\ManyToOne(targetEntity: Information::class, inversedBy: "interactions")]
@@ -79,7 +81,7 @@ class Interaction
         return $this->inter_date_de_debut;
     }
 
-    public function setInterDateDeDebut(\DateTimeInterface $inter_date_de_debut): static
+    public function setInterDateDeDebut(?\DateTimeInterface $inter_date_de_debut): static
     {
         $this->inter_date_de_debut = $inter_date_de_debut;
 
@@ -91,7 +93,7 @@ class Interaction
         return $this->inter_date_de_fin;
     }
 
-    public function setInterDateDeFin(\DateTimeInterface $inter_date_de_fin): static
+    public function setInterDateDeFin(?\DateTimeInterface $inter_date_de_fin): static
     {
         $this->inter_date_de_fin = $inter_date_de_fin;
 

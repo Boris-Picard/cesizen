@@ -21,12 +21,13 @@ import {
 import { useAuth } from "@/context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
 import cta2 from "@/assets/cta2.webp"
-import exerciceVideo from "@/assets/exercice.mp4"
-import perf from "@/assets/perf.png"
-import secure from "@/assets/secure.webp"
-import data from "@/assets/data.png"
-import profile from "@/assets/profile.png"
 import meditation from "@/assets/informations.avif"
+import security from "@/assets/security.svg"
+import profile from "@/assets/profile.png"
+import exo from "@/assets/exo.png"
+import data from "@/assets/data.svg"
+import perf from "@/assets/perf.svg"
+import breathe from "@/assets/breathe.svg"
 
 
 const faqItems = [
@@ -332,15 +333,8 @@ export default function Home() {
                     </p>
                   </div>
 
-                  <div className="relative flex-grow mt-4">
-                    <div className="relative mx-auto w-64 h-96 rounded-3xl border-8 border-gray-800 bg-gray-800 shadow-xl">
-                      <div className="absolute inset-0 rounded-2xl overflow-hidden">
-                        <video autoPlay loop muted className="w-full h-full object-cover">
-                          <source src={exerciceVideo} type="video/mp4" />
-                          Votre navigateur ne supporte pas la vidéo.
-                        </video>
-                      </div>
-                    </div>
+                  <div className="relative flex-grow mt-4 flex justify-center">
+                    <img src={breathe} alt="Respiration" className="w-36 h-36" />
                   </div>
                 </div>
               </motion.div>
@@ -364,7 +358,7 @@ export default function Home() {
                   limitée.
                 </p>
                 <div className="flex justify-center">
-                  <img src={perf} alt="Graphique de performance" className="max-w-full h-auto" />
+                  <img src={perf} alt="Graphique de performance" className="w-36 h-36" />
                 </div>
               </motion.div>
 
@@ -386,7 +380,7 @@ export default function Home() {
                   Vos données sont protégées avec les plus hauts standards de sécurité et de confidentialité.
                 </p>
                 <div className="flex justify-center">
-                  <img src={secure} alt="Bouclier de sécurité" className=" w-auto" />
+                  <img src={security} alt="Bouclier de sécurité" className="w-36 h-36" />
                 </div>
               </motion.div>
 
@@ -407,12 +401,8 @@ export default function Home() {
                 <p className="text-sm text-gray-600 mb-6">
                   Visualisez et analysez vos données pour mieux comprendre vos schémas émotionnels et votre progression.
                 </p>
-                <div className="relative mt-6 flex-grow">
-                  <div className="rounded-lg bg-gray-900 p-4 shadow-lg">
-                    <div className="flex bg-gray-800/40 border-b border-white/10">
-                      <img src={data} alt="data" className="rounded-lg" />
-                    </div>
-                  </div>
+                <div className="relative mt-6 flex-grow flex justify-center">
+                  <img src={data} alt="data" className="w-36 h-36" />
                 </div>
               </motion.div>
             </div>

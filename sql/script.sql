@@ -102,7 +102,7 @@ CREATE TABLE
 CREATE TABLE
    IF NOT EXISTS interaction (
       inter_id SERIAL PRIMARY KEY,
-      inter_date_de_debut TIMESTAMP NOT NULL,
+      inter_date_de_debut TIMESTAMP,
       inter_date_de_fin TIMESTAMP,
       info_id INT,
       type_inter_id INT NOT NULL,

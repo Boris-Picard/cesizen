@@ -13,9 +13,9 @@ export const exerciceCreateSchema = z.object({
     }),
     ex_duration: z.number().positive("La valeur doit être supérieure à 0"),
     ex_benefits: z.array(z.string()).optional(),
-    ex_inspiration: z.number().positive("La valeur doit être supérieure à 0"),
-    ex_apnee: z.number().positive("La valeur doit être supérieure à 0"),
-    ex_expiration: z.number().positive("La valeur doit être supérieure à 0"),
+    ex_inspiration: z.number(),
+    ex_apnee: z.number(),
+    ex_expiration: z.number(),
     ex_active: z.boolean(),
 });
 

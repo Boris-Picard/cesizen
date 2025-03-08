@@ -10,7 +10,7 @@ export interface PatchInteractionData {
     utilisateur?: string;
     exercice?: string;
     typeInteraction?: string;
-  }
+}
 
 export function usePatchInteractions() {
     const { token } = useAuth();
@@ -28,6 +28,7 @@ export function usePatchInteractions() {
                     },
                 }
             );
+            return data
         } catch (error) {
             if (error instanceof Error) {
                 if (axios.isAxiosError(error)) {
