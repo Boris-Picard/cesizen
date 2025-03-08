@@ -41,9 +41,9 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
           await patchInteraction({
             id: lastInteractionId,
             inter_date_de_fin: new Date().toISOString(),
-            utilisateur: `/api/utilisateurs/${user?.id}`,
-            exercice: `/api/exercices/${exercice?.id}`,
-            typeInteraction: `/api/type_interactions/${typeInteraction?.id}`,
+            utilisateur: `/api/utilisateurs/${user!.id}`,
+            exercice: `/api/exercices/${exercice!.id}`,
+            typeInteraction: `/api/type_interactions/${typeInteraction!.id}`,
           });
         } catch (error) {
           console.error("Erreur lors de la mise à jour de l'interaction", error);
@@ -508,7 +508,7 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="bg-white/90 backdrop-blur-lg rounded-3xl p-8 sm:p-12 text-center shadow-xl border border-leather-100 relative overflow-hidden"
+                  className="bg-white/90  rounded-3xl p-8 sm:p-12 text-center shadow-xl border border-leather-100 relative overflow-hidden"
                 >
                   {/* Background decoration */}
                   <div className="absolute inset-0 overflow-hidden">
@@ -560,11 +560,11 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
 
                     {/* Stats summary */}
                     <div className="grid grid-cols-2 gap-4 max-w-md mx-auto my-8">
-                      <div className="bg-leather-50 rounded-2xl p-4">
+                      <div className="bg-leather-100 rounded-2xl p-4">
                         <p className="text-leather-600 text-sm">Durée totale</p>
                         <p className="text-leather-900 text-xl font-bold">{exercice?.ex_duration} min</p>
                       </div>
-                      <div className="bg-leather-50 rounded-2xl p-4">
+                      <div className="bg-leather-100 rounded-2xl p-4">
                         <p className="text-leather-600 text-sm">Cycles complétés</p>
                         <p className="text-leather-900 text-xl font-bold">{totalCycles}</p>
                       </div>

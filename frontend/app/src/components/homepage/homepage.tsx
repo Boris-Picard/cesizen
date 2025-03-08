@@ -20,6 +20,14 @@ import {
 } from "lucide-react"
 import { useAuth } from "@/context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
+import cta2 from "@/assets/cta2.webp"
+import meditation from "@/assets/informations.avif"
+import security from "@/assets/security.svg"
+import profile from "@/assets/profile.png"
+import exo from "@/assets/exo.png"
+import data from "@/assets/data.svg"
+import perf from "@/assets/perf.svg"
+import breathe from "@/assets/breathe.svg"
 
 
 const faqItems = [
@@ -282,7 +290,7 @@ export default function Home() {
               <div className="relative mt-16 h-80 lg:mt-8">
                 <img
                   className="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
-                  src="/breathing-app-screenshot.png"
+                  src={cta2}
                   alt="Capture d'écran de l'application Cesizen"
                   width="1824"
                   height="1080"
@@ -325,16 +333,8 @@ export default function Home() {
                     </p>
                   </div>
 
-                  <div className="relative flex-grow mt-4">
-                    <div className="relative mx-auto w-64 h-96 rounded-3xl border-8 border-gray-800 bg-gray-800 shadow-xl">
-                      <div className="absolute inset-0 rounded-2xl overflow-hidden">
-                        <img
-                          src="/breathing-mobile.png"
-                          alt="Application mobile Cesizen"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    </div>
+                  <div className="relative flex-grow mt-4 flex justify-center">
+                    <img src={breathe} alt="Respiration" className="w-36 h-36" />
                   </div>
                 </div>
               </motion.div>
@@ -358,7 +358,7 @@ export default function Home() {
                   limitée.
                 </p>
                 <div className="flex justify-center">
-                  <img src="/performance-chart.png" alt="Graphique de performance" className="max-w-full h-auto" />
+                  <img src={perf} alt="Graphique de performance" className="w-36 h-36" />
                 </div>
               </motion.div>
 
@@ -380,7 +380,7 @@ export default function Home() {
                   Vos données sont protégées avec les plus hauts standards de sécurité et de confidentialité.
                 </p>
                 <div className="flex justify-center">
-                  <img src="/security-shield.png" alt="Bouclier de sécurité" className="h-24 w-auto" />
+                  <img src={security} alt="Bouclier de sécurité" className="w-36 h-36" />
                 </div>
               </motion.div>
 
@@ -401,48 +401,18 @@ export default function Home() {
                 <p className="text-sm text-gray-600 mb-6">
                   Visualisez et analysez vos données pour mieux comprendre vos schémas émotionnels et votre progression.
                 </p>
-                <div className="relative mt-6 flex-grow">
-                  <div className="rounded-lg bg-gray-900 p-4 shadow-lg">
-                    <div className="flex bg-gray-800/40 border-b border-white/10">
-                      <div className="px-4 py-2 text-sm font-medium text-white border-b-2 border-leather-500">
-                        Statistiques.jsx
-                      </div>
-                      <div className="px-4 py-2 text-sm font-medium text-gray-400">Graphiques.jsx</div>
-                    </div>
-                    <div className="p-4 text-sm text-gray-300 font-mono">
-                      <div className="text-leather-400">// Visualisation des données émotionnelles</div>
-                      <div className="mt-2">
-                        <span className="text-blue-400">const</span>{" "}
-                        <span className="text-yellow-300">EmotionData</span> = () =&gt; {"{"}
-                      </div>
-                      <div className="ml-4">
-                        <span className="text-blue-400">const</span> [<span className="text-yellow-300">data</span>,{" "}
-                        <span className="text-yellow-300">setData</span>] ={" "}
-                        <span className="text-blue-400">useState</span>(emotionStats);
-                      </div>
-                      <div className="ml-4 mt-2">
-                        <span className="text-blue-400">return</span> (
-                      </div>
-                      <div className="ml-8">
-                        &lt;<span className="text-green-400">EmotionChart</span>{" "}
-                        <span className="text-leather-300">data</span>={"{"}
-                        <span className="text-yellow-300">data</span>
-                        {"}"} /&gt;
-                      </div>
-                      <div className="ml-4">);</div>
-                      <div>{"}"}</div>
-                    </div>
-                  </div>
+                <div className="relative mt-6 flex-grow flex justify-center">
+                  <img src={data} alt="data" className="w-36 h-36" />
                 </div>
               </motion.div>
             </div>
           </div>
-        </section>
+        </section >
 
         {/* Testimonials Section */}
-        <section className="relative isolate overflow-hidden bg-leather-900 py-24 sm:py-32">
+        <section className="relative isolate overflow-hidden bg-leather-900 py-24 sm:py-32" >
           <img
-            src="/meditation-bg.jpg"
+            src={meditation}
             alt=""
             className="absolute inset-0 -z-10 h-full w-full object-cover object-right md:object-center opacity-20"
           />
@@ -503,10 +473,10 @@ export default function Home() {
               </dl>
             </div>
           </div>
-        </section>
+        </section >
 
         {/* Detailed Section */}
-        <section className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
+        <section className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0" >
           <div className="absolute inset-0 -z-10 overflow-hidden">
             <svg
               className="absolute top-0 left-[max(50%,25rem)] h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
@@ -553,14 +523,14 @@ export default function Home() {
             <div className="-mt-12 -ml-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
               <img
                 className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
-                src="/app-screenshot.png"
-                alt="Capture d'écran de l'application Cesizen"
+                src={profile}
+                alt="Capture d'écran profile"
               />
             </div>
 
             <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
               <div className="lg:pr-4">
-                <div className="max-w-xl                  text-base leading-7 text-gray-700 lg:max-w-lg">
+                <div className="max-w-xl text-base leading-7 text-gray-700 lg:max-w-lg">
                   <p>
                     Cesizen combine les dernières avancées en neurosciences et en psychologie pour vous offrir des
                     outils efficaces de gestion du stress et d'amélioration du bien-être mental.
@@ -606,10 +576,10 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </section >
 
         {/* FAQ Section */}
-        <section id="faq" className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32">
+        <section id="faq" className="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32" >
           <div className="absolute inset-0 -z-10 overflow-hidden">
             <svg
               className="absolute top-0 left-[max(50%,25rem)] h-[64rem] w-[128rem] -translate-x-1/2 stroke-gray-200 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
@@ -684,12 +654,12 @@ export default function Home() {
               </motion.div>
             </div>
           </div>
-        </section>
+        </section >
 
         {/* CTA Section - Final */}
-        <section className="relative isolate overflow-hidden bg-leather-900 py-24 sm:py-32">
+        <section className="relative isolate overflow-hidden bg-leather-900 py-24 sm:py-32" >
           <img
-            src="/meditation-bg.jpg"
+            src={cta2}
             alt=""
             className="absolute inset-0 -z-10 h-full w-full object-cover object-center opacity-10"
           />
@@ -798,9 +768,9 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
-      </main>
-    </div>
+        </section >
+      </main >
+    </div >
   )
 }
 

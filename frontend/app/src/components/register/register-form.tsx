@@ -86,7 +86,7 @@ export function RegisterForm() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-4xl relative z-10"
       >
-        <Card className="bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl overflow-hidden border border-leather-200/70">
+        <Card className="bg-white/95 shadow-xl rounded-3xl overflow-hidden border border-leather-200/70">
           <CardContent className="p-6 sm:p-10 flex flex-col lg:flex-row gap-8">
             <div className="flex-1 space-y-6">
               <div className="text-center lg:text-left">

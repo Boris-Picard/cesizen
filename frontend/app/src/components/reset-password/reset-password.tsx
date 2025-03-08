@@ -134,7 +134,7 @@ export function ResetPassword() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md relative z-10"
       >
-        <Card className="bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl overflow-hidden border border-leather-200/70">
+        <Card className="bg-white/95 shadow-xl rounded-3xl overflow-hidden border border-leather-200/70">
           <CardContent className="p-8">
             <div className="space-y-8">
               <div className="text-center">

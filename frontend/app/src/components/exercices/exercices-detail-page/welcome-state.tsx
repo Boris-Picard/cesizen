@@ -27,7 +27,7 @@ export default function WelcomeState({ exercise, onStart }: WelcomeStateProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="relative bg-white/90 backdrop-blur-lg rounded-3xl p-8 sm:p-12 shadow-xl border border-leather-100"
+                className="relative bg-white/90 rounded-3xl p-8 sm:p-12 shadow-xl border border-leather-100"
             >
                 <div className="flex flex-col items-center text-center space-y-8">
                     {/* Icon with animation */}

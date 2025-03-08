@@ -30,9 +30,10 @@ interface InfoDetailProps {
   articles: Information[]
   interaction: TypeInteraction | undefined
   user: UserPayload | null
+  isAuthenticated: boolean | undefined
 }
 
-export function InformationsDetailPageComponents({ information, articles, interaction, user }: InfoDetailProps) {
+export function InformationsDetailPageComponents({ information, articles, interaction, user, isAuthenticated }: InfoDetailProps) {
   const [isBookmarked, setIsBookmarked] = useState(false)
   const { createInteraction } = useCreateInteraction()
   const navigate = useNavigate()
@@ -123,23 +124,27 @@ export function InformationsDetailPageComponents({ information, articles, intera
                   </TooltipContent>
                 </Tooltip>
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-white hover:text-leather-800 hover:bg-leather-100 rounded-full"
-                      onClick={() => setIsBookmarked(!isBookmarked)}
-                    >
-                      <motion.div animate={isBookmarked ? { scale: [1, 1.2, 1] } : {}} transition={{ duration: 0.3 }}>
-                        {isBookmarked ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
-                      </motion.div>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{isBookmarked ? "Retirer des favoris" : "Ajouter aux favoris"}</p>
-                  </TooltipContent>
-                </Tooltip>
+                {
+                  isAuthenticated
+                  &&
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-white hover:text-leather-800 hover:bg-leather-100 rounded-full"
+                        onClick={() => setIsBookmarked(!isBookmarked)}
+                      >
+                        <motion.div animate={isBookmarked ? { scale: [1, 1.2, 1] } : {}} transition={{ duration: 0.3 }}>
+                          {isBookmarked ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
+                        </motion.div>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{isBookmarked ? "Retirer des favoris" : "Ajouter aux favoris"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                }
               </TooltipProvider>
             </div>
           </div>
@@ -151,7 +156,7 @@ export function InformationsDetailPageComponents({ information, articles, intera
             <div className="text-center">
               <Badge
                 variant="secondary"
-                className="bg-leather-700/30 text-leather-100 border-leather-600/30 mb-4 px-4 py-1.5 rounded-full"
+                className="bg-leather-700/30 text-leather-100 hover:bg-inherit border-leather-600/30 mb-4 px-4 py-1.5 rounded-full"
               >
                 {information?.typeInformation.type_info_nom}
               </Badge>

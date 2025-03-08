@@ -322,31 +322,33 @@ const EditProfileComponent = ({ user, token }: EditProfileInterface) => {
                           </ul>
                         </div>
                         <DialogFooter className="mt-6 space-x-4">
-                          <Button
-                            type="button"
-                            onClick={() => setShowAnonymizeDialog(false)}
-                            className="flex-1 bg-leather-100 text-leather-800 hover:bg-leather-200 transition-colors duration-300 rounded-full"
-                          >
-                            Annuler
-                          </Button>
-                          <Button
-                            type="button"
-                            disabled={loadingAnonymize}
-                            onClick={() => handleAnonymize()}
-                            className="flex-1 bg-leather-600 text-white hover:bg-leather-700 transition-colors duration-300 rounded-full"
-                          >
-                            {loadingAnonymize ? (
-                              <>
-                                <Icons.loader
-                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                  aria-hidden="true"
-                                />
-                                Modification en cours...
-                              </>
-                            ) : (
-                              "Confirmer"
-                            )}
-                          </Button>
+                          <div className="flex gap-3 w-full">
+                            <Button
+                              type="button"
+                              onClick={() => setShowAnonymizeDialog(false)}
+                              className="flex-1 bg-leather-100 text-leather-800 hover:bg-leather-200 transition-colors duration-300 rounded-full"
+                            >
+                              Annuler
+                            </Button>
+                            <Button
+                              type="button"
+                              disabled={loadingAnonymize}
+                              onClick={() => handleAnonymize()}
+                              className="flex-1 bg-leather-600 text-white hover:bg-leather-700 transition-colors duration-300 rounded-full"
+                            >
+                              {loadingAnonymize ? (
+                                <>
+                                  <Icons.loader
+                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                    aria-hidden="true"
+                                  />
+                                  Modification en cours...
+                                </>
+                              ) : (
+                                "Confirmer"
+                              )}
+                            </Button>
+                          </div>
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
@@ -393,31 +395,33 @@ const EditProfileComponent = ({ user, token }: EditProfileInterface) => {
                           </ul>
                         </div>
                         <DialogFooter className="mt-6 space-x-4">
-                          <Button
-                            type="button"
-                            onClick={() => setShowDeleteDialog(false)}
-                            className="flex-1 bg-leather-100 text-leather-800 hover:bg-leather-200 transition-colors duration-300 rounded-full"
-                          >
-                            Annuler
-                          </Button>
-                          <Button
-                            type="button"
-                            onClick={handleDelete}
-                            disabled={loadingDeleteUser}
-                            className="flex-1 bg-red-600 text-white hover:bg-red-700 transition-colors duration-300 rounded-full"
-                          >
-                            {loadingDeleteUser ? (
-                              <>
-                                <Icons.loader
-                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                  aria-hidden="true"
-                                />
-                                Suppression en cours...
-                              </>
-                            ) : (
-                              "Supprimer définitivement"
-                            )}
-                          </Button>
+                          <div className="flex w-full gap-3">
+                            <Button
+                              type="button"
+                              onClick={() => setShowDeleteDialog(false)}
+                              className="flex-1 bg-leather-100 text-leather-800 hover:bg-leather-200 transition-colors duration-300 rounded-full"
+                            >
+                              Annuler
+                            </Button>
+                            <Button
+                              type="button"
+                              onClick={handleDelete}
+                              disabled={loadingDeleteUser}
+                              className="flex-1 bg-red-600 text-white hover:bg-red-700 transition-colors duration-300 rounded-full"
+                            >
+                              {loadingDeleteUser ? (
+                                <>
+                                  <Icons.loader
+                                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                                    aria-hidden="true"
+                                  />
+                                  Suppression en cours...
+                                </>
+                              ) : (
+                                "Supprimer définitivement"
+                              )}
+                            </Button>
+                          </div>
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>

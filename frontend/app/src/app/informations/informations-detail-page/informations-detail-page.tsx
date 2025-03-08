@@ -13,7 +13,7 @@ export function InformationsDetailPage() {
     const { information, loading } = useGetInformationsId(id)
     const { informations } = useGetInformationsFront()
     const { typeInteractions } = useGetTypeInteractions()
-    const { user } = useAuth()
+    const { user, isAuthenticated } = useAuth()
 
     if (!loading && !information) {
         navigate("/informations");
@@ -25,7 +25,7 @@ export function InformationsDetailPage() {
     return (
         <div className="min-h-scren">
             <Navbar />
-            <InformationsDetailPageComponents information={information} articles={informations} interaction={interaction} user={user} />
+            <InformationsDetailPageComponents isAuthenticated={isAuthenticated} information={information} articles={informations} interaction={interaction} user={user} />
             <FooterPage />
         </div>
     )

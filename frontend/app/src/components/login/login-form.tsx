@@ -51,7 +51,7 @@ export function LoginForm() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md relative z-10"
       >
-        <Card className="bg-white/95 backdrop-blur-sm shadow-xl rounded-3xl overflow-hidden border border-leather-200/70">
+        <Card className="bg-white/95 shadow-xl rounded-3xl overflow-hidden border border-leather-200/70">
           <CardContent className="p-8">
             <div className="mb-8 text-center">
             <Link to="/" className="flex justify-center items-center space-x-2 group h-24">
