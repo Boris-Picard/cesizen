@@ -71,7 +71,7 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
       ? `${hours} heure${hours > 1 ? "s" : ""} ${minutes} minute${minutes !== 1 ? "s" : ""}`
       : `${minutes} minute${minutes !== 1 ? "s" : ""}`
 
-  const daysOfWeek = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]
+  const daysOfWeek = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"]
   const consecutiveDays = exercices?.reduce((acc: Record<string, number>, exercice) => {
     if (exercice.inter_date_de_fin) {
       const dayIndex = new Date(exercice.inter_date_de_fin).getDay()
@@ -215,7 +215,7 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
                       <Award className="h-4 w-4 mr-1 text-leather-600" /> Niveau
                     </span>
                     <Badge
-                      className={`${exercicesDoneLevel === "Débutant"
+                      className={`hover:bg-inherit ${exercicesDoneLevel === "Débutant"
                           ? "bg-leather-100 text-leather-800"
                           : exercicesDoneLevel === "Intermédiaire"
                             ? "bg-leather-200 text-leather-900"

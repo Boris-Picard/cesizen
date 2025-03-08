@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -28,18 +26,18 @@ type TypeInfoKey = "Santé mentale" | "Gestion du stress" | "Exercices de relaxa
 
 const colorMapping: Record<TypeInfoKey, { color: string; textColor: string; gradient: string }> = {
   "Santé mentale": {
-    color: "bg-leather-100",
-    textColor: "text-leather-900",
+    color: "bg-leather-100 hover:bg-inherit",
+    textColor: "text-leather-900 hover:text-black",
     gradient: "from-leather-200 to-leather-100",
   },
   "Gestion du stress": {
-    color: "bg-leather-200",
-    textColor: "text-leather-900",
+    color: "bg-leather-200 hover:bg-inherit",
+    textColor: "text-leather-900 hover:text-black",
     gradient: "from-leather-300 to-leather-200",
   },
   "Exercices de relaxation": {
-    color: "bg-leather-300",
-    textColor: "text-leather-950",
+    color: "bg-leather-300 hover:bg-inherit",
+    textColor: "text-leather-950 hover:text-black",
     gradient: "from-leather-400 to-leather-300",
   },
 }
@@ -253,9 +251,9 @@ export const InformationsComponents = ({ informationsData, interaction, user }: 
                         </div>
 
                         <div
-                          className="prose prose-sm prose-leather mb-6 line-clamp-3 flex-grow"
+                          className="prose prose-sm prose-leather mb-6 line-clamp-5"
                           dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(article?.info_contenu),
+                            __html: DOMPurify.sanitize(article!.info_contenu),
                           }}
                         ></div>
 

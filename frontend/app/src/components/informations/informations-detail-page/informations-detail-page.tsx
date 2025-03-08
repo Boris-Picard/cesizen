@@ -156,7 +156,7 @@ export function InformationsDetailPageComponents({ information, articles, intera
             <div className="text-center">
               <Badge
                 variant="secondary"
-                className="bg-leather-700/30 text-leather-100 border-leather-600/30 mb-4 px-4 py-1.5 rounded-full"
+                className="bg-leather-700/30 text-leather-100 hover:bg-inherit border-leather-600/30 mb-4 px-4 py-1.5 rounded-full"
               >
                 {information?.typeInformation.type_info_nom}
               </Badge>
