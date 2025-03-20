@@ -11,9 +11,12 @@ pipeline {
         stages {
             stage('Lint') {
                 steps {
-                    echo 'Running Linting...'
-                    // Exécution du linter (adapter la commande selon le projet)
-                    sh 'eslint .'
+                    script {
+                        docker.image('node:14-alpine').inside("-v \$WORKSPACE:\$WORKSPACE -w \$WORKSPACE") {
+                            sh 'npm install'
+                            sh 'npx eslint .'
+                        }
+                    }
                 }
             }
 
@@ -49,7 +52,7 @@ pipeline {
                 }
             }
         }
-    }
+        }
 
     post {
         always {
