@@ -7,16 +7,6 @@ pipeline {
         COMPOSE_FILE = 'docker-compose.yml'
     }
     stages {
-        stage('Deploy') {
-            steps {
-                script {
-                    // Exécution de docker-compose dans un container qui dispose de docker-compose
-                    docker.image('docker/compose:latest').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
-                        sh "docker-compose -f docker-compose.yml up -d"
-                    }
-                }
-            }
-        }
         stage('Build') {
             steps {
                 // Construire les images définies dans le docker-compose (si besoin)
@@ -25,8 +15,12 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                // Lancer les containers en arrière-plan
-                sh "docker-compose -f ${COMPOSE_FILE} up -d"
+                script {
+                    // Exécution de docker-compose dans un container qui dispose de docker-compose
+                    docker.image('docker/compose:latest').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+                        sh "docker-compose -f docker-compose.yml up -d"
+                    }
+                }
             }
         }
         stage('Test') {
