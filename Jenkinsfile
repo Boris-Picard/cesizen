@@ -51,19 +51,16 @@ pipeline {
         }
     }
 
-        post {
-            // Actions post-pipeline, exécutées quoi qu'il arrive
-            always {
-                echo 'Nettoyage du workspace Jenkins...'
-                deleteDir() // Nettoie le workspace pour libérer l'espace, bonne pratique CI
-            }
-            failure {
-                echo 'Pipeline échoué - envoi de notification d\'échec...'
-            // Ex: mail to: 'dev-team@company.com', subject: 'Build failed', body: "Voir les logs Jenkins..."
-            }
-            success {
-                echo 'Pipeline réussi - envoi de notification de succès...'
-            // Ex: mail to: 'dev-team@company.com', subject: 'Build success', body: "Déploiement effectué."
-            }
+    post {
+        always {
+            echo 'Cleaning up...'
+            deleteDir()
         }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+    }
 }
