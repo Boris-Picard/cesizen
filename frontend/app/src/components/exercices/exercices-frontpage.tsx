@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 
 import { useState } from "react"
@@ -20,19 +18,19 @@ type Difficulty = "débutant" | "intermédiaire" | "avancé"
 
 const difficultyColors: Record<Difficulty, { bg: string; text: string; border: string; gradient: string }> = {
   débutant: {
-    bg: "bg-leather-100",
+    bg: "bg-leather-100 hover:bg-inherit",
     text: "text-leather-800",
     border: "border-leather-200",
     gradient: "from-leather-200 to-leather-100",
   },
   intermédiaire: {
-    bg: "bg-leather-200",
+    bg: "bg-leather-200 hover:bg-inherit",
     text: "text-leather-900",
     border: "border-leather-300",
     gradient: "from-leather-300 to-leather-200",
   },
   avancé: {
-    bg: "bg-leather-300",
+    bg: "bg-leather-300 hover:bg-inherit",
     text: "text-leather-950",
     border: "border-leather-400",
     gradient: "from-leather-400 to-leather-300",

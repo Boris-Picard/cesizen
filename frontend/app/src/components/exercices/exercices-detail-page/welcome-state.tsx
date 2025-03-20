@@ -57,7 +57,7 @@ export default function WelcomeState({ exercise, onStart }: WelcomeStateProps) {
 
                     {/* Exercise parameters */}
                     <div className="w-full bg-gradient-to-br from-leather-50 to-leather-100/70 rounded-2xl p-6 shadow-inner">
-                        <div className="grid grid-cols-3 gap-6">
+                        <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
                             {[
                                 {
                                     label: "Inspiration",
@@ -80,7 +80,7 @@ export default function WelcomeState({ exercise, onStart }: WelcomeStateProps) {
                                 >
                                     <div className="flex items-center gap-2 mb-1">
                                         {phase.icon}
-                                        <p className="text-sm font-medium text-leather-700">{phase.label}</p>
+                                        <p className="text-xs font-medium text-leather-700">{phase.label}</p>
                                     </div>
                                     <p className="text-2xl font-bold text-leather-800">{phase.value}s</p>
                                 </motion.div>

@@ -1,6 +1,8 @@
 api_platform:
   formats:
-    json: ["application/json", "application/merge-patch+json"]
+    json: ["application/json"]
+  patch_formats:
+    json: ['application/merge-patch+json']
   title: Hello API Platform
   version: 1.0.0
   defaults:
@@ -15,5 +17,5 @@ api_platform:
   collection:
     pagination:
       enabled: true
-      items_per_page_parameter_name: 'itemsPerPage'
-      page_parameter_name: 'page'
+      items_per_page_parameter_name: "itemsPerPage"
+      page_parameter_name: "page"
