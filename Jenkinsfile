@@ -14,6 +14,8 @@ pipeline {
                     script {
                         docker.image('node:23-alpine').inside("-u root -v \$WORKSPACE:\$WORKSPACE -w \$WORKSPACE/frontend/app") {
                             sh 'chmod -R 777 .'
+                            sh 'pwd'
+                            sh 'ls -la'
                             sh 'npm install'
                             sh 'npx eslint .'
                         }
