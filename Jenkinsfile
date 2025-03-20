@@ -12,7 +12,7 @@ pipeline {
             stage('Lint') {
                 steps {
                     script {
-                        docker.image('node:14-alpine').inside("-v \$WORKSPACE:\$WORKSPACE -w \$WORKSPACE") {
+                        docker.image('node:23-alpine').inside("-v \$WORKSPACE:\$WORKSPACE -w \$WORKSPACE") {
                             sh 'npm install'
                             sh 'npx eslint .'
                         }
