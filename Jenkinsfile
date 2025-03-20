@@ -6,14 +6,19 @@ pipeline {
         // par exemple si vous utilisez un fichier .env, assurez-vous qu'il est présent
         COMPOSE_FILE = 'docker-compose.yml'
     }
-
-    stages {
-        stage('Checkout') {
+     stages {
+        stage('Deploy') {
             steps {
-                // Récupérer votre code depuis votre dépôt Git
-                git 'https://github.com/Boris-Picard/cesizen'
+                script {
+                    // Exécution de docker-compose dans un container qui dispose de docker-compose
+                    docker.image('docker/compose:latest').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+                        sh "docker-compose -f docker-compose.yml up -d"
+                    }
+                }
             }
         }
+    }
+    stages {
         stage('Build') {
             steps {
                 // Construire les images définies dans le docker-compose (si besoin)
