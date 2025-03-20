@@ -6,7 +6,7 @@ pipeline {
         // par exemple si vous utilisez un fichier .env, assurez-vous qu'il est présent
         COMPOSE_FILE = 'docker-compose.yml'
     }
-     stages {
+    stages {
         stage('Deploy') {
             steps {
                 script {
@@ -17,8 +17,6 @@ pipeline {
                 }
             }
         }
-    }
-    stages {
         stage('Build') {
             steps {
                 // Construire les images définies dans le docker-compose (si besoin)
