@@ -13,6 +13,7 @@ pipeline {
                 steps {
                     script {
                         docker.image('node:23-alpine').inside("-v \$WORKSPACE:\$WORKSPACE -w \$WORKSPACE") {
+                            sh 'chmod -R 777 .'
                             sh 'npm install'
                             sh 'npx eslint .'
                         }
