@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
             security: "is_granted('ROLE_ADMIN')"
         ),
         new Patch(
-            denormalizationContext: ['groups' => ['interaction:patch']]
+            denormalizationContext: ['groups' => ['interaction:patch']],
         ),
     ]
 )]
@@ -36,7 +36,7 @@ class Interaction
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "inter_id", type: "integer")]
-    #[Groups(['interaction:read', 'utilisateur:read'])]
+    #[Groups(['interaction:read', 'utilisateur:read', 'interaction:patch'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

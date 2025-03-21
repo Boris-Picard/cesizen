@@ -33,7 +33,7 @@ export const getColumns = (
             header: "Description",
             cell: ({ row }) => {
                 const content = row.original.ex_description;
-                return <div className="line-clamp-3" dangerouslySetInnerHTML={{ __html: content }} />;
+                return <div className="line-clamp-3">{content}</div>;
             },
         },
         {

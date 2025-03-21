@@ -4,23 +4,17 @@ import { toast } from "@/hooks/useToast";
 
 export interface PatchInteractionData {
     id: number | null;
-    inter_date_de_debut?: string;
-    inter_date_de_fin?: string;
-    information?: string;
-    utilisateur?: string;
-    exercice?: string;
-    typeInteraction?: string;
+    inter_date_de_fin: string;
 }
 
 export function usePatchInteractions() {
     const { token } = useAuth();
 
-    const patchInteraction = async (validData: PatchInteractionData) => {
+    const patchInteraction = async ({ id, inter_date_de_fin }: PatchInteractionData) => {
         try {
-            const { id, ...patchData } = validData;
             const { data } = await axios.patch(
-                `http://cesizen-api.localhost/api/interactions/${validData.id}`,
-                patchData,
+                `http://cesizen-api.localhost/api/interactions/${id}`,
+                { inter_date_de_fin },
                 {
                     headers: {
                         "Content-Type": "application/merge-patch+json",

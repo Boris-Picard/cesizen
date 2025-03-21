@@ -16,7 +16,7 @@ export default function BenefitsCard({ benefits, isActive = false }: BenefitsCar
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.2 }}
     >
-      <Card className="relative overflow-hidden group backdrop-blur-sm bg-white/90">
+      <Card className="relative overflow-hidden group bg-white/90">
         {/* Particules d'ambiance */}
         <div className="absolute inset-0 overflow-hidden">
           {[...Array(3)].map((_, i) => (

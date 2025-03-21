@@ -1,7 +1,6 @@
-import type React from "react"
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowLeft, Clock, Award, Heart, Play, Pause, RotateCcw, CheckCircle2, Info } from "lucide-react"
+import { ArrowLeft, Clock, Award, Play, Pause, RotateCcw, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
@@ -41,9 +40,6 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
           await patchInteraction({
             id: lastInteractionId,
             inter_date_de_fin: new Date().toISOString(),
-            utilisateur: `/api/utilisateurs/${user!.id}`,
-            exercice: `/api/exercices/${exercice!.id}`,
-            typeInteraction: `/api/type_interactions/${typeInteraction!.id}`,
           });
         } catch (error) {
           console.error("Erreur lors de la mise à jour de l'interaction", error);
@@ -51,7 +47,7 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
       };
       updateInteraction();
     }
-  }, [isCompleted, lastInteractionId, patchInteraction, user, exercice, typeInteraction]);
+  }, [isCompleted]);
 
 
 
@@ -338,7 +334,7 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
                 transition={{ duration: 0.3 }}
                 className={`
         text-center p-6 rounded-full
-        bg-white/90 backdrop-blur-sm
+        bg-white/90
         border-2 ${phaseConfig.borderColor}
         ${phaseConfig.shadowColor} shadow-lg
         transform transition-all duration-300
@@ -372,7 +368,7 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
               animate={{ opacity: 1, y: 0 }}
               className={`
       px-4 py-2 rounded-full
-      bg-white/90 backdrop-blur-sm
+      bg-white/90
       border ${phaseConfig.borderColor}
       ${phaseConfig.shadowColor} shadow-md
     `}
@@ -501,7 +497,7 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
           <div className="lg:col-span-8 space-y-6">
             <AnimatePresence mode="wait">
-            {!hasStarted ? (
+              {!hasStarted ? (
                 <WelcomeState exercise={exercice} onStart={handleInitialStart} />
               ) : isCompleted ? (
                 <motion.div

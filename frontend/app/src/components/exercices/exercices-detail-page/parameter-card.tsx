@@ -24,7 +24,7 @@ interface ParameterCardProps {
 export default function ParameterCard({ phases, cycleDuration, isActive = false }: ParameterCardProps) {
     return (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <Card className="relative overflow-hidden group backdrop-blur-sm bg-white/90">
+            <Card className="relative overflow-hidden group bg-white/90">
                 {/* Particules d'ambiance */}
                 <div className="absolute inset-0 overflow-hidden">
                     {[...Array(3)].map((_, i) => (
