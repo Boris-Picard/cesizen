@@ -4,6 +4,7 @@ import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { Information } from "@/components/admin-dashboard/informations/column";
+import { UseFormReturn } from "react-hook-form";
 
 export const informationCreateSchema = z.object({
     info_titre: z.string().min(2, "Le titre est requis."),
@@ -13,10 +14,12 @@ export const informationCreateSchema = z.object({
     typeInformation: z.string().nonempty("Le type d'information est requis."),
 });
 
+export type InformationsFormValues = z.infer<typeof informationCreateSchema>;
+
 interface CreateInformationInterface {
-    validData: z.infer<typeof informationCreateSchema>;
+    validData: InformationsFormValues;
     onInformationAdded: (information: Information) => void;
-    form: any;
+    form: UseFormReturn<InformationsFormValues>;
 }
 
 export function useCreateInformations() {

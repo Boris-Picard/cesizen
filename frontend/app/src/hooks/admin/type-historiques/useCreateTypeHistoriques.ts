@@ -4,15 +4,18 @@ import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { TypeHistorique } from "@/components/admin-dashboard/type-historiques/column";
+import { UseFormReturn } from "react-hook-form";
 
 export const typeHistoriqueCreateSchema = z.object({
     type_histo_libelle: z.string().min(1, "Le libellé est requis."),
 });
 
+export type TypeHistoriqueFormValues = z.infer<typeof typeHistoriqueCreateSchema>;
+
 interface CreateTypeHistoriqueInterface {
-    validData: z.infer<typeof typeHistoriqueCreateSchema>;
+    validData: TypeHistoriqueFormValues;
     onTypeHistoriqueAdded: (typeHistorique: TypeHistorique) => void;
-    form: any;
+    form: UseFormReturn<TypeHistoriqueFormValues>;
 }
 
 export function useCreateTypeHistoriques() {

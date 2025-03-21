@@ -94,7 +94,8 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
   ]
 
   const randomColor = (color: string[]) => color[Math.floor(Math.random() * color.length)]
-  const randomIcon = (icons: any[]) => icons[Math.floor(Math.random() * icons.length)]
+  const randomIcon = <T,>(icons: T[]): T =>
+    icons[Math.floor(Math.random() * icons.length)];
 
   const activities = [
     ...exercicesDone!.map((ex) => ({
@@ -216,10 +217,10 @@ const ProfilePage = ({ user, informations, exercices, totalInteractions }: Profi
                     </span>
                     <Badge
                       className={`hover:bg-inherit ${exercicesDoneLevel === "Débutant"
-                          ? "bg-leather-100 text-leather-800"
-                          : exercicesDoneLevel === "Intermédiaire"
-                            ? "bg-leather-200 text-leather-900"
-                            : "bg-leather-300 text-leather-950"
+                        ? "bg-leather-100 text-leather-800"
+                        : exercicesDoneLevel === "Intermédiaire"
+                          ? "bg-leather-200 text-leather-900"
+                          : "bg-leather-300 text-leather-950"
                         } border-none`}
                     >
                       {exercicesDoneLevel}

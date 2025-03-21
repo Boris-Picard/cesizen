@@ -47,7 +47,7 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
       };
       updateInteraction();
     }
-  }, [isCompleted]);
+  }, [isCompleted, lastInteractionId, patchInteraction]);
 
 
 
@@ -58,8 +58,6 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
     (exercice?.ex_inspiration ?? 0) + (exercice?.ex_apnee ?? 0) + (exercice?.ex_expiration ?? 0)
   const totalCycles = cycleDurationInSeconds > 0 ? Math.floor(totalDurationInSeconds / cycleDurationInSeconds) : 0
   const cycleDuration = cycleDurationInSeconds
-
-  const remainingTotalTime = totalDurationInSeconds - Math.floor(totalTime / 1000)
 
   const getPhaseConfig = useCallback(() => {
     const configs = {
@@ -117,8 +115,6 @@ export default function ExercicePage({ exercice, typeInteraction, user }: Exerci
     const interval = 50
 
     timerRef.current = window.setInterval(() => {
-      const now = Date.now()
-
       setPhaseTime((prev) => {
         const newTime = prev + interval
         if (newTime >= phaseDuration) {

@@ -4,6 +4,7 @@ import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { TypeInformation } from "@/components/admin-dashboard/type-informations/column";
+import { UseFormReturn } from "react-hook-form";
 
 export const typeInformationCreateSchema = z.object({
   type_info_nom: z.enum(["Santé mentale", "Gestion du stress", "Exercices de relaxation"], {
@@ -11,10 +12,12 @@ export const typeInformationCreateSchema = z.object({
   }),
 });
 
+export type TypeInformationsFormValues = z.infer<typeof typeInformationCreateSchema>;
+
 interface CreateTypeInformationInterface {
-  validData: z.infer<typeof typeInformationCreateSchema>;
+  validData: TypeInformationsFormValues;
   onTypeInformationAdded: (typeInfo: TypeInformation) => void;
-  form: any;
+  form: UseFormReturn<TypeInformationsFormValues>;
 }
 
 export function useCreateTypeInformations() {

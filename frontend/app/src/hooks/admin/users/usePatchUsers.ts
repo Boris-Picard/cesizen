@@ -1,6 +1,8 @@
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { z } from "zod";
+import { UserFormValues } from "./useCreateUsers";
+import { UseFormReturn } from "react-hook-form";
 
 export const userSchema = z.object({
     ut_prenom: z
@@ -21,11 +23,11 @@ export const userSchema = z.object({
 });
 
 interface PatchUserParams {
-    validData: z.infer<typeof userSchema>;
+    validData: UserFormValues;
     id: number,
     onClose: () => void;
-    form: any;
-    onSave: (values: z.infer<typeof userSchema>) => void;
+    form: UseFormReturn<UserFormValues>;
+    onSave: (values: UserFormValues) => void;
 }
 
 export function usePatchUsers() {

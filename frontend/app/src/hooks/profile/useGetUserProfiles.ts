@@ -6,6 +6,7 @@ import { Role } from "@/components/admin-dashboard/users/columns";
 import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
 import { Information } from "@/components/admin-dashboard/informations/column";
 import { Interaction } from "@/components/admin-dashboard/interactions/column";
+import { ValidationType } from "@/components/admin-dashboard/validations/column";
 
 interface userProfileInterface {
     id: number;
@@ -19,7 +20,7 @@ interface userProfileInterface {
     exercices: ExerciceType[];
     informations: Information[];
     interactions: Interaction[]
-    validations: any[];
+    validations: ValidationType[];
 }
 
 export function useGetUserProfile(id: string | undefined) {

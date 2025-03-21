@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-siderbar/app-sidebar";
 import AdminHeader from "@/components/admin-dashboard/header/header";

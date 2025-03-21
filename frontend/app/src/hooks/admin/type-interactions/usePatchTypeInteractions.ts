@@ -1,15 +1,15 @@
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
-import { z } from "zod";
-import { typeInteractionCreateSchema } from "./useCreateTypeInteractions";
+import { TypeInteractionFormValues } from "./useCreateTypeInteractions";
+import { UseFormReturn } from "react-hook-form";
 
 
 interface PatchTypeInteractionInterface {
-    validData: z.infer<typeof typeInteractionCreateSchema>;
+    validData: TypeInteractionFormValues;
     id: number;
-    onSave: (updatedData: z.infer<typeof typeInteractionCreateSchema>) => void;
-    form: any;
+    onSave: (updatedData: TypeInteractionFormValues) => void;
+    form: UseFormReturn<TypeInteractionFormValues>;
     onClose: () => void;
 }
 

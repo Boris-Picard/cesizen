@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
+import { UseFormReturn } from "react-hook-form";
 
 export const roleCreateSchema = z.object({
     role_nom: z.string().min(2, "Le nom du rôle est requis."),
@@ -13,10 +14,12 @@ export interface RoleInterface {
     role_nom: string
 }
 
+export type RolesFormValues = z.infer<typeof roleCreateSchema>;
+
 interface CreateRoleInterface {
-    validData: z.infer<typeof roleCreateSchema>;
+    validData: RolesFormValues;
     onRoleAdded: (role: RoleInterface) => void;
-    form: any;
+    form: UseFormReturn<RolesFormValues>;
 }
 
 export function useCreateRoles() {

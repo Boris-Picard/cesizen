@@ -3,13 +3,11 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/useToast";
 import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
-import { useNavigate } from "react-router-dom";
 
 export function useGetExercicesId(id: string | undefined) {
     const [exercice, setExercice] = useState<ExerciceType | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const { token } = useAuth();
-    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchExercice = async () => {

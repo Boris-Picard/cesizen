@@ -1,5 +1,3 @@
-import type React from "react"
-
 import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -9,7 +7,7 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { motion } from "framer-motion"
 import logo from "@/assets/cesizen-logo.png"
 
-export function ConfirmAccount({ className, ...props }: React.ComponentProps<"div">) {
+export function ConfirmAccount() {
   const { token } = useParams<{ token: string }>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [message, setMessage] = useState<string | null>(null)
@@ -24,7 +22,7 @@ export function ConfirmAccount({ className, ...props }: React.ComponentProps<"di
     setIsLoading(true)
     axios
       .get(`http://cesizen-api.localhost/account-confirmation/${token}`)
-      .then((response) => {
+      .then(() => {
         setMessage("Votre compte a été confirmé avec succès. Vous pouvez maintenant vous connecter.")
       })
       .catch((err) => {
