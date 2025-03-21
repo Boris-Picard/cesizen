@@ -4,6 +4,7 @@ import axios from "axios";
 import { z } from "zod";
 import { User } from "@/components/admin-dashboard/users/columns";
 import { toast } from "@/hooks/useToast";
+import { UseFormReturn } from "react-hook-form";
 
 export const userCreateSchema = z
     .object({
@@ -30,10 +31,12 @@ export const userCreateSchema = z
         path: ["confirmPassword"],
     });
 
+export type UserFormValues = z.infer<typeof userCreateSchema>;
+
 interface CreateUserInterface {
-    validData: z.infer<typeof userCreateSchema>;
+    validData: UserFormValues;
     onUserAdded: (user: User) => void;
-    form: any;
+    form: UseFormReturn<UserFormValues>;
 }
 
 export function useCreateUsers() {

@@ -4,6 +4,7 @@ import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { TypeInteraction } from "@/components/admin-dashboard/type-interactions/columns";
+import { UseFormReturn } from "react-hook-form";
 
 export const typeInteractionCreateSchema = z.object({
     type_inter_libelle: z.enum(["Exercice", "Information"], {
@@ -11,10 +12,12 @@ export const typeInteractionCreateSchema = z.object({
     }),
 });
 
+export type TypeInteractionFormValues = z.infer<typeof typeInteractionCreateSchema>;
+
 interface CreateTypeInteractionInterface {
-    validData: z.infer<typeof typeInteractionCreateSchema>;
+    validData: TypeInteractionFormValues;
     onTypeInteractionAdded: (typeInteraction: TypeInteraction) => void;
-    form: any;
+    form: UseFormReturn<TypeInteractionFormValues>;
 }
 
 export function useCreateTypeInteractions() {

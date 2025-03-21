@@ -1,14 +1,14 @@
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
-import { z } from "zod";
-import { typeHistoriqueCreateSchema } from "./useCreateTypeHistoriques";
+import { TypeHistoriqueFormValues } from "./useCreateTypeHistoriques";
+import { UseFormReturn } from "react-hook-form";
 
 interface PatchTypeHistoriqueInterface {
-    validData: z.infer<typeof typeHistoriqueCreateSchema>;
+    validData: TypeHistoriqueFormValues;
     id: number;
-    onSave: (updatedData: z.infer<typeof typeHistoriqueCreateSchema>) => void;
-    form: any;
+    onSave: (updatedData: TypeHistoriqueFormValues) => void;
+    form: UseFormReturn<TypeHistoriqueFormValues>;
     onClose: () => void;
 }
 

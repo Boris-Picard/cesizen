@@ -1,15 +1,14 @@
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
-import { z } from "zod";
-import { typeInformationCreateSchema } from "./useCreateTypeInformations";
-
+import { TypeInformationsFormValues } from "./useCreateTypeInformations";
+import { UseFormReturn } from "react-hook-form";
 
 interface PatchTypeInformationInterface {
-    validData: z.infer<typeof typeInformationCreateSchema>;
+    validData: TypeInformationsFormValues;
     id: number;
-    onSave: (updatedData: z.infer<typeof typeInformationCreateSchema>) => void;
-    form: any;
+    onSave: (updatedData: TypeInformationsFormValues) => void;
+    form: UseFormReturn<TypeInformationsFormValues>;
     onClose: () => void;
 }
 

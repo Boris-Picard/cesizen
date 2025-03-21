@@ -60,7 +60,9 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up...'
+            echo 'Nettoyage des conteneurs Docker inutilisés...'
+            sh 'docker container prune -f'
+            sh 'docker-compose down'
             deleteDir()
         }
         failure {

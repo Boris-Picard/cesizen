@@ -3,16 +3,18 @@ import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { Role } from "@/components/admin-dashboard/roles/columns";
+import { RolesFormValues } from "./useCreateRoles";
+import { UseFormReturn } from "react-hook-form";
 
 export const roleSchema = z.object({
     role_nom: z.string().min(4, "Le nom du rôle est requis."),
 });
 
 interface PatchRoleInterface {
-    validData: z.infer<typeof roleSchema>;
+    validData: RolesFormValues;
     id: number;
     onSave: (role: Role) => void;
-    form: any;
+    form: UseFormReturn<RolesFormValues>;
     onClose: () => void;
 }
 

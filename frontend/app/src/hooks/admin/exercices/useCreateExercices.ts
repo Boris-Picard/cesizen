@@ -4,6 +4,7 @@ import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
+import { UseFormReturn } from "react-hook-form";
 
 export const exerciceCreateSchema = z.object({
     ex_nom: z.string().min(2, "Le nom de l'exercice est requis.").max(255, "Le nom doit comporter 200 caractères maximum"),
@@ -19,11 +20,12 @@ export const exerciceCreateSchema = z.object({
     ex_active: z.boolean(),
 });
 
+export type ExerciceFormValues = z.infer<typeof exerciceCreateSchema>;
 
 interface Exercice {
-    validData: z.infer<typeof exerciceCreateSchema>;
+    validData: ExerciceFormValues;
     onExerciceAdded: (exercice: ExerciceType) => void;
-    form: any;
+    form: UseFormReturn<ExerciceFormValues>;
 }
 
 export function useCreateExercices() {

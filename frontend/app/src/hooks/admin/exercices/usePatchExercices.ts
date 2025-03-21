@@ -1,15 +1,15 @@
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
-import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
-import { exerciceCreateSchema } from "./useCreateExercices";
+import { ExerciceFormValues } from "./useCreateExercices";
+import { UseFormReturn } from "react-hook-form";
 
 interface PatchExerciceInterface {
-    validData: z.infer<typeof exerciceCreateSchema>;
+    validData: ExerciceFormValues;
     id: number;
     onSave: (exercice: ExerciceType) => void;
-    form: any;
+    form: UseFormReturn<ExerciceFormValues>;
     onClose: () => void;
 }
 

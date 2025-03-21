@@ -83,14 +83,14 @@ export default function AdminDashboard() {
   const slicedUsers = sortedUsers.slice(0, 3)
 
   const daysOfWeek = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"]
-  const interactionsByDay = interactions.reduce((acc: any, interaction) => {
+  const interactionsByDay = interactions.reduce<Record<string, number>>((acc, interaction) => {
     const dayIndex = new Date(interaction.inter_date_de_debut).getDay()
     const dayName = daysOfWeek[dayIndex]
     acc[dayName] = (acc[dayName] || 0) + 1
     return acc
   }, {})
 
-  const usersByDay = users.reduce((acc: any, user) => {
+  const usersByDay = users.reduce<Record<string, number>>((acc, user) => {
     const dayIndex = new Date(user.createdAt).getDay()
     const dayName = daysOfWeek[dayIndex]
     acc[dayName] = (acc[dayName] || 0) + 1
@@ -103,7 +103,7 @@ export default function AdminDashboard() {
     interactions: interactionsByDay[day] || 0,
   }))
 
-  const counts = interactions.reduce((acc: any, interaction) => {
+  const counts = interactions.reduce<Record<string, number>>((acc, interaction) => {
     const libelle = interaction.typeInteraction.type_inter_libelle
     acc[libelle] = (acc[libelle] || 0) + 1
     return acc

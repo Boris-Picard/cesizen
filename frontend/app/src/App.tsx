@@ -6,7 +6,6 @@ import { PublicRoute } from '@/routes/PublicRoute';
 import { RequireAuth } from '@/routes/RequireAuth';
 import HomePage from '@/app/homepage/page';
 import { Toaster } from '@/components/ui/toaster';
-import ExerciceLibrePage from '@/app/exercices/exercice-libre/pages';
 import ProfilePage from '@/app/profile/page';
 import EditProfilePage from '@/app/profile/edit-profile/page';
 import ForgotPasswordPage from '@/app/mail-reset-password/page';
@@ -67,7 +66,6 @@ function App() {
         <Route path="/informations/:id" element={<InformationsDetailPage />} />
 
         <Route element={<RequireAuth />}>
-          {/* <Route path='/exercice-libre' element={<ExerciceLibrePage />} /> */}
           <Route path="/exercices" element={<ExercicesFrontPage />} />
           <Route path="/exercices/:id" element={<ExercicesDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />

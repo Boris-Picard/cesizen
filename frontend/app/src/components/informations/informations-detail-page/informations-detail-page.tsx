@@ -47,11 +47,13 @@ export function InformationsDetailPageComponents({ information, articles, intera
           url: window.location.href,
         })
       } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Une erreur est survenue",
-          description: "Impossible de partager l'article",
-        })
+        if (error instanceof Error) {
+          toast({
+            variant: "destructive",
+            title: "Une erreur est survenue",
+            description: "Impossible de partager l'article",
+          })
+        }
       }
     }
   }
