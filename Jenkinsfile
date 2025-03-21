@@ -12,7 +12,7 @@ pipeline {
             stage('Lint') {
                 steps {
                     script {
-                        docker.image('node:23-alpine').inside("-T -v") {
+                        docker.image('node:23-alpine').inside("-v") {
                             dir('frontend/app') {
                                 sh 'chmod -R 777 .'
                                 sh 'npm install'
