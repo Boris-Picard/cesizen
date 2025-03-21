@@ -16,6 +16,7 @@ pipeline {
                             dir('frontend/app') {
                                 sh 'chmod -R 777 .'
                                 sh 'npm install'
+                                // enlever true quand linter corrigé
                                 sh 'npx eslint . || true'
                             }
                         }
