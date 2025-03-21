@@ -27,7 +27,7 @@ pipeline {
                 steps {
                     echo 'Building Docker images...'
                     // Construction des images Docker pour tous les services définis dans docker-compose.yml
-                    sh 'docker compose build'
+                    sh 'docker-compose build'
                 }
             }
 
