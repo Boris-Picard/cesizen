@@ -12,7 +12,7 @@ pipeline {
             stage('Lint') {
                 steps {
                     script {
-                        docker.image('node:23-alpine').inside("-u root -v \$WORKSPACE:\$WORKSPACE -w \$WORKSPACE/frontend/app") {
+                        docker.image('node:23-alpine').inside("-u root -v ${env.WORKSPACE}:${env.WORKSPACE} -w ${env.WORKSPACE}/frontend/app") {
                             sh 'chmod -R 777 .'
                             sh 'npm install'
                             sh 'npx eslint .'
