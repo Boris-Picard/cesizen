@@ -93,6 +93,20 @@ services:
       - "traefik.http.services.frontend.loadbalancer.server.port=3000"
       - "traefik.docker.network=app-network"
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025"
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.mailer.rule=Host(`${PROJECT_NAME}-mailer.localhost`)"
+        - "traefik.http.routers.mailer.entrypoints=web"
+        - "traefik.http.services.mailer.loadbalancer.server.port=8025"
+        - "traefik.docker.network=app-network"
+    networks:
+      - app-network
+
 networks:
   app-network:
     external: true
