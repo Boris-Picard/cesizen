@@ -1,9 +1,11 @@
 import { ChatInterface } from "@/components/chatbot/chatbot";
+import { useAuth } from "@/context/AuthContext";
 
-export function ChatbotPage () {
+export function ChatbotPage() {
+    const { token } = useAuth()
     return (
         <>
-            <ChatInterface />
+            {token && <ChatInterface />}
         </>
     )
 }
