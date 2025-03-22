@@ -6,7 +6,7 @@
 parameters:
   sender_email: "%env(SENDER_EMAIL)%"
   cesizen_front_url: "http://cesizen-front.localhost"
-  openai.api_key: "%env(OPENAI_API_KEY)%"
+  cohere.api_key: "%env(COHERE_API_KEY)%"
 services:
   acme_api.event.jwt_created_listener:
     class: App\EventListener\JWTCreatedListener
@@ -46,7 +46,7 @@ services:
       $mailerInterface: "@mailer"
       $senderEmail: "%sender_email%"
       $frontUrl: "%cesizen_front_url%"
-  App\Service\ChatGPTService:
+  App\Service\ChatService:
     arguments:
-      $apiKey: "%openai.api_key%"
+      $apiKey: "%cohere.api_key%"
   # config/services.yaml

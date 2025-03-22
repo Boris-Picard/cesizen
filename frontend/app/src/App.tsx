@@ -29,10 +29,12 @@ import { ConditionsPage } from './app/conditions/page';
 import { PrivacyPage } from './app/privacy/page';
 import { HistoriquesAdminPage } from './app/admin-dashboard/historiques/page';
 import ValidationPage from './app/admin-dashboard/validations/page';
+import { ChatbotPage } from './app/chatbot/page';
 
 function App() {
   return (
     <AuthProvider>
+      <ChatbotPage />
       <Toaster />
       <Routes>
         <Route>
