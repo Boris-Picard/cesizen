@@ -3,10 +3,10 @@ pipeline {
 
     environment {
         // Variables d'environnement pour une utilisation flexible
-        DEPLOY_ENABLED = 'false'
-        SSH_CREDENTIAL_ID = 'git'
-        DEPLOY_USER_HOST  = 'deploy@staging.myserver.com'  // Valeur fictive pour l'instant
-        APP_DIR           = '/home/deploy/myapp'
+        DEPLOY_ENABLED = 'true'
+        SSH_CREDENTIAL_ID = 'fd9f2e55-f7f3-47a9-88d2-fa12a1e94dc6'
+        DEPLOY_USER_HOST  = 'ubuntu@51.44.84.88'
+        APP_DIR           = '/home/deploy/cesizen'
     }
         stages {
             stage('Lint') {
