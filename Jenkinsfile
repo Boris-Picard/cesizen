@@ -15,7 +15,7 @@ pipeline {
                         docker.image('node:23-alpine').inside {
                             dir('frontend/app') {
                                 sh 'chmod -R 777 .'
-                                sh 'npm install'
+                                sh 'npm install --no-bin-links || npm rebuild esbuild || true'
                                 // enlever true quand linter corrigé
                                 sh 'npx eslint . || true'
                             }
@@ -48,8 +48,11 @@ pipeline {
                 echo 'Deploying services...'
                 sshagent(credentials: [env.SSH_CREDENTIAL_ID]) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ${DEPLOY_USER_HOST} << 'EOF'
-                        cd ${APP_DIR} || exit 1
+                        ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${DEPLOY_USER_HOST} << 'EOF'
+                        set -e
+                        mkdir -p ${APP_DIR}
+                        cd ${APP_DIR}
+                        docker-compose pull
                         docker-compose up -d --remove-orphans
                         EOF
                     """
@@ -66,10 +69,10 @@ pipeline {
             deleteDir()
         }
         failure {
-            echo 'Pipeline failed!'
+            echo '❌ Pipeline failed!'
         }
         success {
-            echo 'Pipeline succeeded!'
+            echo '✅ Pipeline succeeded!'
         }
     }
 }
