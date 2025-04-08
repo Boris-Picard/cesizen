@@ -7,15 +7,16 @@ pipeline {
         SSH_CREDENTIAL_ID = 'fd9f2e55-f7f3-47a9-88d2-fa12a1e94dc6'
         DEPLOY_USER_HOST  = 'ubuntu@51.44.84.88'
         APP_DIR           = '/home/deploy/cesizen'
+        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
     }
         stages {
             stage('Lint') {
                 steps {
                     script {
-                        docker.image('node:23-alpine').inside {
+                        docker.image('node:23-slim').inside {
                             dir('frontend/app') {
                                 sh 'chmod -R 777 .'
-                                sh 'npm install --no-bin-links || npm rebuild esbuild || true'
+                                sh 'npm ci --no-bin-links || true'
                                 // enlever true quand linter corrigé
                                 sh 'npx eslint . || true'
                             }
