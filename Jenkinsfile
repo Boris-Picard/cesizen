@@ -13,7 +13,7 @@ pipeline {
             stage('Lint') {
                 steps {
                     script {
-                        docker.image('node:23-slim').inside {
+                        docker.image('node:23-bullseye').inside {
                             dir('frontend/app') {
                                 sh 'chmod -R 777 .'
                                 sh 'npm ci --no-bin-links || true'
