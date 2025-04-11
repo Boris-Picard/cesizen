@@ -42,6 +42,8 @@ WORKDIR /var/www
 
 COPY --from=build /app /var/www
 
+COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
+
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
