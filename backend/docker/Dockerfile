@@ -17,7 +17,7 @@ COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-COPY app/composer.* ./
+COPY app/ .
 
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
 
