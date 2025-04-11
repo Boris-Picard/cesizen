@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
-COPY composer.* ./
+COPY backend/composer.* ./
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
 
 COPY . .

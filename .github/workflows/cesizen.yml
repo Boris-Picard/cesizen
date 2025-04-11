@@ -26,8 +26,8 @@ jobs:
       - name: Build & push backend
         uses: docker/build-push-action@v6
         with:
-          context: ./backend
-          file: ./backend/docker/Dockerfile
+          context: .
+          file: backend/docker/Dockerfile
           push: true
           tags: ghcr.io/boris-picard/cesizen-backend:latest
 
