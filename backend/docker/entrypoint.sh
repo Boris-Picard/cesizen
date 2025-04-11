@@ -25,14 +25,12 @@ if [ ! -f "/var/www/composer.json" ]; then
     fi
 else
     echo "composer.json trouvé, pas d'initialisation du projet Symfony."
+    echo "Les dépendances Composer sont déjà installées dans l'image. Rien à faire."
 fi
-
-echo "Installation des dépendances..."
-composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Attendre Postgres
 echo "En attente de PostgreSQL..."
 wait-for-it.sh db:5432 --timeout=60 -- echo "PostgreSQL est prêt."
 
-# Lancer la commande finale du Dockerfile : symfony serve ...
+# Lancer la commande finale du Dockerfile
 exec "$@"
