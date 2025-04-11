@@ -1,0 +1,2 @@
+buildCommand: ""
+startCommand: "php-fpm"
