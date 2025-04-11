@@ -14,11 +14,11 @@ COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-COPY composer.* ./
+COPY app/composer.* ./
 
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
 
-COPY . .
+COPY app/ .
 
 FROM php:8.2-fpm
 
