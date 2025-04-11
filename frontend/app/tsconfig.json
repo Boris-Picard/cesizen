@@ -5,8 +5,13 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "lib": ["DOM", "ESNext"],
     "types": ["node"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
