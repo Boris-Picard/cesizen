@@ -9,9 +9,11 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "lib": ["DOM", "ESNext"],
-    "types": ["node"],
+    "types": ["node", "vite/client"],
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
