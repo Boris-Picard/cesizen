@@ -56,5 +56,4 @@ ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 EXPOSE 8000
 
-CMD ["symfony", "serve", "--no-tls", "--port=8000", "--allow-http"]
-
+CMD ["symfony", "serve", "--no-tls", "--port=8000", "--allow-http", "--allow-all-ips"]
