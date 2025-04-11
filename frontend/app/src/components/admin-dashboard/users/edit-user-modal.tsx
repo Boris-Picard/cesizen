@@ -1,4 +1,4 @@
-import { useForm, Controller } from "react-hook-form"
+import { useForm, Controller, UseFormReturn } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
@@ -40,7 +40,7 @@ export default function EditUserModal({ user, open, onClose, onSave }: EditUserM
             ut_nom: user.ut_nom,
             ut_mail: user.ut_mail,
             role: `/api/roles/${user.role.id}`,
-            ut_active: user.ut_active,
+            active: user.ut_active,
         },
     })
 
@@ -50,14 +50,33 @@ export default function EditUserModal({ user, open, onClose, onSave }: EditUserM
             ut_nom: user.ut_nom,
             ut_mail: user.ut_mail,
             role: `/api/roles/${user.role.id}`,
-            ut_active: user.ut_active,
+            active: user.ut_active,
         });
     }, [user, form]);
 
 
     async function onSubmit(values: z.infer<typeof userSchema>) {
         const validData = userSchema.parse(values);
-        await updatedUser({ validData, id: user.id, onClose, form, onSave });
+        const transformedData = {
+            ut_prenom: validData.ut_prenom,
+            ut_nom: validData.ut_nom,
+            ut_mail: validData.ut_mail,
+            role: validData.role,
+            password: validData.password ?? "",
+            confirmPassword: validData.confirmPassword ?? "",
+            active: validData.active,
+        };
+        await updatedUser({
+            validData: transformedData, id: user.id, onClose, form: form as UseFormReturn<{
+                ut_prenom: string;
+                ut_nom: string;
+                ut_mail: string;
+                role: string;
+                active: boolean;
+                password: string;
+                confirmPassword: string;
+            }>, onSave
+        });
     }
 
     return (
@@ -150,7 +169,7 @@ export default function EditUserModal({ user, open, onClose, onSave }: EditUserM
                     <div className="flex items-center space-x-2">
                         <Controller
                             defaultValue={user.ut_active}
-                            name={"ut_active"}
+                            name={"active"}
                             control={form.control}
                             render={({ field }) => <Switch id={"ut_active"} checked={field.value} onCheckedChange={field.onChange} />}
                         />

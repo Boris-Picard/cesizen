@@ -5,22 +5,25 @@ import { UserFormValues } from "./useCreateUsers";
 import { UseFormReturn } from "react-hook-form";
 
 export const userSchema = z.object({
-    ut_prenom: z
-        .string()
-        .min(2, "Le prénom est requis.")
-        .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
-            message: "Le prénom ne doit pas contenir de chiffres ou de caractères spéciaux.",
-        }),
-    ut_nom: z
-        .string()
-        .min(2, "Le nom est requis.")
-        .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
-            message: "Le nom ne doit pas contenir de chiffres ou de caractères spéciaux.",
-        }),
-    ut_mail: z.string().email("Veuillez entrer une adresse e-mail valide."),
-    role: z.string().min(1, "Veuillez sélectionner un rôle."),
-    ut_active: z.boolean(),
+  ut_prenom: z
+    .string()
+    .min(2, "Le prénom est requis.")
+    .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
+      message: "Le prénom ne doit pas contenir de chiffres ou de caractères spéciaux.",
+    }),
+  ut_nom: z
+    .string()
+    .min(2, "Le nom est requis.")
+    .regex(/^(?!.*\d)[\p{L}\s]+$/u, {
+      message: "Le nom ne doit pas contenir de chiffres ou de caractères spéciaux.",
+    }),
+  ut_mail: z.string().email("Veuillez entrer une adresse e-mail valide."),
+  role: z.string().min(1, "Veuillez sélectionner un rôle."),
+  active: z.boolean(),
+  password: z.string().optional(),
+  confirmPassword: z.string().optional(),
 });
+
 
 interface PatchUserParams {
     validData: UserFormValues;
