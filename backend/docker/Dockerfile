@@ -4,10 +4,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     libonig-dev \
     libxml2-dev \
+    postgresql-client \
     zip \
     unzip \
     git \
     curl \
+    bash \
+    && docker-php-ext-install pdo_pgsql \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
