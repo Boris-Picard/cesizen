@@ -53,4 +53,8 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 RUN chown -R www-data:www-data /var/www
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["php-fpm"]
+
+EXPOSE 8000
+
+CMD ["symfony", "serve", "--no-tls", "--port=8000", "--allow-http"]
+
