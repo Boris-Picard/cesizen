@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
-COPY backend/composer.* ./
+COPY composer.* ./
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
 
 COPY . .
@@ -40,7 +40,7 @@ WORKDIR /var/www
 
 COPY --from=build /app /var/www
 
-COPY backend/docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 RUN chown -R www-data:www-data /var/www

@@ -3,7 +3,7 @@ name: CI/CD - Build and Push
 on:
   push:
     branches:
-      - "prod"
+      - "dev"
 
 jobs:
   build-and-push:
@@ -26,8 +26,8 @@ jobs:
       - name: Build & push backend
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: backend/docker/Dockerfile
+          context: ./backend
+          file: ./backend/docker/Dockerfile
           push: true
           tags: ghcr.io/boris-picard/cesizen-backend:latest
 
