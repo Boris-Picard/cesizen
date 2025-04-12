@@ -19,13 +19,9 @@ WORKDIR /app
 
 COPY app/ .
 
-COPY app/config/.env.local.php /var/www/config/.env.local.php
-
-RUN rm -f /var/www/.env
+RUN composer dump-env prod
 
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
-
-COPY app/ .
 
 FROM php:8.2-fpm
 
@@ -49,6 +45,11 @@ WORKDIR /var/www
 
 COPY --from=build /app /var/www
 
+RUN rm -f /var/www/.env
+
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
@@ -59,8 +60,5 @@ RUN chown -R www-data:www-data /var/www
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 EXPOSE 8000
-
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
 
 CMD ["symfony", "serve", "--no-tls", "--port=8000", "--allow-http", "--listen-ip=0.0.0.0"]
