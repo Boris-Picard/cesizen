@@ -34,6 +34,7 @@ security:
       pattern: ^/api/(information|type_interactions)
       stateless: true
       provider: app_user_provider
+      jwt: ~
     api:
       pattern: ^/api
       stateless: true
