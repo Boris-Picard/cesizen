@@ -21,8 +21,6 @@ COPY app/ .
 
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
 
-RUN rm -f /var/www/.env
-
 FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -44,6 +42,8 @@ RUN curl -Lo /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vis
 WORKDIR /var/www
 
 COPY --from=build /app /var/www
+
+COPY app/.env.local.php /var/www/.env.local.php
 
 RUN rm -f /var/www/.env
 
