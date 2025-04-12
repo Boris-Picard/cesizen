@@ -39,25 +39,25 @@ CREATE TABLE
 CREATE TABLE
    IF NOT EXISTS role (
       role_id SERIAL PRIMARY KEY,
-      role_nom VARCHAR(100) NOT NULL
+      role_nom VARCHAR(100) NOT NULL UNIQUE
    );
 
 CREATE TABLE
    IF NOT EXISTS type_information (
       type_info_id SERIAL PRIMARY KEY,
-      type_info_nom VARCHAR(100) NOT NULL
+      type_info_nom VARCHAR(100) NOT NULL UNIQUE
    );
 
 CREATE TABLE
    IF NOT EXISTS type_interaction (
       type_inter_id SERIAL PRIMARY KEY,
-      type_inter_libelle VARCHAR(100) NOT NULL
+      type_inter_libelle VARCHAR(100) NOT NULL UNIQUE
    );
 
 CREATE TABLE
    IF NOT EXISTS type_historique (
       type_histo_id SERIAL PRIMARY KEY,
-      type_histo_libelle VARCHAR(100) NOT NULL
+      type_histo_libelle VARCHAR(100) NOT NULL UNIQUE
    );
 
 CREATE TABLE IF NOT EXISTS utilisateur (
