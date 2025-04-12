@@ -30,7 +30,7 @@ WORKDIR /var/www
 
 COPY --from=build /app /var/www
 
-COPY ./.env.local.php /var/www/.env.local.php
+COPY ./backend/app/.env.local.php /var/www/.env.local.php
 
 RUN rm -f /var/www/.env
 
