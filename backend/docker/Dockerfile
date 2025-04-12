@@ -19,9 +19,9 @@ WORKDIR /app
 
 COPY app/ .
 
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer dump-env prod
-
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
+
+RUN rm -f /var/www/.env
 
 FROM php:8.2-fpm
 
