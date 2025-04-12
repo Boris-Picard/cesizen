@@ -19,7 +19,7 @@ WORKDIR /app
 
 COPY app/ .
 
-COPY app/config/.env.local.php /var/www/config/.env.local.php
+COPY app/.env.local.php /var/www/config/.env.local.php
 
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
 
