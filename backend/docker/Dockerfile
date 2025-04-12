@@ -19,7 +19,7 @@ WORKDIR /app
 
 COPY app/ .
 
-RUN composer dump-env prod
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer dump-env prod
 
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
 
