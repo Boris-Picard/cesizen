@@ -2,6 +2,9 @@
 
 set -e
 
+export APP_ENV=prod
+export APP_DEBUG=0
+
 # Petite fonction pour vérifier si un package est dans le composer.json
 function has_composer_package() {
     local package="$1"

@@ -38,3 +38,7 @@ jobs:
           file: ./frontend/docker/Dockerfile
           push: true
           tags: ghcr.io/boris-picard/cesizen-frontend:latest
+
+      - name: Trigger redeploy on Render
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_BACKEND }}
+        
