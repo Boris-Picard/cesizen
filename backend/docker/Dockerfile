@@ -21,7 +21,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-install pdo_pgsql \
     && rm -rf /var/lib/apt/lists/*
 
-# Symfony CLI + wait-for-it
 RUN curl -sS https://get.symfony.com/cli/installer | bash \
     && mv /root/.symfony*/bin/symfony /usr/local/bin/symfony
 RUN curl -Lo /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
@@ -30,6 +29,8 @@ RUN curl -Lo /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vis
 WORKDIR /var/www
 
 COPY --from=build /app /var/www
+
+COPY app/.env.local.php /var/www/.env.local.php
 
 RUN rm -f /var/www/.env
 
