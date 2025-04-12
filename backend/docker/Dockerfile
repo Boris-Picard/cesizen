@@ -21,6 +21,8 @@ COPY app/ .
 
 COPY app/config/.env.local.php /var/www/config/.env.local.php
 
+RUN rm -f /var/www/.env
+
 RUN composer install --no-dev --prefer-dist --no-scripts --no-progress
 
 COPY app/ .
@@ -57,5 +59,8 @@ RUN chown -R www-data:www-data /var/www
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 EXPOSE 8000
+
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
 
 CMD ["symfony", "serve", "--no-tls", "--port=8000", "--allow-http", "--listen-ip=0.0.0.0"]
