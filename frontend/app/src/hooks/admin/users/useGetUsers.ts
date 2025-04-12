@@ -13,7 +13,7 @@ export function useGetUsers() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const { data } = await axios.get(`http://cesizen-api.localhost/api/utilisateurs`, {
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/utilisateurs`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,

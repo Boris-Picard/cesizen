@@ -25,7 +25,7 @@ export function usePatchTypeInteractions() {
     }: PatchTypeInteractionInterface) => {
         try {
             const { data } = await axios.patch(
-                `http://cesizen-api.localhost/api/type_interactions/${id}`,
+                `${import.meta.env.VITE_API_URL}/api/type_interactions/${id}`,
                 validData,
                 {
                     headers: {

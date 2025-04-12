@@ -13,7 +13,7 @@ export function useDeleteTypeInteractions() {
 
     const handleDelete = async ({ id, onDelete, onClose }: DeleteTypeInteractionInterface) => {
         try {
-            await axios.delete(`http://cesizen-api.localhost/api/type_interactions/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/type_interactions/${id}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

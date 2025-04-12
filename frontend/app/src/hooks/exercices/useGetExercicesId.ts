@@ -13,7 +13,7 @@ export function useGetExercicesId(id: string | undefined) {
         const fetchExercice = async () => {
             try {
                 const { data } = await axios.get(
-                    `http://cesizen-api.localhost/api/exercices/${id}`,
+                    `${import.meta.env.VITE_API_URL}/api/exercices/${id}`,
                     {
                         headers: {
                             "Content-Type": "application/json",

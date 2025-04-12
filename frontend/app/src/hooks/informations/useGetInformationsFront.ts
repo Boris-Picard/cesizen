@@ -13,7 +13,7 @@ export function useGetInformationsFront() {
         const getInformations = async () => {
             try {
                 const { data } = await axios.get(
-                    "http://cesizen-api.localhost/api/information?info_active=true",
+                    `${import.meta.env.VITE_API_URL}/api/information?info_active=true`,
                     {
                         headers: {
                             "Content-Type": "application/json",

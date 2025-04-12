@@ -46,7 +46,7 @@ export function useCreateUsers() {
     const createUser = async ({ validData, onUserAdded, form }: CreateUserInterface) => {
         try {
             const response = await axios.post(
-                "http://cesizen-api.localhost/api/admin/register-user",
+                `${import.meta.env.VITE_API_URL}/api/admin/register-user`,
                 {
                     ut_prenom: validData.ut_prenom,
                     ut_nom: validData.ut_nom,

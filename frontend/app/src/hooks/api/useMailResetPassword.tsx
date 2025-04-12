@@ -11,7 +11,7 @@ export default function useMailResetPassword() {
     const mailResetPassword = async (submitData: submitDataInterface) => {
         try {
             setLoading(true);
-            const response = await axios.post('http://cesizen-api.localhost/reset-password/forgot-password', {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/reset-password/forgot-password`, {
                 ut_mail: submitData.ut_mail,
             });
             if (response.status === 200) {

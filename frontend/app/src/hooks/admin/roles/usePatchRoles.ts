@@ -24,7 +24,7 @@ export function usePatchRoles() {
     const updatedRole = async ({ validData, id, onSave, form, onClose }: PatchRoleInterface) => {
         try {
             const response = await axios.patch(
-                `http://cesizen-api.localhost/api/roles/${id}`,
+                `${import.meta.env.VITE_API_URL}/api/roles/${id}`,
                 validData,
                 {
                     headers: {

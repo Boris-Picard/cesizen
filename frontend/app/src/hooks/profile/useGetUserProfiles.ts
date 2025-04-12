@@ -32,7 +32,7 @@ export function useGetUserProfile(id: string | undefined) {
         const fetchUser = async () => {
             try {
                 const { data } = await axios.get(
-                    `http://cesizen-api.localhost/api/utilisateurs/${id}`,
+                    `${import.meta.env.VITE_API_URL}/api/utilisateurs/${id}`,
                     {
                         headers: {
                             "Content-Type": "application/json",

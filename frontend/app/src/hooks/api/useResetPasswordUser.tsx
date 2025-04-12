@@ -14,7 +14,7 @@ export default function useResetPasswordUser(token: string | undefined) {
         setLoading(true);
         try {
             const response = await axios.post(
-                `http://cesizen-api.localhost/reset-password/reset/${token}`,
+                `${import.meta.env.VITE_API_URL}/reset-password/reset/${token}`,
                 {
                     plainPassword: submitData.plainPassword,
                 }

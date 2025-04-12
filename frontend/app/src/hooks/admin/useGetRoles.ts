@@ -12,7 +12,7 @@ export function useGetRoles() {
     useEffect(() => {
         const getRoles = async () => {
             try {
-                const { data } = await axios.get("http://cesizen-api.localhost/api/roles", {
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/roles`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

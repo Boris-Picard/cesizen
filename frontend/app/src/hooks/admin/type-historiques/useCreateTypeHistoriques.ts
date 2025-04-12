@@ -25,7 +25,7 @@ export function useCreateTypeHistoriques() {
     const createTypeHistorique = async ({ validData, onTypeHistoriqueAdded, form }: CreateTypeHistoriqueInterface) => {
         try {
             const { data } = await axios.post(
-                "http://cesizen-api.localhost/api/type_historiques",
+                `${import.meta.env.VITE_API_URL}/api/type_historiques`,
                 {
                     type_histo_libelle: validData.type_histo_libelle,
                 },

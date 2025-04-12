@@ -13,7 +13,7 @@ export function usePatchInteractions() {
     const patchInteraction = async ({ id, inter_date_de_fin }: PatchInteractionData) => {
         try {
             const { data } = await axios.patch(
-                `http://cesizen-api.localhost/api/interactions/${id}`,
+                `${import.meta.env.VITE_API_URL}/api/interactions/${id}`,
                 { inter_date_de_fin },
                 {
                     headers: {

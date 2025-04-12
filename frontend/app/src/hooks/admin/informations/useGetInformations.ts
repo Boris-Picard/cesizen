@@ -14,7 +14,7 @@ export function useGetInformations() {
     useEffect(() => {
         const getInformations = async () => {
             try {
-                const { data } = await axios.get("http://cesizen-api.localhost/api/information", {
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/information`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

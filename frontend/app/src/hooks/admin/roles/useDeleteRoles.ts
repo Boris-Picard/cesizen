@@ -13,7 +13,7 @@ export function useDeleteRoles() {
     
     async function handleDelete({ id, onDelete, onClose }: roleDeleteInterface) {
         try {
-            await axios.delete(`http://cesizen-api.localhost/api/roles/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/roles/${id}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

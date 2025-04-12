@@ -35,7 +35,7 @@ export function useCreateExercices() {
     const createExercice = async ({ validData, onExerciceAdded, form }: Exercice) => {
         try {
             const response = await axios.post(
-                "http://cesizen-api.localhost/api/exercices",
+                `${import.meta.env.VITE_API_URL}/api/exercices`,
                 {
                     ex_nom: validData.ex_nom,
                     ex_description: validData.ex_description,

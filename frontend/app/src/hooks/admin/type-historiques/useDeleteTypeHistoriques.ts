@@ -13,7 +13,7 @@ export function useDeleteTypeHistoriques() {
 
     const handleDelete = async ({ id, onDelete, onClose }: DeleteTypeHistoriqueInterface) => {
         try {
-            await axios.delete(`http://cesizen-api.localhost/api/type_historiques/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/type_historiques/${id}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

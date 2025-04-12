@@ -12,7 +12,7 @@ export function useGetValidations() {
     useEffect(() => {
         const getValidations = async () => {
             try {
-                const { data } = await axios.get("http://cesizen-api.localhost/api/validations", {
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/validations`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
