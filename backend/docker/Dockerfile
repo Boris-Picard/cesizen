@@ -9,7 +9,7 @@ COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 
 COPY app/ .  
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
 FROM php:8.2-fpm
 
