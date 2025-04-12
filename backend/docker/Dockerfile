@@ -1,4 +1,3 @@
-# STAGE 1 - build
 FROM php:8.2-fpm AS build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -29,6 +28,8 @@ RUN curl -Lo /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vis
 WORKDIR /var/www
 
 COPY --from=build /app /var/www
+
+RUN ls -la /var/www/
 
 RUN rm -f /var/www/.env
 
