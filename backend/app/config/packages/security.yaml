@@ -30,10 +30,6 @@ security:
         check_path: /api/login_check
         success_handler: lexik_jwt_authentication.handler.authentication_success
         failure_handler: lexik_jwt_authentication.handler.authentication_failure
-    api_public:
-      pattern: ^/api/(information|type_interactions)
-      stateless: true
-      provider: app_user_provider
     api:
       pattern: ^/api
       stateless: true
@@ -58,9 +54,11 @@ security:
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
     - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
     - { path: ^/api/information, roles: PUBLIC_ACCESS }
-    - { path: ^/api/type_interactions, roles: PUBLIC_ACCESS }
+    - { path: ^/api/type_interactions, roles: PUBLIC_ACCESS, methods: [GET] }
     - { path: ^/api/type_informations, roles: PUBLIC_ACCESS }
 
+    - { path: ^/api/type_interactions, roles: ROLE_ADMIN, methods: [POST, PATCH, DELETE] }
+    
     - {
         path: ^/api/(exercices|interactions|utilisateurs),
         roles: [ROLE_USER, ROLE_ADMIN],
