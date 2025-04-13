@@ -1,0 +1,7 @@
+backend/app/.env merge=ours
+backend/docker/** merge=ours
+backend/app/config/packages/** merge=ours
+frontend/docker/** merge=ours
+.env merge=ours
+db/** merge=ours
+.github/** merge=ours
