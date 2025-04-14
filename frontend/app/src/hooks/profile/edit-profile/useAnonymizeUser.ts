@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@/hooks/useToast";
+import { joinUrl } from "@/services/api";
 
 export function useAnonymizeUser(token: string | null) {
     const { toast } = useToast();
@@ -10,7 +11,7 @@ export function useAnonymizeUser(token: string | null) {
         setLoadingAnonymize(true);
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}profile/anonymize`,
+                 joinUrl(import.meta.env.VITE_API_URL,'/profile/anonymize'),
                 {},
                 {
                     headers: {

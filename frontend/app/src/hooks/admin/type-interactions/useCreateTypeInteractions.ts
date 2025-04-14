@@ -5,6 +5,7 @@ import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { TypeInteraction } from "@/components/admin-dashboard/type-interactions/columns";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 export const typeInteractionCreateSchema = z.object({
     type_inter_libelle: z.enum(["Exercice", "Information"], {
@@ -27,7 +28,7 @@ export function useCreateTypeInteractions() {
     const createTypeInteraction = async ({ validData, onTypeInteractionAdded, form }: CreateTypeInteractionInterface) => {
         try {
             const { data } = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/type_interactions`,
+                joinUrl(import.meta.env.VITE_API_URL,'/api/type_interactions'),
                 {
                     type_inter_libelle: validData.type_inter_libelle,
                 },

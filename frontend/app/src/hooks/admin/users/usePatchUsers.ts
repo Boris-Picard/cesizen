@@ -3,6 +3,7 @@ import axios from "axios";
 import { z } from "zod";
 import { UserFormValues } from "./useCreateUsers";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 export const userSchema = z.object({
   ut_prenom: z
@@ -39,7 +40,7 @@ export function usePatchUsers() {
     const updatedUser = async ({ validData, id, onClose, form, onSave }: PatchUserParams) => {
         try {
             const { data } = await axios.patch(
-                `${import.meta.env.VITE_API_URL}api/utilisateurs/${id}`,
+                joinUrl(import.meta.env.VITE_API_URL,`/api/utilisateurs/${id}`),
                 validData,
                 {
                     headers: {

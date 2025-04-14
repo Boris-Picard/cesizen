@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/useToast";
 import { Information } from "@/components/admin-dashboard/informations/column";
+import { joinUrl } from "@/services/api";
 
 export function useGetInformationsId(id: string | undefined) {
     const [information, setInformation] = useState<Information | null>(null);
@@ -13,7 +14,7 @@ export function useGetInformationsId(id: string | undefined) {
         const fetchInformation = async () => {
             try {
                 const { data } = await axios.get(
-                    `${import.meta.env.VITE_API_URL}api/information/${id}`,
+                    joinUrl(import.meta.env.VITE_API_URL,`/api/information/${id}`),
                     {
                         headers: {
                             "Content-Type": "application/json",

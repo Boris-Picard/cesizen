@@ -7,6 +7,7 @@ import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
 import { Information } from "@/components/admin-dashboard/informations/column";
 import { Interaction } from "@/components/admin-dashboard/interactions/column";
 import { ValidationType } from "@/components/admin-dashboard/validations/column";
+import { joinUrl } from "@/services/api";
 
 interface userProfileInterface {
     id: number;
@@ -32,7 +33,7 @@ export function useGetUserProfile(id: string | undefined) {
         const fetchUser = async () => {
             try {
                 const { data } = await axios.get(
-                    `${import.meta.env.VITE_API_URL}api/utilisateurs/${id}`,
+                    joinUrl(import.meta.env.VITE_API_URL,`/api/utilisateurs/${id}`),
                     {
                         headers: {
                             "Content-Type": "application/json",

@@ -4,6 +4,7 @@ import { toast } from "@/hooks/useToast";
 import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
 import { ExerciceFormValues } from "./useCreateExercices";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 interface PatchExerciceInterface {
     validData: ExerciceFormValues;
@@ -19,7 +20,7 @@ export function usePatchExercices() {
     const updatedExercice = async ({ validData, id, onSave, form, onClose }: PatchExerciceInterface) => {
         try {
             const response = await axios.patch(
-                `${import.meta.env.VITE_API_URL}api/exercices/${id}`,
+                joinUrl(import.meta.env.VITE_API_URL, `/api/exercices/${id}`),
                 validData,
                 {
                     headers: {

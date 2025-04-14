@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/useToast";
 import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
+import { joinUrl } from "@/services/api";
 
 export function useGetExercicesId(id: string | undefined) {
     const [exercice, setExercice] = useState<ExerciceType | null>(null);
@@ -13,7 +14,7 @@ export function useGetExercicesId(id: string | undefined) {
         const fetchExercice = async () => {
             try {
                 const { data } = await axios.get(
-                    `${import.meta.env.VITE_API_URL}api/exercices/${id}`,
+                    joinUrl(import.meta.env.VITE_API_URL,`/api/exercices/${id}`),
                     {
                         headers: {
                             "Content-Type": "application/json",

@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "@/hooks/useToast";
 import { TypeInteractionFormValues } from "./useCreateTypeInteractions";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 
 interface PatchTypeInteractionInterface {
@@ -25,7 +26,7 @@ export function usePatchTypeInteractions() {
     }: PatchTypeInteractionInterface) => {
         try {
             const { data } = await axios.patch(
-                `${import.meta.env.VITE_API_URL}api/type_interactions/${id}`,
+                joinUrl(import.meta.env.VITE_API_URL,`/api/type_interactions/${id}`),
                 validData,
                 {
                     headers: {

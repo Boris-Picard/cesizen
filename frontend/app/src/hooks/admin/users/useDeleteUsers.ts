@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/useToast";
+import { joinUrl } from "@/services/api";
 
 interface userDeleteInterface {
     id: number;
@@ -15,7 +16,7 @@ export function useDeleteUsers() {
         console.log(id);
         
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}api/utilisateurs/${id}`, {
+            await axios.delete(joinUrl(import.meta.env.VITE_API_URL,`/api/utilisateurs/${id}`), {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

@@ -5,6 +5,7 @@ import { toast } from "@/hooks/useToast";
 import { Role } from "@/components/admin-dashboard/roles/columns";
 import { RolesFormValues } from "./useCreateRoles";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 export const roleSchema = z.object({
     role_nom: z.string().min(4, "Le nom du rôle est requis."),
@@ -24,7 +25,7 @@ export function usePatchRoles() {
     const updatedRole = async ({ validData, id, onSave, form, onClose }: PatchRoleInterface) => {
         try {
             const response = await axios.patch(
-                `${import.meta.env.VITE_API_URL}api/roles/${id}`,
+                joinUrl(import.meta.env.VITE_API_URL, `/api/roles/${id}`),
                 validData,
                 {
                     headers: {

@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
 import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
+import { joinUrl } from "@/services/api";
 
 export function useGetExercices() {
     const [exercices, setExercices] = useState<ExerciceType[]>([]);
@@ -13,7 +14,7 @@ export function useGetExercices() {
     useEffect(() => {
         const getExercices = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/exercices`, {
+                const { data } = await axios.get(joinUrl(import.meta.env.VITE_API_URL,'/api/exercices'), {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

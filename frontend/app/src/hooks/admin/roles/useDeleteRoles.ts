@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/useToast";
+import { joinUrl } from "@/services/api";
 
 interface roleDeleteInterface {
     id: number;
@@ -13,7 +14,7 @@ export function useDeleteRoles() {
     
     async function handleDelete({ id, onDelete, onClose }: roleDeleteInterface) {
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}api/roles/${id}`, {
+            await axios.delete(joinUrl(import.meta.env.VITE_API_URL,`/api/roles/${id}`), {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

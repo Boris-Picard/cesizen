@@ -3,6 +3,7 @@ import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { useState } from "react";
+import { joinUrl } from "@/services/api";
 
 export const chatbotSchema = z.object({
     query: z.string().min(1, "Le message est requis.")
@@ -23,7 +24,7 @@ export function useChatbot() {
         try {
             SetIsLoading(true)
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/chatbot`,
+                joinUrl(import.meta.env.VITE_API_URL,'/api/chatbot'),
                 {
                     message: validData.query,
                 },

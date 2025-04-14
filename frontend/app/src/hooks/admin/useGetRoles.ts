@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
+import { joinUrl } from "@/services/api";
 
 export function useGetRoles() {
     const [roles, setRoles] = useState<Array<Role>>([]);
@@ -12,7 +13,7 @@ export function useGetRoles() {
     useEffect(() => {
         const getRoles = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/roles`, {
+                const { data } = await axios.get(joinUrl(import.meta.env.VITE_API_URL, '/api/roles'), {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

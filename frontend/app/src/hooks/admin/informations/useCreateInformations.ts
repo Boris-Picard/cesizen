@@ -5,6 +5,7 @@ import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { Information } from "@/components/admin-dashboard/informations/column";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 export const informationCreateSchema = z.object({
     info_titre: z.string().min(2, "Le titre est requis."),
@@ -30,7 +31,7 @@ export function useCreateInformations() {
         
         try {
             const { data } = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/information`,
+                joinUrl(import.meta.env.VITE_API_URL,'/api/information'),
                 {
                     info_titre: validData.info_titre,
                     info_description: validData.info_description,

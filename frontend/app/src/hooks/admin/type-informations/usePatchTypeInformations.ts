@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "@/hooks/useToast";
 import { TypeInformationsFormValues } from "./useCreateTypeInformations";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 interface PatchTypeInformationInterface {
     validData: TypeInformationsFormValues;
@@ -24,7 +25,7 @@ export function usePatchTypeInformations() {
     }: PatchTypeInformationInterface) => {
         try {
             const { data } = await axios.patch(
-                `${import.meta.env.VITE_API_URL}api/type_informations/${id}`,
+                joinUrl(import.meta.env.VITE_API_URL,`/api/type_informations/${id}`),
                 validData,
                 {
                     headers: {

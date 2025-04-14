@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
 import { TypeInformation } from "@/components/admin-dashboard/type-informations/column";
+import { joinUrl } from "@/services/api";
 
 export function useGetTypeInformations() {
     const [typeInformations, setTypeInformations] = useState<TypeInformation[]>([]);
@@ -12,7 +13,7 @@ export function useGetTypeInformations() {
     useEffect(() => {
         const getTypeInformations = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/type_informations`, {
+                const { data } = await axios.get(joinUrl(import.meta.env.VITE_API_URL, '/api/type_informations'), {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

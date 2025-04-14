@@ -1,6 +1,7 @@
 import { User } from "@/components/admin-dashboard/users/columns";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/useToast";
+import { joinUrl } from "@/services/api";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -13,7 +14,7 @@ export function useGetUsers() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/utilisateurs`, {
+                const { data } = await axios.get(joinUrl(import.meta.env.VITE_API_URL,'/api/utilisateurs'), {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,

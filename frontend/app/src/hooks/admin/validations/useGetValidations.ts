@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
 import { ValidationType } from "@/components/admin-dashboard/validations/column";
+import { joinUrl } from "@/services/api";
 
 export function useGetValidations() {
     const [validations, setValidations] = useState<ValidationType[]>([]);
@@ -12,7 +13,7 @@ export function useGetValidations() {
     useEffect(() => {
         const getValidations = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/validations`, {
+                const { data } = await axios.get(joinUrl(import.meta.env.VITE_API_URL,'/api/validations'), {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

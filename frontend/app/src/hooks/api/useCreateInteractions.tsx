@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
+import { joinUrl } from "@/services/api";
 
 interface InteractionInterface {
   inter_date_de_debut: string;
@@ -27,7 +28,7 @@ export function useCreateInteraction() {
     setIsCreating(true);
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}api/interactions`,
+        joinUrl(import.meta.env.VITE_API_URL,'/api/interactions'),
         interactionData,
         {
           headers: {

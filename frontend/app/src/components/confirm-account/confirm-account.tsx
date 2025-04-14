@@ -6,6 +6,7 @@ import axios from "axios"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { motion } from "framer-motion"
 import logo from "@/assets/cesizen-logo.png"
+import { joinUrl } from "@/services/api"
 
 export function ConfirmAccount() {
   const { token } = useParams<{ token: string }>()
@@ -21,7 +22,7 @@ export function ConfirmAccount() {
     }
     setIsLoading(true)
     axios
-      .get(`${import.meta.env.VITE_API_URL}account-confirmation/${token}`)
+      .get(joinUrl(import.meta.env.VITE_API_URL, `/account-confirmation/${token}`))
       .then(() => {
         setMessage("Votre compte a été confirmé avec succès. Vous pouvez maintenant vous connecter.")
       })

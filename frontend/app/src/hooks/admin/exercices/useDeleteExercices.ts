@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/useToast";
+import { joinUrl } from "@/services/api";
 
 interface ExerciceDeleteInterface {
     id: number;
@@ -13,7 +14,7 @@ export function useDeleteExercices() {
 
     async function handleDelete({ id, onDelete, onClose }: ExerciceDeleteInterface) {
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}api/exercices/${id}`, {
+            await axios.delete(joinUrl(import.meta.env.VITE_API_URL, `/api/exercices/${id}`), {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

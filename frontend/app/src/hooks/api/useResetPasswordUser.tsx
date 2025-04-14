@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toast } from "../useToast";
 import { useState } from "react";
+import { joinUrl } from "@/services/api";
 
 interface submitDataInterface {
     plainPassword: string
@@ -14,7 +15,7 @@ export default function useResetPasswordUser(token: string | undefined) {
         setLoading(true);
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}reset-password/reset/${token}`,
+                joinUrl(import.meta.env.VITE_API_URL,`/reset-password/reset/${token}`),
                 {
                     plainPassword: submitData.plainPassword,
                 }

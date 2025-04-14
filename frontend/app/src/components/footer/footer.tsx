@@ -19,6 +19,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { joinUrl } from "@/services/api"
 
 const footerLinks = {
   product: [
@@ -37,7 +38,7 @@ const footerLinks = {
     { name: "Centre d'aide", href: "/help" },
     { name: "Documentation", href: "/docs" },
     { name: "Guides", href: "/guides" },
-    { name: "API", href: `${import.meta.env.VITE_API_URL}api/docs` },
+    { name: "API", href: joinUrl(import.meta.env.VITE_API_URL, '/api/docs') },
   ],
   legal: [
     { name: "Confidentialité", href: "/privacy" },

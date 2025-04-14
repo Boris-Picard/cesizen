@@ -3,6 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
 import { HistoriqueType } from "@/components/admin-dashboard/historiques/column";
+import { joinUrl } from "@/services/api";
 
 export function useGetHistoriques() {
     const [historiques, setHistoriques] = useState<HistoriqueType[]>([]);
@@ -12,7 +13,7 @@ export function useGetHistoriques() {
     useEffect(() => {
         const getHistoriques = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/historiques`, {
+                const { data } = await axios.get(joinUrl(import.meta.env.VITE_API_URL,'/api/historiques'), {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

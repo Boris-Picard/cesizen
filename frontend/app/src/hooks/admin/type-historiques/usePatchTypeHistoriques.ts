@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "@/hooks/useToast";
 import { TypeHistoriqueFormValues } from "./useCreateTypeHistoriques";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 interface PatchTypeHistoriqueInterface {
     validData: TypeHistoriqueFormValues;
@@ -24,7 +25,7 @@ export function usePatchTypeHistoriques() {
     }: PatchTypeHistoriqueInterface) => {
         try {
             const { data } = await axios.patch(
-                `${import.meta.env.VITE_API_URL}api/type_historiques/${id}`,
+                joinUrl(import.meta.env.VITE_API_URL,`/api/type_historiques/${id}`),
                 validData,
                 {
                     headers: {

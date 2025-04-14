@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
+import { joinUrl } from "@/services/api";
 
 export interface PatchInteractionData {
     id: number | null;
@@ -13,7 +14,7 @@ export function usePatchInteractions() {
     const patchInteraction = async ({ id, inter_date_de_fin }: PatchInteractionData) => {
         try {
             const { data } = await axios.patch(
-                `${import.meta.env.VITE_API_URL}api/interactions/${id}`,
+                joinUrl(import.meta.env.VITE_API_URL,`/api/interactions/${id}`),
                 { inter_date_de_fin },
                 {
                     headers: {

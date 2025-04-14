@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { toast } from "@/hooks/useToast";
+import { joinUrl } from "@/services/api";
 
 interface DeleteTypeInteractionInterface {
     id: number;
@@ -13,7 +14,7 @@ export function useDeleteTypeInteractions() {
 
     const handleDelete = async ({ id, onDelete, onClose }: DeleteTypeInteractionInterface) => {
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}api/type_interactions/${id}`, {
+            await axios.delete(joinUrl(import.meta.env.VITE_API_URL,`/api/type_interactions/${id}`), {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

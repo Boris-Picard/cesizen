@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/useToast";
 import { Interaction } from "@/components/admin-dashboard/interactions/column";
+import { joinUrl } from "@/services/api";
 
 export function useGetInteractions() {
     const [interactions, setInteractions] = useState<Array<Interaction>>([]);
@@ -13,7 +14,7 @@ export function useGetInteractions() {
     useEffect(() => {
         const getInteractions = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/interactions`, {
+                const { data } = await axios.get(joinUrl(import.meta.env.VITE_API_URL,'/api/interactions'), {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@/hooks/useToast";
 import { useAuth } from "@/context/AuthContext";
+import { joinUrl } from "@/services/api";
 
 export function useDeleteUser(token: string | null) {
     const { toast } = useToast();
@@ -12,7 +13,7 @@ export function useDeleteUser(token: string | null) {
         setLoadingDeleteUser(true);
         try {
             const response = await axios.delete(
-                `${import.meta.env.VITE_API_URL}profile/delete`,
+                joinUrl(import.meta.env.VITE_API_URL,'/profile/delete'),
                 {
                     headers: {
                         "Content-Type": "application/json",

@@ -4,6 +4,7 @@ import axios from "axios";
 import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 export const roleCreateSchema = z.object({
     role_nom: z.string().min(2, "Le nom du rôle est requis."),
@@ -29,7 +30,7 @@ export function useCreateRoles() {
     const createRole = async ({ validData, onRoleAdded, form }: CreateRoleInterface) => {
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/roles`,
+                joinUrl(import.meta.env.VITE_API_URL, '/api/roles'),
                 {
                     role_nom: validData.role_nom,
                 },

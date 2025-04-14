@@ -9,6 +9,7 @@ import {
 } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { joinUrl } from "@/services/api";
 
 export interface UserPayload {
     id: number;
@@ -110,7 +111,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (!token) return;
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/token/refresh`,
+                joinUrl(import.meta.env.VITE_API_URL,'/api/token/refresh') ,
                 { token }
             );
             if (response.status === 200 && response.data.token) {
@@ -180,7 +181,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const login = async (email: string, password: string): Promise<void> => {
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/login_check`,
+                joinUrl(import.meta.env.VITE_API_URL, '/api/login_check'),
                 {
                     username: email,
                     password: password,

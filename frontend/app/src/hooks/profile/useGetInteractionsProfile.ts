@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/useToast";
 import { Interaction } from "@/components/admin-dashboard/interactions/column";
+import { joinUrl } from "@/services/api";
 
 export function useGetInteractionProfile(id: string | undefined) {
     const [interaction, setInteraction] = useState<Interaction | null>(null);
@@ -13,7 +14,7 @@ export function useGetInteractionProfile(id: string | undefined) {
         const fetchInteraction = async () => {
             try {
                 const { data } = await axios.get(
-                    `${import.meta.env.VITE_API_URL}api/interaction/${id}`,
+                    joinUrl(import.meta.env.VITE_API_URL,`/api/interaction/${id}`),
                     {
                         headers: {
                             "Content-Type": "application/json",

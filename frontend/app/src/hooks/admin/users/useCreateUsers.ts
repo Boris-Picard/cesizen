@@ -5,6 +5,7 @@ import { z } from "zod";
 import { User } from "@/components/admin-dashboard/users/columns";
 import { toast } from "@/hooks/useToast";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 export const userCreateSchema = z
     .object({
@@ -46,7 +47,7 @@ export function useCreateUsers() {
     const createUser = async ({ validData, onUserAdded, form }: CreateUserInterface) => {
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/admin/register-user`,
+                joinUrl(import.meta.env.VITE_API_URL,'/api/admin/register-user'),
                 {
                     ut_prenom: validData.ut_prenom,
                     ut_nom: validData.ut_nom,

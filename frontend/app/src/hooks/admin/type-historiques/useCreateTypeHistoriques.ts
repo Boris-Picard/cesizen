@@ -5,6 +5,7 @@ import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { TypeHistorique } from "@/components/admin-dashboard/type-historiques/column";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 export const typeHistoriqueCreateSchema = z.object({
     type_histo_libelle: z.string().min(1, "Le libellé est requis."),
@@ -25,7 +26,7 @@ export function useCreateTypeHistoriques() {
     const createTypeHistorique = async ({ validData, onTypeHistoriqueAdded, form }: CreateTypeHistoriqueInterface) => {
         try {
             const { data } = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/type_historiques`,
+                joinUrl(import.meta.env.VITE_API_URL,'/api/type_historiques'),
                 {
                     type_histo_libelle: validData.type_histo_libelle,
                 },

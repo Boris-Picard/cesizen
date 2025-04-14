@@ -5,6 +5,7 @@ import { z } from "zod";
 import { toast } from "@/hooks/useToast";
 import { ExerciceType } from "@/components/admin-dashboard/exercices/column";
 import { UseFormReturn } from "react-hook-form";
+import { joinUrl } from "@/services/api";
 
 export const exerciceCreateSchema = z.object({
     ex_nom: z.string().min(2, "Le nom de l'exercice est requis.").max(255, "Le nom doit comporter 200 caractères maximum"),
@@ -35,7 +36,7 @@ export function useCreateExercices() {
     const createExercice = async ({ validData, onExerciceAdded, form }: Exercice) => {
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/exercices`,
+                joinUrl(import.meta.env.VITE_API_URL, '/api/exercices'),
                 {
                     ex_nom: validData.ex_nom,
                     ex_description: validData.ex_description,
