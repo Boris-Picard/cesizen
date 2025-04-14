@@ -12,7 +12,7 @@ export function useDeleteUser(token: string | null) {
         setLoadingDeleteUser(true);
         try {
             const response = await axios.delete(
-                `${import.meta.env.VITE_API_URL}/profile/delete`,
+                `${import.meta.env.VITE_API_URL}profile/delete`,
                 {
                     headers: {
                         "Content-Type": "application/json",

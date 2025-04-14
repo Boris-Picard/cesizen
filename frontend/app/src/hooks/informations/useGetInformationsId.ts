@@ -13,7 +13,7 @@ export function useGetInformationsId(id: string | undefined) {
         const fetchInformation = async () => {
             try {
                 const { data } = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/api/information/${id}`,
+                    `${import.meta.env.VITE_API_URL}api/information/${id}`,
                     {
                         headers: {
                             "Content-Type": "application/json",

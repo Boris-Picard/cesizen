@@ -18,7 +18,7 @@ export function usePatchInformations() {
     const updatedInformation = async ({ validData, id, onSave, form, onClose }: PatchInformationInterface) => {
         try {
             const { data } = await axios.patch(
-                `${import.meta.env.VITE_API_URL}/api/information/${id}`,
+                `${import.meta.env.VITE_API_URL}api/information/${id}`,
                 validData,
                 {
                     headers: {

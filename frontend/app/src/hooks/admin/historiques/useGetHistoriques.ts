@@ -12,7 +12,7 @@ export function useGetHistoriques() {
     useEffect(() => {
         const getHistoriques = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/historiques`, {
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/historiques`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

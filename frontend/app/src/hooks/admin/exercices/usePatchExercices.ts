@@ -19,7 +19,7 @@ export function usePatchExercices() {
     const updatedExercice = async ({ validData, id, onSave, form, onClose }: PatchExerciceInterface) => {
         try {
             const response = await axios.patch(
-                `${import.meta.env.VITE_API_URL}/api/exercices/${id}`,
+                `${import.meta.env.VITE_API_URL}api/exercices/${id}`,
                 validData,
                 {
                     headers: {

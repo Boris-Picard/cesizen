@@ -15,7 +15,7 @@ export function useDeleteUsers() {
         console.log(id);
         
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/api/utilisateurs/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}api/utilisateurs/${id}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

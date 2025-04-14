@@ -13,7 +13,7 @@ export function useDeleteTypeInformations() {
 
     const handleDelete = async ({ id, onDelete, onClose }: DeleteTypeInformationInterface) => {
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/api/type_informations/${id}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}api/type_informations/${id}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

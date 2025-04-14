@@ -39,7 +39,7 @@ export function usePatchUsers() {
     const updatedUser = async ({ validData, id, onClose, form, onSave }: PatchUserParams) => {
         try {
             const { data } = await axios.patch(
-                `${import.meta.env.VITE_API_URL}/api/utilisateurs/${id}`,
+                `${import.meta.env.VITE_API_URL}api/utilisateurs/${id}`,
                 validData,
                 {
                     headers: {

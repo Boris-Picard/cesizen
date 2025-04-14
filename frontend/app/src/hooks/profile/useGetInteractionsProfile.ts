@@ -13,7 +13,7 @@ export function useGetInteractionProfile(id: string | undefined) {
         const fetchInteraction = async () => {
             try {
                 const { data } = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/api/interaction/${id}`,
+                    `${import.meta.env.VITE_API_URL}api/interaction/${id}`,
                     {
                         headers: {
                             "Content-Type": "application/json",

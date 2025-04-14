@@ -27,7 +27,7 @@ export function useCreateTypeInteractions() {
     const createTypeInteraction = async ({ validData, onTypeInteractionAdded, form }: CreateTypeInteractionInterface) => {
         try {
             const { data } = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/type_interactions`,
+                `${import.meta.env.VITE_API_URL}api/type_interactions`,
                 {
                     type_inter_libelle: validData.type_inter_libelle,
                 },

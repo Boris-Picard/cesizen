@@ -27,7 +27,7 @@ export function useCreateInteraction() {
     setIsCreating(true);
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/interactions`,
+        `${import.meta.env.VITE_API_URL}api/interactions`,
         interactionData,
         {
           headers: {

@@ -10,7 +10,7 @@ export function useAnonymizeUser(token: string | null) {
         setLoadingAnonymize(true);
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/profile/anonymize`,
+                `${import.meta.env.VITE_API_URL}profile/anonymize`,
                 {},
                 {
                     headers: {

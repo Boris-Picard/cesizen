@@ -24,7 +24,7 @@ export function usePatchTypeInformations() {
     }: PatchTypeInformationInterface) => {
         try {
             const { data } = await axios.patch(
-                `${import.meta.env.VITE_API_URL}/api/type_informations/${id}`,
+                `${import.meta.env.VITE_API_URL}api/type_informations/${id}`,
                 validData,
                 {
                     headers: {

@@ -23,7 +23,7 @@ export function useChatbot() {
         try {
             SetIsLoading(true)
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/chatbot`,
+                `${import.meta.env.VITE_API_URL}api/chatbot`,
                 {
                     message: validData.query,
                 },

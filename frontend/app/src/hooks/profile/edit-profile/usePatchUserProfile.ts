@@ -22,7 +22,7 @@ export function useUpdateProfile(token: string | null) {
         setLoading(true);
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/profile/parameters`,
+                `${import.meta.env.VITE_API_URL}profile/parameters`,
                 {
                     ut_prenom: submitData.firstName,
                     ut_nom: submitData.lastName,

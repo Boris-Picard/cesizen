@@ -30,7 +30,7 @@ export function useCreateInformations() {
         
         try {
             const { data } = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/information`,
+                `${import.meta.env.VITE_API_URL}api/information`,
                 {
                     info_titre: validData.info_titre,
                     info_description: validData.info_description,

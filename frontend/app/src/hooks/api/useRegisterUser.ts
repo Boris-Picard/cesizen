@@ -21,7 +21,7 @@ export function useRegisterUser() {
     const registerUser = async (submitData: submitDataInterface) => {
         setLoading(true)
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/register`, {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}register`, {
                 ut_prenom: submitData.firstName,
                 ut_nom: submitData.lastName,
                 ut_mail: submitData.email,

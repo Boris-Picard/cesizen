@@ -29,7 +29,7 @@ export function useCreateRoles() {
     const createRole = async ({ validData, onRoleAdded, form }: CreateRoleInterface) => {
         try {
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/roles`,
+                `${import.meta.env.VITE_API_URL}api/roles`,
                 {
                     role_nom: validData.role_nom,
                 },

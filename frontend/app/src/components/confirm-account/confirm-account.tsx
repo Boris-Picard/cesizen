@@ -21,7 +21,7 @@ export function ConfirmAccount() {
     }
     setIsLoading(true)
     axios
-      .get(`${import.meta.env.VITE_API_URL}/account-confirmation/${token}`)
+      .get(`${import.meta.env.VITE_API_URL}account-confirmation/${token}`)
       .then(() => {
         setMessage("Votre compte a été confirmé avec succès. Vous pouvez maintenant vous connecter.")
       })

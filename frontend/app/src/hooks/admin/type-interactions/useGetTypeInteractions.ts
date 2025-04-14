@@ -12,7 +12,7 @@ export function useGetTypeInteractions() {
     useEffect(() => {
         const fetchTypeInteractions = async () => {
             try {
-                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/type_interactions`, {
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}api/type_interactions`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

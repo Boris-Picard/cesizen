@@ -27,7 +27,7 @@ export function useCreateTypeInformations() {
   const createTypeInformation = async ({ validData, onTypeInformationAdded, form }: CreateTypeInformationInterface) => {
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/type_informations`,
+        `${import.meta.env.VITE_API_URL}api/type_informations`,
         {
           type_info_nom: validData.type_info_nom,
         },
