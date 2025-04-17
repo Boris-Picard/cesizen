@@ -25,15 +25,20 @@ class ChatService
                 'messages' => [
                     ['role' => 'user', 'content' => $message],
                 ],
+                'temperature' => 0.3,
+                'max_tokens' => 500,
+                'frequency_penalty' => 0.4,
+                'presence_penalty' => 0.2,
+                'p' => 0.9
             ];
-            
+
             $response = $this->client->request('POST', $url, [
                 'headers' => $headers,
                 'json'    => $payload,
             ]);
 
             $data = $response->toArray();
-            
+
             return $data['message']['content'][0]['text'] ?? null;
         } catch (\Exception $e) {
             return 'Erreur lors de la requête à l\'API : ' . $e->getMessage();

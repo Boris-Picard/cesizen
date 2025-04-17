@@ -49,4 +49,7 @@ services:
   App\Service\ChatService:
     arguments:
       $apiKey: "%cohere.api_key%"
+  App\Service\RagService:
+    arguments:
+        $projectDir: '%kernel.project_dir%'
   # config/services.yaml

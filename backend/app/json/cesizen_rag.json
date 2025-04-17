@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "diagnostic-stress",
+    "keywords": ["diagnostic", "stress", "holmes", "rahe", "questionnaire"],
+    "title": "Diagnostic de stress",
+    "content": "Le diagnostic de stress se base sur l’échelle de Holmes et Rahe. Il propose une liste d’événements vécus dans les 12 derniers mois, chacun étant associé à un nombre de points. Plus le score final est élevé, plus le niveau de stress est considéré comme important. Il permet une auto-évaluation simple du niveau de stress d’un utilisateur."
+  },
+  {
+    "slug": "respiration",
+    "keywords": [
+      "respiration",
+      "cohérence",
+      "cardiaque",
+      "rythme",
+      "748",
+      "505",
+      "406"
+    ],
+    "title": "Exercices de respiration",
+    "content": "Les exercices de respiration proposés reposent sur la cohérence cardiaque. Trois rythmes sont disponibles : 7-4-8 (inspiration 7s, apnée 4s, expiration 8s), 5-0-5 (inspiration 5s, pas d’apnée, expiration 5s), et 4-0-6 (inspiration 4s, pas d’apnée, expiration 6s). L’objectif est de réguler l’état émotionnel par la respiration."
+  },
+  {
+    "slug": "tracker-emotions",
+    "keywords": [
+      "émotions",
+      "tracker",
+      "ressenti",
+      "journal",
+      "rapport",
+      "suivi"
+    ],
+    "title": "Tracker d’émotions",
+    "content": "Le tracker d’émotions permet aux utilisateurs de suivre leurs ressentis au fil du temps à travers un journal de bord. Il permet d’ajouter, modifier ou supprimer des entrées, et d’obtenir des rapports sur différentes périodes (semaine, mois, trimestre, année). Un référentiel d’émotions est utilisé, basé sur des émotions de base et leurs déclinaisons."
+  },
+  {
+    "slug": "activites-detente",
+    "keywords": ["activités", "détente", "catalogue", "favoris"],
+    "title": "Activités de détente",
+    "content": "Un catalogue d’activités de détente est accessible à tous les utilisateurs. Les utilisateurs connectés peuvent marquer des activités comme favorites. Les administrateurs peuvent ajouter, modifier ou désactiver des activités dans le catalogue."
+  },
+  {
+    "slug": "ergonomie-securite",
+    "keywords": ["ergonomie", "sécurité", "rgpd", "responsive", "mobile", "cesizen", "site cesizen"],
+    "title": "Ergonomie et sécurité",
+    "content": "L’application CESIZen est conçue pour être accessible sur tous les supports avec une approche mobile-first. Elle respecte les standards web et applique des mesures de sécurité strictes, incluant le chiffrement des données sensibles et le respect du RGPD."
+  }
+]
