@@ -1,8 +1,19 @@
 backend/app/.env merge=ours
-backend/docker/** merge=ours
+backend/app/.env merge=ours
 backend/app/config/packages/** merge=ours
+backend/app/config/services.yaml merge=ours
+backend/app/config/routes/** merge=ours
+backend/app/config/packages/** merge=ours
+
+backend/docker/** merge=ours
 frontend/docker/** merge=ours
+
+frontend/app/.env merge=ours
+frontend/app/.env.production merge=ours
+
 .env merge=ours
+
 db/** merge=ours
+
 .github/** merge=ours
 .github/workflows/** merge=ours
