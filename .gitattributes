@@ -5,3 +5,4 @@ frontend/docker/** merge=ours
 .env merge=ours
 db/** merge=ours
 .github/** merge=ours
+.github/workflows/** merge=ours
