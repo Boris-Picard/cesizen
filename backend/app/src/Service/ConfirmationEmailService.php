@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Service;
 
@@ -6,26 +6,24 @@ use App\Entity\Utilisateur;
 use App\Entity\Validation;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use Resend\Resend;
-use Resend\Resources\Emails;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class ConfirmationEmailService
 {
-    private Emails $emailClient;
-
     public function __construct(
         protected JWTEncoderInterface $jwtEncoder,
         protected UrlGeneratorInterface $urlGenerator,
         protected EntityManagerInterface $entityManager,
-        string $resendApiKey,
+        protected MailerInterface $mailerInterface,
         protected string $senderEmail,
         protected string $frontUrl
-    ) {
-        $resend = Resend::client($resendApiKey);
-        $this->emailClient = new Emails($resend);
-    }
+    ) {}
 
+    /**
+     * Envoie un e-mail de confirmation avec un token JWT stocké en base dans l'entité Validation
+     */
     public function sendConfirmationEmail(Utilisateur $user): void
     {
         $existingValidation = $this->entityManager->getRepository(Validation::class)
@@ -41,7 +39,7 @@ class ConfirmationEmailService
 
         $payload = [
             'ut_mail' => $user->getUtMail(),
-            'exp'      => time() + 86400,
+            'exp'      => time() + 86400, // expiration dans 24 heures
             'action'   => 'account_confirmation',
         ];
         $token = $this->jwtEncoder->encode($payload);
@@ -61,23 +59,26 @@ class ConfirmationEmailService
         );
         $confirmationUrl = rtrim($this->frontUrl, '/') . $relativeUrl;
 
-        $subject = 'Confirmation de votre inscription';
-        $html = "<p>Bonjour " . $user->getUtPrenom() . ",</p>
+        $email = (new Email())
+            ->from($this->senderEmail)
+            ->to($user->getUtMail())
+            ->subject('Confirmation de votre inscription')
+            ->text("Merci de confirmer votre inscription en visitant le lien suivant: {$confirmationUrl}")
+            ->html("<p>Bonjour " . $user->getUtPrenom() . ",</p>
                 <p>Pour confirmer votre inscription, cliquez sur le lien suivant :</p>
-                <p><a href=\"{$confirmationUrl}\">Confirmer mon compte</a></p>";
+                <p><a href=\"{$confirmationUrl}\">Confirmer mon compte</a></p>");
 
         try {
-            $this->emailClient->send([
-                'from' => $this->senderEmail,
-                'to' => $user->getUtMail(),
-                'subject' => $subject,
-                'html' => $html,
-            ]);
-        } catch (\Exception $e) {
-            throw new \Exception('Erreur lors de l’envoi de l’e-mail : ' . $e->getMessage());
+            $this->mailerInterface->send($email);
+        } catch (\Exception $error) {
+            throw new \Exception($error->getMessage());
         }
     }
 
+    /**
+     * Valide le token de confirmation en vérifiant l'existence de l'enregistrement dans la table Validation,
+     * active le compte de l'utilisateur, puis supprime l'enregistrement pour empêcher toute réutilisation.
+     */
     public function confirmAccount(string $token): Utilisateur
     {
         $validation = $this->entityManager->getRepository(Validation::class)
@@ -94,7 +95,8 @@ class ConfirmationEmailService
                 if ($user && $user->isUtActive()) {
                     return $user;
                 }
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
             throw new \Exception('Token invalide ou inexistant.');
         }
 
